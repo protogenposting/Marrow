@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Marrow")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e85f047481dfb73624841febe8f64abca2efab1e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e24f2a86813576956ad2d95eb841751e54d0176d")]
 [assembly: System.Reflection.AssemblyProductAttribute("Marrow")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Marrow")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

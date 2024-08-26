@@ -24,3 +24,4 @@ C:\Users\ck6100\Documents\GitHub\Marrow\Marrow\Marrow\obj\Debug\net8.0\refint\Ma
 C:\Users\ck6100\Documents\GitHub\Marrow\Marrow\Marrow\obj\Debug\net8.0\Marrow.pdb
 C:\Users\ck6100\Documents\GitHub\Marrow\Marrow\Marrow\obj\Debug\net8.0\Marrow.genruntimeconfig.cache
 C:\Users\ck6100\Documents\GitHub\Marrow\Marrow\Marrow\obj\Debug\net8.0\ref\Marrow.dll
+C:\Users\ck6100\Documents\GitHub\Marrow\Marrow\Marrow\bin\Debug\net8.0\Content\test.xnb
