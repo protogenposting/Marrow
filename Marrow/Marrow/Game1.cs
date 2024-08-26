@@ -18,6 +18,7 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
+        Window.AllowUserResizing = true;
         base.Initialize();
     }
 
