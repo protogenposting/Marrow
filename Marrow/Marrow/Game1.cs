@@ -36,7 +36,7 @@ public class Game1 : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.Azure);
+        GraphicsDevice.Clear(Color.White);
 
         base.Draw(gameTime);
     }
