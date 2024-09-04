@@ -25,3 +25,11 @@ C:\Users\ck6100\Documents\GitHub\Marrow\Marrow\Marrow\obj\Debug\net8.0\Marrow.pd
 C:\Users\ck6100\Documents\GitHub\Marrow\Marrow\Marrow\obj\Debug\net8.0\Marrow.genruntimeconfig.cache
 C:\Users\ck6100\Documents\GitHub\Marrow\Marrow\Marrow\obj\Debug\net8.0\ref\Marrow.dll
 C:\Users\ck6100\Documents\GitHub\Marrow\Marrow\Marrow\bin\Debug\net8.0\Content\test.xnb
+C:\Users\ck6100\Documents\GitHub\Marrow\Marrow\Marrow\bin\Debug\net8.0\Aspose.SVG.dll
+C:\Users\ck6100\Documents\GitHub\Marrow\Marrow\Marrow\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\ck6100\Documents\GitHub\Marrow\Marrow\Marrow\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\ck6100\Documents\GitHub\Marrow\Marrow\Marrow\bin\Debug\net8.0\System.Drawing.Common.dll
+C:\Users\ck6100\Documents\GitHub\Marrow\Marrow\Marrow\bin\Debug\net8.0\System.Security.Permissions.dll
+C:\Users\ck6100\Documents\GitHub\Marrow\Marrow\Marrow\bin\Debug\net8.0\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\ck6100\Documents\GitHub\Marrow\Marrow\Marrow\bin\Debug\net8.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\ck6100\Documents\GitHub\Marrow\Marrow\Marrow\bin\Debug\net8.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll

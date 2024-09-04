@@ -1,2 +1,2 @@
-﻿using var game = new Marrow.Game1();
+﻿using var game = new Marrow.Main();
 game.Run();
