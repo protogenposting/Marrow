@@ -15,7 +15,6 @@
 		<MenuBar>
 			<SubMenuItem Text="&amp;File">
 				<ButtonMenuItem Text="Click Me!" Click="HandleClickMe" />
-				<ButtonMenuItem Text="Click Me Too!" Click="HandleClickMe" Shortcut="{On Control+B, Mac=Application+Comma}"/>
 			</SubMenuItem>
 			<MenuBar.ApplicationItems>
 				<ButtonMenuItem Text="Preferences.." Shortcut="{On Control+O, Mac=Application+Comma}" />
