@@ -21,3 +21,5 @@ SKELETONS
 Skeletones would be node trees containing bones. each bone would have a child layer that it is binded to that moving that bone would affect. Each bone would also be able to be moved, resized, and rotated.
 
 That's it for now!
+
+We should also probably add this soon https://github.com/DanWBR/Eto.Forms.SkiaSharp
