@@ -33,7 +33,7 @@ public class ImageConversions {
     {
         BufferedImage newImage = toBufferedImage(image);
 
-        File outputfile = new File("C:\\Users\\ck6100\\Documents\\GitHub\\Marrow\\Marrow\\image.png");
+        File outputfile = new File("image.png");
 
         try {
             ImageIO.write(newImage,"png",outputfile);

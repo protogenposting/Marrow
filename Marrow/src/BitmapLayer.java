@@ -10,7 +10,7 @@ import java.io.IOException;
 
 /**
  * This is where the user draws images as well as rendering images
- * we will have to seperate this into a rendering and a image component later
+ * we will have to separate this into a rendering and an image component later
  */
 public class BitmapLayer extends Layer {
 
