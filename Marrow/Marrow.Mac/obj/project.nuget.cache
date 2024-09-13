@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "dgSpecHash": "8qQ86bv/HQ0=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\ck6100\\Documents\\GitHub\\Marrow\\Marrow\\Marrow.Mac\\Marrow.Mac.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ck6100\\.nuget\\packages\\eto.forms\\2.8.3\\eto.forms.2.8.3.nupkg.sha512",
+    "C:\\Users\\ck6100\\.nuget\\packages\\eto.platform.mac64\\2.8.3\\eto.platform.mac64.2.8.3.nupkg.sha512",
+    "C:\\Users\\ck6100\\.nuget\\packages\\eto.serialization.xaml\\2.8.3\\eto.serialization.xaml.2.8.3.nupkg.sha512",
+    "C:\\Users\\ck6100\\.nuget\\packages\\portable.xaml\\0.26.0\\portable.xaml.0.26.0.nupkg.sha512",
+    "C:\\Users\\ck6100\\.nuget\\packages\\microsoft.netcore.app.runtime.osx-x64\\8.0.8\\microsoft.netcore.app.runtime.osx-x64.8.0.8.nupkg.sha512",
+    "C:\\Users\\ck6100\\.nuget\\packages\\microsoft.netcore.app.runtime.osx-arm64\\8.0.8\\microsoft.netcore.app.runtime.osx-arm64.8.0.8.nupkg.sha512",
+    "C:\\Users\\ck6100\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.osx-x64\\8.0.8\\microsoft.aspnetcore.app.runtime.osx-x64.8.0.8.nupkg.sha512",
+    "C:\\Users\\ck6100\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.osx-arm64\\8.0.8\\microsoft.aspnetcore.app.runtime.osx-arm64.8.0.8.nupkg.sha512",
+    "C:\\Users\\ck6100\\.nuget\\packages\\microsoft.netcore.app.host.osx-x64\\8.0.8\\microsoft.netcore.app.host.osx-x64.8.0.8.nupkg.sha512",
+    "C:\\Users\\ck6100\\.nuget\\packages\\microsoft.netcore.app.host.osx-arm64\\8.0.8\\microsoft.netcore.app.host.osx-arm64.8.0.8.nupkg.sha512"
+  ],
+  "logs": []
+}
