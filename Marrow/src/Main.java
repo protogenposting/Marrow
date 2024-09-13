@@ -17,7 +17,7 @@ public class Main {
         //add the bitmap layer to the main window
         content.add(bitmapLayer, BorderLayout.CENTER);
 
-        //controls
+        //controls, these will be used for buttons later
         JPanel controls = new JPanel();
 
         frame.setSize(1366,768);
