@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Marrow.Wpf")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+735f929e856c4ff7bdbc98833dc4be89fab3f566")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+be4d98adef5f77e8b66d2859e33b59e87547896f")]
 [assembly: System.Reflection.AssemblyProductAttribute("Marrow.Wpf")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Marrow.Wpf")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
