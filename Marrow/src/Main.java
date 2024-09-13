@@ -20,7 +20,7 @@ public class Main {
         //controls
         JPanel controls = new JPanel();
 
-        frame.setSize(600,600);
+        frame.setSize(1366,768);
 
         frame.setResizable(true);
 
