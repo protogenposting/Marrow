@@ -40,5 +40,7 @@ public class ImageConversions {
         } catch (IOException t) {
             throw new RuntimeException(t);
         }
+
+        System.out.println("saved image");
     }
 }

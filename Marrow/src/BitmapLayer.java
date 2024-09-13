@@ -47,8 +47,6 @@ public class BitmapLayer extends Layer {
                     repaint();
                     oldX = currentX;
                     oldY = currentY;
-
-                    ImageConversions.SaveImage(image);
                 }
             }
         });
@@ -79,5 +77,9 @@ public class BitmapLayer extends Layer {
         repaint();
     }
 
+    public Image getImage()
+    {
+        return image;
+    }
 
 }

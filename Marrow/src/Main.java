@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class Main {
     public static void main(String[] args) {
@@ -25,6 +26,17 @@ public class Main {
 
         frame.setVisible(true);
 
+        Input input = new Input(frame);
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //update loop
+        while(true)
+        {
+            if(input.getKeyHeld(KeyEvent.VK_CONTROL)&&input.getKeyHeld(KeyEvent.VK_S))
+            {
+                ImageConversions.SaveImage(bitmapLayer.getImage());
+            }
+        }
     }
 }
