@@ -1,8 +1,12 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * This is where the user draws images as well as rendering images
@@ -43,6 +47,8 @@ public class BitmapLayer extends Layer {
                     repaint();
                     oldX = currentX;
                     oldY = currentY;
+
+                    ImageConversions.SaveImage(image);
                 }
             }
         });
