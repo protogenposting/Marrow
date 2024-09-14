@@ -38,6 +38,8 @@ public class Input {
     {
         int index = keysPressed.indexOf(keyID);
 
+        //System.out.println("huh");
+
         return index > -1;
     }
 }

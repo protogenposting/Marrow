@@ -40,15 +40,12 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //update loop
-        boolean programIsRunning = true;
-
-        while(programIsRunning)
+        while(true)
         {
             if(input.getKeyHeld(KeyEvent.VK_CONTROL)&&input.getKeyHeld(KeyEvent.VK_S))
             {
                 ImageConversions.SaveImage(bitmapLayer.getImage());
                 System.out.println("saved");
-                programIsRunning=false;
             }
         }
     }
