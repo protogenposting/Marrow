@@ -1,12 +1,9 @@
-import javax.imageio.ImageIO;
-import javax.swing.*;
+package Layers;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * This is where the user draws images as well as rendering images
@@ -20,7 +17,6 @@ public class BitmapLayer extends Layer {
     private Graphics2D graphics;
     //mouse cooridnates
     private int currentX, currentY, oldX, oldY;
-
     public BitmapLayer(){
         setDoubleBuffered(false);
         //listener for mouse being pressed.

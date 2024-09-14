@@ -1,13 +1,21 @@
+import Layers.BitmapLayer;
+import Layers.*;
+import Tools.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.LinkedList;
 
 public class Main {
+    public Tool currentTool = new Tool();
     public static void main(String[] args) {
         //the main frame we will be drawing on
         JFrame frame = new JFrame("Marrow");
         Container content = frame.getContentPane();
         Toolbox tools = new Toolbox("Marrow Toolbox");
+
+        LinkedList<Layer> layers = new LinkedList<>();
 
         //set layout
         content.setLayout(new BorderLayout());
@@ -32,11 +40,15 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //update loop
-        while(true)
+        boolean programIsRunning = true;
+
+        while(programIsRunning)
         {
             if(input.getKeyHeld(KeyEvent.VK_CONTROL)&&input.getKeyHeld(KeyEvent.VK_S))
             {
                 ImageConversions.SaveImage(bitmapLayer.getImage());
+                System.out.println("saved");
+                programIsRunning=false;
             }
         }
     }
