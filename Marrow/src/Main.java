@@ -7,6 +7,7 @@ public class Main {
         //the main frame we will be drawing on
         JFrame frame = new JFrame("Marrow");
         Container content = frame.getContentPane();
+        Toolbox tools = new Toolbox("Marrow Toolbox");
 
         //set layout
         content.setLayout(new BorderLayout());
@@ -23,8 +24,8 @@ public class Main {
         frame.setSize(1366,768);
 
         frame.setResizable(true);
-
         frame.setVisible(true);
+        frame.setLocationRelativeTo(null); //places window at the center of the screen
 
         Input input = new Input(frame);
 
