@@ -35,18 +35,14 @@ public class Main {
         frame.setVisible(true);
         frame.setLocationRelativeTo(null); //places window at the center of the screen
 
-        Input input = new Input(frame);
-
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //update loop
         while(true)
         {
-            if(input.getKeyHeld(KeyEvent.VK_CONTROL)&&input.getKeyHeld(KeyEvent.VK_S))
-            {
-                ImageConversions.SaveImage(bitmapLayer.getImage());
-                System.out.println("saved");
-            }
+            //move these to a key pressed event
+            //ImageConversions.SaveImage(bitmapLayer.getImage());
+            //System.out.println("saved");
         }
     }
 }
