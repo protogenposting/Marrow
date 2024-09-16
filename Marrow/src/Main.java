@@ -1,10 +1,10 @@
-import Layers.BitmapLayer;
 import Layers.*;
 import Tools.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.LinkedList;
 
 public class Main {

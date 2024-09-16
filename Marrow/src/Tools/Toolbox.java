@@ -1,7 +1,10 @@
 package Tools;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Toolbox extends JPanel {
 
@@ -14,12 +17,12 @@ public class Toolbox extends JPanel {
     JPanel buttonPanel = new JPanel(); // add all buttons to this
 
     // these 4 buttons will connect to their corresponding methods / classes (?)
-    JButton paintBrush = initializeButton("paint brush");
-    JButton bucket = initializeButton("bucket");
-    JButton line = initializeButton("line");
-    JButton shape = initializeButton("shape"); //circle or rectangle idk
+    JButton paintBrush = initializeButton("paint brush", "res/iconImages/brushTool.png");
+    JButton bucket = initializeButton("bucket", "res/iconImages/bucketTool.png");
+    JButton line = initializeButton("line", "res/iconImages/lineTool.png");
+    JButton shape = initializeButton("shape", "res/iconImages/shapeTool.png"); //circle or rectangle idk
 
-    public Toolbox(String windowName){
+    public Toolbox(String windowName) {
         frame.setTitle(windowName);
         frame.setSize(1366,128);
 
@@ -48,13 +51,14 @@ public class Toolbox extends JPanel {
 
     }
 
-    public JButton initializeButton(String buttonText){
-        JButton tempButton = new JButton();
+    public JButton initializeButton(String buttonText, String iconFile) {
+        Icon icon = new ImageIcon();
+        JButton tempButton = new JButton(icon);
         Dimension windowSize = new Dimension(200, 120);
 
         tempButton.setVisible(true);
         tempButton.setSize(windowSize);
-        tempButton.setText(buttonText); //replace with sprite later on
+        //tempButton.setText(buttonText); //replace with sprite later on
 
         return tempButton;
     }
