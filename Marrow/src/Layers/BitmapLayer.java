@@ -11,6 +11,7 @@ import java.awt.event.MouseMotionAdapter;
 /**
  * This is where the user draws images as well as rendering images
  * we will have to separate this into a rendering and an image component later
+ * woowooo
  */
 public class BitmapLayer extends Layer {
     //mouse cooridnates
