@@ -4,6 +4,7 @@ import Bitmaps.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 
@@ -40,7 +41,6 @@ public class ParentLayer extends Layer {
 
         graphics.setColor(Color.black);
 
-        long time1 = Calendar.getInstance().getTimeInMillis();
         for(int i = 0; i < children.size(); i++)
         {
             Layer child = children.get(i);
@@ -49,7 +49,7 @@ public class ParentLayer extends Layer {
                 //draw lines from the bitmap
                 BitmapLayer bitmapChild = (BitmapLayer)children.get(i);
                 Bitmap bitmap = bitmapChild.bitmap;
-                LinkedList<LinkedList<Pixel>> map = bitmap.bitmap;
+                ArrayList<ArrayList<Pixel>> map = bitmap.bitmap;
                 for(int xPos = 0; xPos < map.size(); xPos++)
                 {
                     for(int yPos = 0; yPos < map.get(xPos).size(); yPos++)
@@ -64,7 +64,6 @@ public class ParentLayer extends Layer {
         }
         long time2 = Calendar.getInstance().getTimeInMillis();
 
-        System.out.println(time2-time1);
         g.drawImage(image,0,0,null);
     }
 

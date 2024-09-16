@@ -66,25 +66,23 @@ public class BitmapLayer extends Layer {
 
                     if(width>Math.abs(y1-y2))
                     {
-                        System.out.println("HORIZONTAL");
                         int xProgress = x1;
 
                         for(int i = 0; i < width; i++)
                         {
                             int yResult = (int)Math.round(Math.tan(theta)*xProgress);
-                            bitmap.addPixel(xProgress,yResult,new Pixel(255,0,0,100));
+                            bitmap.addPixel(xProgress,yResult,new Pixel(red,green,blue,alpha));
                             xProgress += signX;
                         }
                     }
                     else
                     {
-                        System.out.println("VERTICAL");
                         int yProgress = y1;
 
                         for(int i = 0; i < width; i++)
                         {
                             int xResult = (int)Math.round(yProgress/Math.tan(theta));
-                            bitmap.addPixel(xResult,yProgress,new Pixel(0,0,0,100));
+                            bitmap.addPixel(xResult,yProgress,new Pixel(red,green,blue,alpha));
                             yProgress += signY;
                         }
                     }
