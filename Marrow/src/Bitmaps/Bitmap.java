@@ -12,7 +12,7 @@ public class Bitmap {
         for (int x = 0; x < width; x++) {
             bitmap.add(new LinkedList<>());
             for (int y = 0; y < height; y++) {
-                bitmap.get(x).add(new Pixel(0,0,0,100));
+                bitmap.get(x).add(new Pixel(0,0,0,0));
             }
         }
     }

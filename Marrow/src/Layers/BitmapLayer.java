@@ -41,12 +41,20 @@ public class BitmapLayer extends Layer {
             public void mouseDragged(MouseEvent e) {
                 currentX = e.getX();
                 currentY = e.getY();
+                int red = 0;
+                int green = 0;
+                int blue = 0;
+                int alpha = 100;
                 //draw some lines
                 if(canBeDrawnOn) {
                     int x1 = oldX;
                     int x2 = currentX;
                     int y1 = oldY;
                     int y2 = currentY;
+
+                    bitmap.addPixel(x1,y1,new Pixel(red,green,blue,alpha));
+
+                    bitmap.addPixel(x2,y2,new Pixel(red,green,blue,alpha));
 
                     int width = Math.abs(x1-x2);
 
