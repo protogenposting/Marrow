@@ -1,10 +1,7 @@
 package Tools;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class Toolbox extends JPanel {
 
@@ -14,7 +11,7 @@ public class Toolbox extends JPanel {
     }
 
     JFrame frame = new JFrame();
-    JPanel buttonPanel = new JPanel(); // add all buttons to this
+    JPanel buttonPanel = new JPanel(); // adds all buttons to this
 
     // these 4 buttons will connect to their corresponding methods / classes (?)
     JButton paintBrush = initializeButton("paint brush", "iconImages/brushTool.png");
@@ -22,6 +19,10 @@ public class Toolbox extends JPanel {
     JButton line = initializeButton("line", "iconImages/lineTool.png");
     JButton shape = initializeButton("shape", "iconImages/shapeTool.png"); //circle or rectangle idk
 
+    /**
+     * initializes the toolbox window
+     * @param windowName window name
+     */
     public Toolbox(String windowName) {
         frame.setTitle(windowName);
         frame.setSize(1366,128);
@@ -30,27 +31,37 @@ public class Toolbox extends JPanel {
         frame.setVisible(true);
         buttonPanel.setVisible(true);
 
-        buttonPanel.add(paintBrush); buttonPanel.add(bucket);
-        buttonPanel.add(line); buttonPanel.add(shape);
+        buttonPanel.add(paintBrush);
+        buttonPanel.add(bucket);
+        buttonPanel.add(line);
+        buttonPanel.add(shape);
 
         frame.add(buttonPanel);
         frame.setLocationRelativeTo(null);
 
-        //region experimental code
-
+        // "if button is pressed, do this event"
         paintBrush.addActionListener(e -> { System.out.println("paintbrush selected");});
         bucket.addActionListener(e -> { System.out.println("bucket selected"); });
         line.addActionListener(e -> { System.out.println("line selected"); });
         shape.addActionListener(e -> { System.out.println("shape selected"); });
 
-        //setCurrentTool(ButtonID.PAINTBRUSH);
-        //setCurrentTool(ButtonID.BUCKET);
-        //setCurrentTool(ButtonID.LINE);
-        //setCurrentTool(ButtonID.SHAPE);
+        //region experimental code
+        /*
+        setCurrentTool(ButtonID.PAINTBRUSH);
+        setCurrentTool(ButtonID.BUCKET);
+        setCurrentTool(ButtonID.LINE);
+        setCurrentTool(ButtonID.SHAPE);
+         */
         //endregion
 
     }
 
+    /**
+     * initializes each tool button with its size and icon
+     * @param buttonText the text inside the button
+     * @param iconFile the url to the icon png
+     * @return the initialized button
+     */
     public JButton initializeButton(String buttonText, String iconFile) {
         Icon icon = new ImageIcon(iconFile);
         JButton tempButton = new JButton(icon);
