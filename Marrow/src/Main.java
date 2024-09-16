@@ -36,12 +36,10 @@ public class Main {
         content.setLayout(new BorderLayout());
 
         //create draw area
-        ParentLayer parentLayer = new ParentLayer(frame);
+        BitmapLayer bitmapLayer = new BitmapLayer();
 
         //add the bitmap layer to the main window
-        content.add(parentLayer, BorderLayout.CENTER);
-
-        parentLayer.addChild(new BitmapLayer());
+        content.add(bitmapLayer, BorderLayout.CENTER);
 
         //controls, these will be used for buttons later
         JPanel controls = new JPanel();
