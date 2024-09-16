@@ -29,6 +29,7 @@ public class Main {
     static void frameSetup(){
         Container content = frame.getContentPane();
         Toolbox tools = new Toolbox("Marrow Toolbox");
+        Timeline timeline = new Timeline("Bonemarrow Timeline");
 
         LinkedList<Layer> layers = new LinkedList<>();
 

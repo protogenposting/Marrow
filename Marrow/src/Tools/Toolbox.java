@@ -27,8 +27,10 @@ public class Toolbox extends JPanel {
         frame.setVisible(true);
         buttonPanel.setVisible(true);
 
-        buttonPanel.add(paintBrush); buttonPanel.add(bucket);
-        buttonPanel.add(line); buttonPanel.add(shape);
+        buttonPanel.add(paintBrush);
+        buttonPanel.add(bucket);
+        buttonPanel.add(line);
+        buttonPanel.add(shape);
 
         frame.add(buttonPanel);
         frame.setLocationRelativeTo(null);
