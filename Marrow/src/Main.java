@@ -9,9 +9,24 @@ import java.util.LinkedList;
 
 public class Main {
     public Tool currentTool = new Tool();
+
+    //the main frame we will be drawing on
+    static JFrame frame = new JFrame("Marrow");
+
     public static void main(String[] args) {
-        //the main frame we will be drawing on
-        JFrame frame = new JFrame("Marrow");
+
+        frameSetup();
+
+        //update loop
+        while(true)
+        {
+            //move these to a key pressed event
+            //ImageConversions.SaveImage(bitmapLayer.getImage());
+            //System.out.println("saved");
+        }
+    }
+
+    static void frameSetup(){
         Container content = frame.getContentPane();
         Toolbox tools = new Toolbox("Marrow Toolbox");
 
@@ -38,13 +53,6 @@ public class Main {
         frame.setLocationRelativeTo(null); //places window at the center of the screen
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //update loop
-        while(true)
-        {
-            //move these to a key pressed event
-            //ImageConversions.SaveImage(bitmapLayer.getImage());
-            //System.out.println("saved");
-        }
     }
+
 }
