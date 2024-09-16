@@ -17,10 +17,10 @@ public class Toolbox extends JPanel {
     JPanel buttonPanel = new JPanel(); // add all buttons to this
 
     // these 4 buttons will connect to their corresponding methods / classes (?)
-    JButton paintBrush = initializeButton("paint brush", "res/iconImages/brushTool.png");
-    JButton bucket = initializeButton("bucket", "res/iconImages/bucketTool.png");
-    JButton line = initializeButton("line", "res/iconImages/lineTool.png");
-    JButton shape = initializeButton("shape", "res/iconImages/shapeTool.png"); //circle or rectangle idk
+    JButton paintBrush = initializeButton("paint brush", "iconImages/brushTool.png");
+    JButton bucket = initializeButton("bucket", "iconImages/bucketTool.png");
+    JButton line = initializeButton("line", "iconImages/lineTool.png");
+    JButton shape = initializeButton("shape", "iconImages/shapeTool.png"); //circle or rectangle idk
 
     public Toolbox(String windowName) {
         frame.setTitle(windowName);
@@ -52,7 +52,7 @@ public class Toolbox extends JPanel {
     }
 
     public JButton initializeButton(String buttonText, String iconFile) {
-        Icon icon = new ImageIcon();
+        Icon icon = new ImageIcon(iconFile);
         JButton tempButton = new JButton(icon);
         Dimension windowSize = new Dimension(200, 120);
 
