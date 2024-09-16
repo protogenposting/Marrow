@@ -26,6 +26,7 @@ public class ParentLayer extends Layer {
         frame.getContentPane().add(layer);
         layer.setOpaque(false);
         layer.parent = this;
+        layer.setSize(1366,768);
     }
     protected void paintComponent(Graphics g) {
         if(image==null)
