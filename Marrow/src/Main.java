@@ -43,6 +43,8 @@ public class Main {
 
         parentLayer.addChild(new BitmapLayer());
 
+        parentLayer.setSize(1366,768);
+
         //controls, these will be used for buttons later
         JPanel controls = new JPanel();
 

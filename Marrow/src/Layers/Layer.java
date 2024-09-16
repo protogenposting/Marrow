@@ -9,6 +9,10 @@ import java.util.LinkedList;
 public class Layer extends JComponent {
     public LinkedList<Layer> children = new LinkedList<>();
 
+    public double x = 0;
+
+    public double y = 0;
+
     public LinkedList<Layer> getChildren()
     {
         return children;
