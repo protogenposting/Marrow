@@ -14,7 +14,13 @@ import java.awt.event.MouseMotionAdapter;
  * we will have to separate this into a rendering and an image component later
  */
 public class BitmapLayer extends ChildLayer {
-    //mouse cooridnates
+
+    //image being drawn
+    private Image image;
+    //a silly billy graphics2D object
+    private Graphics2D graphics;
+    //mouse coordinates
+
     private int currentX, currentY, oldX, oldY;
 
     public Bitmap bitmap = new Bitmap();
