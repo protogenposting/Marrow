@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Main {
@@ -28,11 +29,12 @@ public class Main {
 
     static void frameSetup(){
         Container content = frame.getContentPane();
-        Toolbox tools = new Toolbox("Marrow Toolbox");
-        LayerWindow layerOrganization = new LayerWindow("Marrow Layers");
-        Timeline timeline = new Timeline("Marrow Timeline");
 
-        LinkedList<Layer> layers = new LinkedList<>();
+        ArrayList<Layer> layers = new ArrayList<>();
+
+        Toolbox tools = new Toolbox("Marrow Toolbox");
+        LayerWindow layerOrganization = new LayerWindow("Marrow Layers",layers);
+        Timeline timeline = new Timeline("Marrow Timeline");
 
         //set layout
         content.setLayout(new BorderLayout());

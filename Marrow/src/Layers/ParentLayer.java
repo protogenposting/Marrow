@@ -15,6 +15,7 @@ public class ParentLayer extends Layer {
     JFrame frame;
     Graphics2D graphics;
     Image image;
+    public ChildLayer currentLayer;
     public ParentLayer(JFrame frame)
     {
         this.frame = frame;
@@ -22,6 +23,10 @@ public class ParentLayer extends Layer {
 
     public void addChild(ChildLayer layer)
     {
+        if(children.isEmpty())
+        {
+            currentLayer = layer;
+        }
         children.add(layer);
         frame.getContentPane().add(layer);
         layer.setOpaque(false);
@@ -44,7 +49,13 @@ public class ParentLayer extends Layer {
 
         for(int i = 0; i < children.size(); i++)
         {
-            Layer child = children.get(i);
+            ChildLayer child = children.get(i);
+            
+            if(currentLayer.equals(child))
+            {
+                child.isCurrentLayer = true;
+            }
+
             if(child.getClass().equals(BitmapLayer.class))
             {
                 //draw lines from the bitmap

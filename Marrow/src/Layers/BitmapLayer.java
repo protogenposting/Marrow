@@ -16,8 +16,6 @@ public class BitmapLayer extends ChildLayer {
     //mouse cooridnates
     private int currentX, currentY, oldX, oldY;
 
-    private boolean canBeDrawnOn = true;
-
     public Bitmap bitmap = new Bitmap();
 
     public BitmapLayer() {
@@ -44,7 +42,7 @@ public class BitmapLayer extends ChildLayer {
                 int blue = 0;
                 int alpha = 100;
                 //draw some lines
-                if(canBeDrawnOn) {
+                if(isCurrentLayer) {
                     int x1 = oldX;
                     int x2 = currentX;
                     int y1 = oldY;
