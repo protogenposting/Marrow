@@ -39,10 +39,10 @@ public class Toolbox extends JPanel {
         frame.setLocationRelativeTo(null);
 
         // "if button is pressed, do this event"
-        paintBrush.addActionListener(e -> { System.out.println("paintbrush selected");});
-        bucket.addActionListener(e -> { System.out.println("bucket selected"); });
-        line.addActionListener(e -> { System.out.println("line selected"); });
-        shape.addActionListener(e -> { System.out.println("shape selected"); });
+        paintBrush.addActionListener(e -> { paintBrush.swapTool(ToolID.PAINTBRUSH); });
+        bucket.addActionListener(e -> { bucket.swapTool(ToolID.BUCKET); });
+        line.addActionListener(e -> { line.swapTool(ToolID.LINE); });
+        shape.addActionListener(e -> { shape.swapTool(ToolID.SHAPE); });
 
         //region experimental code
         /*
