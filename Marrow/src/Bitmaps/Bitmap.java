@@ -23,7 +23,6 @@ public class Bitmap {
     public boolean addPixel(int x, int y, Pixel pixel)
     {
         if(x<0||y<0||x>bitmap.size()||y>bitmap.getFirst().size()) {
-            System.out.println("OUT OF BOUNDS: "+x+","+y);
             return false;
         }
         bitmap.get(x).set(y,pixel);

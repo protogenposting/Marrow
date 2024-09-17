@@ -1,12 +1,10 @@
 import Layers.*;
+import Layers.LayerWindow.LayerWindow;
 import Tools.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class Main {
     public Tool currentTool = new Tool();
@@ -32,10 +30,6 @@ public class Main {
 
         ArrayList<Layer> layers = new ArrayList<>();
 
-        Toolbox tools = new Toolbox("Marrow Toolbox");
-        LayerWindow layerOrganization = new LayerWindow("Marrow Layers",layers);
-        Timeline timeline = new Timeline("Marrow Timeline");
-
         //set layout
         content.setLayout(new BorderLayout());
 
@@ -59,6 +53,10 @@ public class Main {
         frame.setLocationRelativeTo(null); //places window at the center of the screen
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        Toolbox tools = new Toolbox("Marrow Toolbox");
+        LayerWindow layerOrganization = new LayerWindow("Marrow Layers",layers);
+        Timeline timeline = new Timeline("Marrow Timeline");
     }
 
 }

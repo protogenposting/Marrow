@@ -16,4 +16,11 @@ public class Pixel {
         this.blue = blue;
         this.alpha = alpha;
     }
+    public Pixel(RGBColor color)
+    {
+        this.red = color.red;
+        this.green = color.green;
+        this.blue = color.blue;
+        this.alpha = color.alpha;
+    }
 }

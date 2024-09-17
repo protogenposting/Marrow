@@ -2,6 +2,7 @@ package Layers;
 
 import Bitmaps.Bitmap;
 import Bitmaps.Pixel;
+import Bitmaps.RGBColor;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -18,6 +19,8 @@ public class BitmapLayer extends ChildLayer {
 
     public Bitmap bitmap = new Bitmap();
 
+    RGBColor currentColor = new RGBColor(0,0,0,100);
+
     public BitmapLayer() {
         setDoubleBuffered(false);
 
@@ -26,6 +29,7 @@ public class BitmapLayer extends ChildLayer {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                bitmap.addPixel(e.getX(),e.getY(),new Pixel(currentColor));
                 //save the old coords
                 oldX = e.getX();
                 oldY = e.getY();
@@ -37,10 +41,6 @@ public class BitmapLayer extends ChildLayer {
             public void mouseDragged(MouseEvent e) {
                 currentX = e.getX();
                 currentY = e.getY();
-                int red = 0;
-                int green = 0;
-                int blue = 0;
-                int alpha = 100;
                 //draw some lines
                 if(isCurrentLayer) {
                     int x1 = oldX;
@@ -48,9 +48,9 @@ public class BitmapLayer extends ChildLayer {
                     int y1 = oldY;
                     int y2 = currentY;
 
-                    bitmap.addPixel(x1,y1,new Pixel(red,green,blue,alpha));
+                    bitmap.addPixel(x1,y1,new Pixel(currentColor));
 
-                    bitmap.addPixel(x2,y2,new Pixel(red,green,blue,alpha));
+                    bitmap.addPixel(x2,y2,new Pixel(currentColor));
 
                     int width = Math.abs(x1-x2);
 
@@ -70,7 +70,7 @@ public class BitmapLayer extends ChildLayer {
                         {
                             double tan = Math.tan(theta)*xProgress;
                             int yResult = (int)Math.round(tan);
-                            bitmap.addPixel(xProgress + x1,yResult + y1,new Pixel(red,green,blue,alpha));
+                            bitmap.addPixel(xProgress + x1,yResult + y1,new Pixel(currentColor));
                             xProgress += signX;
                         }
                     }
@@ -81,7 +81,7 @@ public class BitmapLayer extends ChildLayer {
                         for(int i = 0; i < height; i++)
                         {
                             int xResult = (int)Math.round(yProgress/Math.tan(theta));
-                            bitmap.addPixel(xResult + x1,yProgress + y1,new Pixel(red,green,blue,alpha));
+                            bitmap.addPixel(xResult + x1,yProgress + y1,new Pixel(currentColor));
                             yProgress += signY;
                         }
                     }

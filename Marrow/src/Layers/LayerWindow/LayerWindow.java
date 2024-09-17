@@ -1,4 +1,6 @@
-package Layers;
+package Layers.LayerWindow;
+
+import Layers.Layer;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -13,5 +15,7 @@ public class LayerWindow extends JFrame {
         this.setSize(256,768);
         this.setResizable(true);
         this.layers = layers;
+
+
     }
 }
