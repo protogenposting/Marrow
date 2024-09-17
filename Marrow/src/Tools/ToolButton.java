@@ -1,4 +1,6 @@
 package Tools;
+import Layers.BitmapLayer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -22,14 +24,24 @@ public class ToolButton extends JButton {
      */
     public void swapTool(ToolID toolID){
         switch (toolID){
-            case PAINTBRUSH -> paintBrush();
-            case BUCKET -> bucket();
-            case LINE -> line();
-            case SHAPE -> shape();
+            case PAINTBRUSH -> this.toolID = ToolID.PAINTBRUSH;
+            case BUCKET -> this.toolID = ToolID.BUCKET;
+            case LINE -> this.toolID = ToolID.LINE;
+            case SHAPE -> this.toolID = ToolID.SHAPE;
         }
-
     }
 
+    public void useTool(ToolID toolID, BitmapLayer bitmap){
+        switch(toolID){
+            case PAINTBRUSH -> paintBrush(bitmap);
+            case BUCKET -> bucket(bitmap);
+            case LINE -> line(bitmap);
+            case SHAPE -> shape(bitmap);
+        }
+    }
+
+
+    /*
     public void getOldMouseCoordinates(){
         addMouseListener(new MouseAdapter() {
             @Override
@@ -41,21 +53,22 @@ public class ToolButton extends JButton {
         });
     }
 
-    public void paintBrush(){
+     */
+
+    public void paintBrush(BitmapLayer bitmap){
         System.out.println("WIP paintbrush");
-        getOldMouseCoordinates();
 
     }
 
-    public void bucket(){
+    public void bucket(BitmapLayer bitmap){
         System.out.println("WIP bucket");
     }
 
-    public void line(){
+    public void line(BitmapLayer bitmap){
         System.out.println("WIP line");
     }
 
-    public void shape(){
+    public void shape(BitmapLayer bitmap){
         System.out.println("WIP shape");
     }
 
