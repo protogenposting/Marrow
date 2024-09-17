@@ -30,6 +30,7 @@ public class Main {
         Container content = frame.getContentPane();
         Toolbox tools = new Toolbox("Marrow Toolbox");
         LayerWindow layerOrganization = new LayerWindow("Marrow Layers");
+        Timeline timeline = new Timeline("Marrow Timeline");
 
         LinkedList<Layer> layers = new LinkedList<>();
 
