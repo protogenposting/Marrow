@@ -34,7 +34,6 @@ public class Toolbox extends JPanel {
         buttonPanel.add(line); buttonPanel.add(shape);
 
         frame.add(buttonPanel);
-        frame.setLocationRelativeTo(null);
 
         //region experimental code
 

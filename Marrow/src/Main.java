@@ -29,6 +29,7 @@ public class Main {
     static void frameSetup(){
         Container content = frame.getContentPane();
         Toolbox tools = new Toolbox("Marrow Toolbox");
+        LayerWindow layerOrganization = new LayerWindow("Marrow Layers");
 
         LinkedList<Layer> layers = new LinkedList<>();
 
