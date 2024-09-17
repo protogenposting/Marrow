@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Main {
@@ -28,19 +29,25 @@ public class Main {
 
     static void frameSetup(){
         Container content = frame.getContentPane();
-        Toolbox tools = new Toolbox();
-        Timeline timeline = new Timeline("Bonemarrow Timeline");
 
-        LinkedList<Layer> layers = new LinkedList<>();
+        ArrayList<Layer> layers = new ArrayList<>();
+
+        Toolbox tools = new Toolbox();
+        LayerWindow layerOrganization = new LayerWindow("Marrow Layers",layers);
+        Timeline timeline = new Timeline("Marrow Timeline");
 
         //set layout
         content.setLayout(new BorderLayout());
 
         //create draw area
-        BitmapLayer bitmapLayer = new BitmapLayer();
+        ParentLayer parentLayer = new ParentLayer(frame);
 
         //add the bitmap layer to the main window
-        content.add(bitmapLayer, BorderLayout.CENTER);
+        content.add(parentLayer, BorderLayout.CENTER);
+
+        parentLayer.addChild(new BitmapLayer());
+
+        parentLayer.setSize(1366,768);
 
         //controls, these will be used for buttons later
         JPanel controls = new JPanel();

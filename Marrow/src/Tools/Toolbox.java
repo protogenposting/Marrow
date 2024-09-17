@@ -36,7 +36,6 @@ public class Toolbox extends JPanel {
         buttonPanel.add(shape.tool);
 
         frame.add(buttonPanel);
-        frame.setLocationRelativeTo(null);
 
         // "if button is pressed, do this event"
         paintBrush.addActionListener(e -> { paintBrush.swapTool(ToolID.PAINTBRUSH); });
