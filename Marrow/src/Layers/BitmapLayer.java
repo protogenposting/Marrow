@@ -60,31 +60,34 @@ public class BitmapLayer extends ChildLayer {
 
                     int width = Math.abs(x1-x2);
 
-                    int signX = (int)Math.signum(x1-x2);
+                    int height = Math.abs(y1-y2);
 
-                    int signY = (int)Math.signum(y1-y2);
+                    int signX = (int)Math.signum(x2-x1);
 
-                    double theta = Math.atan(((double)y1-y2)/(x1-x2));
+                    int signY = (int)Math.signum(y2-y1);
+
+                    double theta = Math.atan(((double)y2-y1)/(x2-x1));
 
                     if(width>Math.abs(y1-y2))
                     {
-                        int xProgress = x1;
+                        int xProgress = signX;
 
                         for(int i = 0; i < width; i++)
                         {
-                            int yResult = (int)Math.round(Math.tan(theta)*xProgress);
-                            bitmap.addPixel(xProgress,yResult,new Pixel(red,green,blue,alpha));
+                            double tan = Math.tan(theta)*xProgress;
+                            int yResult = (int)Math.round(tan);
+                            bitmap.addPixel(xProgress + x1,yResult + y1,new Pixel(red,green,blue,alpha));
                             xProgress += signX;
                         }
                     }
                     else
                     {
-                        int yProgress = y1;
+                        int yProgress = signY;
 
-                        for(int i = 0; i < width; i++)
+                        for(int i = 0; i < height; i++)
                         {
                             int xResult = (int)Math.round(yProgress/Math.tan(theta));
-                            bitmap.addPixel(xResult,yProgress,new Pixel(red,green,blue,alpha));
+                            bitmap.addPixel(xResult + x1,yProgress + y1,new Pixel(red,green,blue,alpha));
                             yProgress += signY;
                         }
                     }
