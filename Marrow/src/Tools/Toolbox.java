@@ -1,7 +1,6 @@
 package Tools;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class Toolbox extends JPanel {
 
@@ -14,10 +13,10 @@ public class Toolbox extends JPanel {
     //JButton line = initializeButton("line", "iconImages/lineTool.png");
     //JButton shape = initializeButton("shape", "iconImages/shapeTool.png"); //circle or rectangle idk
 
-    Tool paintBrush = new Tool("iconImages/brushTool.png", ToolID.PAINTBRUSH);
-    Tool bucket = new Tool("iconImages/brushTool.png", ToolID.BUCKET);
-    Tool line = new Tool("iconImages/lineTool.png", ToolID.LINE);
-    Tool shape = new Tool("iconImages/shapeTool.png", ToolID.SHAPE);
+    ToolButton paintBrush = new ToolButton("iconImages/brushTool.png", ToolID.PAINTBRUSH);
+    ToolButton bucket = new ToolButton("iconImages/brushTool.png", ToolID.BUCKET);
+    ToolButton line = new ToolButton("iconImages/lineTool.png", ToolID.LINE);
+    ToolButton shape = new ToolButton("iconImages/shapeTool.png", ToolID.SHAPE);
 
     /**
      * initializes the toolbox window

@@ -1,13 +1,17 @@
 package Tools;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class Tool extends JButton {
+public class ToolButton extends JButton {
+
+    private int currentX, currentY, oldX, oldY;
 
     JButton tool;
     ToolID toolID;
 
-    public Tool(String iconFile, ToolID toolID){
+    public ToolButton(String iconFile, ToolID toolID){
         tool = initializeButton(iconFile);
         this.toolID = toolID;
     }
@@ -26,8 +30,21 @@ public class Tool extends JButton {
 
     }
 
+    public void getOldMouseCoordinates(){
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                //save the old coords
+                oldX = e.getX();
+                oldY = e.getY();
+            }
+        });
+    }
+
     public void paintBrush(){
         System.out.println("WIP paintbrush");
+        getOldMouseCoordinates();
+
     }
 
     public void bucket(){
