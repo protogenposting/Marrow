@@ -20,7 +20,7 @@ public class ParentLayer extends Layer {
         this.frame = frame;
     }
 
-    public void addChild(BitmapLayer layer)
+    public void addChild(ChildLayer layer)
     {
         children.add(layer);
         frame.getContentPane().add(layer);

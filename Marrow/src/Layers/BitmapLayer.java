@@ -12,15 +12,13 @@ import java.awt.event.MouseMotionAdapter;
  * This is where the user draws images as well as rendering images
  * we will have to separate this into a rendering and an image component later
  */
-public class BitmapLayer extends Layer {
+public class BitmapLayer extends ChildLayer {
     //mouse cooridnates
     private int currentX, currentY, oldX, oldY;
 
     private boolean canBeDrawnOn = true;
 
     public Bitmap bitmap = new Bitmap();
-
-    public Layer parent;
 
     public BitmapLayer() {
         setDoubleBuffered(false);
@@ -86,10 +84,10 @@ public class BitmapLayer extends Layer {
                             yProgress += signY;
                         }
                     }
-                    parent.repaint();
                 }
                 oldX = currentX;
                 oldY = currentY;
+                parent.repaint();
             }
         });
     }
