@@ -5,36 +5,35 @@ import java.awt.*;
 
 public class Toolbox extends JPanel {
 
-    enum ButtonID {
-        PAINTBRUSH, BUCKET,
-        LINE, SHAPE
-    }
-
     JFrame frame = new JFrame();
     JPanel buttonPanel = new JPanel(); // adds all buttons to this
 
     // these 4 buttons will connect to their corresponding methods / classes (?)
-    JButton paintBrush = initializeButton("paint brush", "iconImages/brushTool.png");
-    JButton bucket = initializeButton("bucket", "iconImages/bucketTool.png");
-    JButton line = initializeButton("line", "iconImages/lineTool.png");
-    JButton shape = initializeButton("shape", "iconImages/shapeTool.png"); //circle or rectangle idk
+    //JButton paintBrush = initializeButton("paint brush", "iconImages/brushTool.png");
+    //JButton bucket = initializeButton("bucket", "iconImages/bucketTool.png");
+    //JButton line = initializeButton("line", "iconImages/lineTool.png");
+    //JButton shape = initializeButton("shape", "iconImages/shapeTool.png"); //circle or rectangle idk
+
+    Tool paintBrush = new Tool("iconImages/brushTool.png", ToolID.PAINTBRUSH);
+    Tool bucket = new Tool("iconImages/brushTool.png", ToolID.BUCKET);
+    Tool line = new Tool("iconImages/lineTool.png", ToolID.LINE);
+    Tool shape = new Tool("iconImages/shapeTool.png", ToolID.SHAPE);
 
     /**
      * initializes the toolbox window
-     * @param windowName window name
      */
-    public Toolbox(String windowName) {
-        frame.setTitle(windowName);
+    public Toolbox() {
+        frame.setTitle("Marrow Toolbox");
         frame.setSize(1366,128);
 
         frame.setResizable(true);
         frame.setVisible(true);
         buttonPanel.setVisible(true);
 
-        buttonPanel.add(paintBrush);
-        buttonPanel.add(bucket);
-        buttonPanel.add(line);
-        buttonPanel.add(shape);
+        buttonPanel.add(paintBrush.tool);
+        buttonPanel.add(bucket.tool);
+        buttonPanel.add(line.tool);
+        buttonPanel.add(shape.tool);
 
         frame.add(buttonPanel);
         frame.setLocationRelativeTo(null);
@@ -56,23 +55,7 @@ public class Toolbox extends JPanel {
 
     }
 
-    /**
-     * initializes each tool button with its size and icon
-     * @param buttonText the text inside the button
-     * @param iconFile the url to the icon png
-     * @return the initialized button
-     */
-    public JButton initializeButton(String buttonText, String iconFile) {
-        Icon icon = new ImageIcon(iconFile);
-        JButton tempButton = new JButton(icon);
-        Dimension windowSize = new Dimension(200, 120);
 
-        tempButton.setVisible(true);
-        tempButton.setSize(windowSize);
-        //tempButton.setText(buttonText); //replace with sprite later on
-
-        return tempButton;
-    }
 
 
 }

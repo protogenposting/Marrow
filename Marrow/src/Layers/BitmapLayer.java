@@ -15,7 +15,7 @@ public class BitmapLayer extends Layer {
     private Image image;
     //a silly billy graphics2D object
     private Graphics2D graphics;
-    //mouse cooridnates
+    //mouse coordinates
     private int currentX, currentY, oldX, oldY;
     public BitmapLayer(){
         setDoubleBuffered(false);
