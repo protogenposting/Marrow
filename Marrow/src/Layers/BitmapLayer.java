@@ -3,6 +3,7 @@ package Layers;
 import Bitmaps.Bitmap;
 import Bitmaps.Pixel;
 import Bitmaps.RGBColor;
+import Tools.Paintbrush;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -25,7 +26,7 @@ public class BitmapLayer extends ChildLayer {
 
     public Bitmap bitmap = new Bitmap();
 
-    RGBColor currentColor = new RGBColor(0,0,0,100);
+    public RGBColor currentColor = new RGBColor(0,0,0,100);
 
     public BitmapLayer() {
         setDoubleBuffered(false);
@@ -35,10 +36,12 @@ public class BitmapLayer extends ChildLayer {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                bitmap.addPixel(e.getX(),e.getY(),new Pixel(currentColor));
                 //save the old coords
                 oldX = e.getX();
                 oldY = e.getY();
+                Paintbrush paintbrush = new Paintbrush();
+                paintbrush.onPress(oldX,oldY,bitmap);
+                parent.repaint();
             }
         });
         //listened for mouse movement
@@ -49,48 +52,8 @@ public class BitmapLayer extends ChildLayer {
                 currentY = e.getY();
                 //draw some lines
                 if(isCurrentLayer) {
-                    int x1 = oldX;
-                    int x2 = currentX;
-                    int y1 = oldY;
-                    int y2 = currentY;
-
-                    bitmap.addPixel(x1,y1,new Pixel(currentColor));
-
-                    bitmap.addPixel(x2,y2,new Pixel(currentColor));
-
-                    int width = Math.abs(x1-x2);
-
-                    int height = Math.abs(y1-y2);
-
-                    int signX = (int)Math.signum(x2-x1);
-
-                    int signY = (int)Math.signum(y2-y1);
-
-                    double theta = Math.atan(((double)y2-y1)/(x2-x1));
-
-                    if(width>Math.abs(y1-y2))
-                    {
-                        int xProgress = signX;
-
-                        for(int i = 0; i < width; i++)
-                        {
-                            double tan = Math.tan(theta)*xProgress;
-                            int yResult = (int)Math.round(tan);
-                            bitmap.addPixel(xProgress + x1,yResult + y1,new Pixel(currentColor));
-                            xProgress += signX;
-                        }
-                    }
-                    else
-                    {
-                        int yProgress = signY;
-
-                        for(int i = 0; i < height; i++)
-                        {
-                            int xResult = (int)Math.round(yProgress/Math.tan(theta));
-                            bitmap.addPixel(xResult + x1,yProgress + y1,new Pixel(currentColor));
-                            yProgress += signY;
-                        }
-                    }
+                    Paintbrush paintbrush = new Paintbrush();
+                    paintbrush.onDrag(oldX,oldY,currentX,currentY,bitmap);
                 }
                 oldX = currentX;
                 oldY = currentY;
