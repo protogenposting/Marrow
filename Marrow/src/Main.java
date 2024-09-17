@@ -7,7 +7,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Main {
-    public Tool currentTool = new Tool();
 
     //the main frame we will be drawing on
     static JFrame frame = new JFrame("Marrow");
@@ -54,7 +53,7 @@ public class Main {
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Toolbox tools = new Toolbox("Marrow Toolbox");
+        Toolbox tools = new Toolbox();
         LayerWindow layerOrganization = new LayerWindow("Marrow Layers",layers);
         Timeline timeline = new Timeline("Marrow Timeline");
     }
