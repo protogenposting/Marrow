@@ -23,7 +23,7 @@ public class Bitmap {
 
     public boolean addPixel(int x, int y, Pixel pixel)
     {
-        if(x<0||y<0||x>bitmap.size()||y>bitmap.getFirst().size()) {
+        if(!isInBounds(x,y)) {
             return false;
         }
         bitmap.get(x).set(y,pixel);
@@ -31,14 +31,25 @@ public class Bitmap {
     }
     public boolean pixelAt(int x, int y)
     {
-        if(x<0||y<0||x>bitmap.size()||y>bitmap.getFirst().size()) {
+        if(!isInBounds(x,y)) {
             return false;
         }
         return bitmap.get(x).get(y).alpha>0;
     }
+    public Pixel getPixelAt(int x, int y)
+    {
+        return bitmap.get(x).get(y);
+    }
+    public boolean pixelColorMatches(int x, int y,Pixel pixel)
+    {
+        if(!isInBounds(x,y)) {
+            return false;
+        }
+        return pixel.equals(getPixelAt(x,y));
+    }
     public boolean isInBounds(int x, int y)
     {
-        if(x<0||y<0||x>bitmap.size()||y>bitmap.getFirst().size()) {
+        if(x<0||y<0||x>=bitmap.size()||y>=bitmap.getFirst().size()) {
             return false;
         }
         return true;

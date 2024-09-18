@@ -1,6 +1,11 @@
 package Tools;
 
+import Bitmaps.RGBColor;
+
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 
 public class Toolbox extends JPanel {
 
@@ -42,15 +47,36 @@ public class Toolbox extends JPanel {
 
         // "if button is pressed, do this event"
 
-        paintBrush.toolButton.addActionListener(e -> { toolContainer.currentTool = paintBrush.tool; });
+        paintBrush.toolButton.addActionListener(e -> {
+            toolContainer.currentTool = paintBrush.tool;
+            toolContainer.currentTool.currentColor = toolContainer.currentColor;
+        });
         bucket.toolButton.addActionListener(e -> {
             toolContainer.currentTool = bucket.tool;
+            toolContainer.currentTool.currentColor = toolContainer.currentColor;
         });
         line.toolButton.addActionListener(e -> { toolContainer.currentTool = line.tool;
             System.out.println("swapped"); });
         
         //line.addActionListener(e -> { line.swapTool(ToolID.LINE); });
         //shape.addActionListener(e -> { shape.swapTool(ToolID.SHAPE); });
+
+        JColorChooser colorChooser = new JColorChooser();
+
+        colorChooser.getSelectionModel().addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                Color currentColor = colorChooser.getColor();
+                toolContainer.currentColor = new RGBColor(
+                        currentColor.getRed(),
+                        currentColor.getGreen(),
+                        currentColor.getBlue(),
+                        100);
+                toolContainer.currentTool.currentColor = toolContainer.currentColor;
+            }
+        });
+
+        frame.add(colorChooser);
 
         //region experimental code
         /*

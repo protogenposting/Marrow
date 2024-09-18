@@ -6,7 +6,6 @@ import Bitmaps.RGBColor;
 
 public class Paintbrush extends Tool{
     int size = 1;
-    public RGBColor currentColor = new RGBColor(0,0,0,100);
     public void onPress(int x, int y, Bitmap bitmap)
     {
         bitmap.addPixel(x,y,new Pixel(currentColor));
