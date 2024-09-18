@@ -5,7 +5,8 @@ import javax.swing.*;
 public class Toolbox extends JPanel {
 
     JFrame frame = new JFrame();
-    JPanel buttonPanel = new JPanel(); // adds all buttons to this
+    JPanel buttonPanel = new JPanel();
+    ToolContainer toolContainer;// adds all buttons to this
 
     // these 4 buttons will connect to their corresponding methods / classes (?)
     //JButton paintBrush = initializeButton("paint brush", "iconImages/brushTool.png");
@@ -13,15 +14,15 @@ public class Toolbox extends JPanel {
     //JButton line = initializeButton("line", "iconImages/lineTool.png");
     //JButton shape = initializeButton("shape", "iconImages/shapeTool.png"); //circle or rectangle idk
 
-    ToolButton paintBrush = new ToolButton("iconImages/brushTool.png", ToolID.PAINTBRUSH);
-    ToolButton bucket = new ToolButton("iconImages/brushTool.png", ToolID.BUCKET);
-    ToolButton line = new ToolButton("iconImages/lineTool.png", ToolID.LINE);
-    ToolButton shape = new ToolButton("iconImages/shapeTool.png", ToolID.SHAPE);
+    ToolButton paintBrush = new ToolButton("iconImages/brushTool.png", new Paintbrush());
+    ToolButton bucket = new ToolButton("iconImages/brushTool.png", new Bucket());
+    ToolButton line = new ToolButton("iconImages/lineTool.png", new LineTool());
+    ToolButton shape = new ToolButton("iconImages/shapeTool.png", new ShapeTool());
 
     /**
      * initializes the toolbox window
      */
-    public Toolbox() {
+    public Toolbox(ToolContainer toolContainer) {
         frame.setTitle("Marrow Toolbox");
         frame.setSize(1366,128);
 
@@ -29,18 +30,20 @@ public class Toolbox extends JPanel {
         frame.setVisible(true);
         buttonPanel.setVisible(true);
 
-        buttonPanel.add(paintBrush.tool);
-        buttonPanel.add(bucket.tool);
-        buttonPanel.add(line.tool);
-        buttonPanel.add(shape.tool);
+        buttonPanel.add(paintBrush.toolButton);
+        buttonPanel.add(bucket.toolButton);
+        buttonPanel.add(line.toolButton);
+        buttonPanel.add(shape.toolButton);
 
         frame.add(buttonPanel);
 
+        this.toolContainer = toolContainer;
+
         // "if button is pressed, do this event"
-        paintBrush.addActionListener(e -> { paintBrush.swapTool(ToolID.PAINTBRUSH); });
-        bucket.addActionListener(e -> { bucket.swapTool(ToolID.BUCKET); });
-        line.addActionListener(e -> { line.swapTool(ToolID.LINE); });
-        shape.addActionListener(e -> { shape.swapTool(ToolID.SHAPE); });
+        paintBrush.addActionListener(e -> { toolContainer.currentTool = paintBrush.tool; });
+        //bucket.addActionListener(e -> { bucket.swapTool(ToolID.BUCKET); });
+        //line.addActionListener(e -> { line.swapTool(ToolID.LINE); });
+        //shape.addActionListener(e -> { shape.swapTool(ToolID.SHAPE); });
 
         //region experimental code
         /*

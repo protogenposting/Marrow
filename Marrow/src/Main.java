@@ -26,6 +26,7 @@ public class Main {
 
     static void frameSetup(){
         Container content = frame.getContentPane();
+        ToolContainer toolContainer = new ToolContainer();
 
         ArrayList<Layer> layers = new ArrayList<>();
 
@@ -33,12 +34,12 @@ public class Main {
         content.setLayout(new BorderLayout());
 
         //create draw area
-        ParentLayer parentLayer = new ParentLayer(frame);
+        ParentLayer parentLayer = new ParentLayer(frame, toolContainer);
 
         //add the bitmap layer to the main window
         content.add(parentLayer, BorderLayout.CENTER);
 
-        parentLayer.addChild(new BitmapLayer());
+        parentLayer.addChild(new BitmapLayer(toolContainer));
 
         parentLayer.setSize(1366,768);
 
@@ -53,7 +54,9 @@ public class Main {
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Toolbox tools = new Toolbox();
+
+
+        Toolbox tools = new Toolbox(toolContainer);
         LayerWindow layerOrganization = new LayerWindow("Marrow Layers",layers);
         Timeline timeline = new Timeline("Marrow Timeline");
     }

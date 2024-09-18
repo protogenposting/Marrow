@@ -1,6 +1,7 @@
 package Layers;
 
 import Bitmaps.*;
+import Tools.ToolContainer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,10 +16,12 @@ public class ParentLayer extends Layer {
     JFrame frame;
     Graphics2D graphics;
     Image image;
+    ToolContainer toolContainer;
     public ChildLayer currentLayer;
-    public ParentLayer(JFrame frame)
+    public ParentLayer(JFrame frame, ToolContainer toolContainer)
     {
         this.frame = frame;
+        this.toolContainer = toolContainer;
     }
 
     public void addChild(ChildLayer layer)

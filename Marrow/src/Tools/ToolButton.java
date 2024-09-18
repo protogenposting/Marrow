@@ -10,34 +10,12 @@ public class ToolButton extends JButton {
 
     private int currentX, currentY, oldX, oldY;
 
-    JButton tool;
-    ToolID toolID;
+    JButton toolButton;
+    public Tool tool;
 
-    public ToolButton(String iconFile, ToolID toolID){
-        tool = initializeButton(iconFile);
-        this.toolID = toolID;
-    }
-
-    /**
-     * swaps the tool the user is using according to the tool button pressed
-     * @param toolID the tool being switched to
-     */
-    public void swapTool(ToolID toolID){
-        switch (toolID){
-            case PAINTBRUSH -> this.toolID = ToolID.PAINTBRUSH;
-            case BUCKET -> this.toolID = ToolID.BUCKET;
-            case LINE -> this.toolID = ToolID.LINE;
-            case SHAPE -> this.toolID = ToolID.SHAPE;
-        }
-    }
-
-    public void useTool(ToolID toolID, BitmapLayer bitmap){
-        switch(toolID){
-            case PAINTBRUSH -> paintBrush(bitmap);
-            case BUCKET -> bucket(bitmap);
-            case LINE -> line(bitmap);
-            case SHAPE -> shape(bitmap);
-        }
+    public ToolButton(String iconFile, Tool tool){
+        toolButton = initializeButton(iconFile);
+        this.tool = tool;
     }
 
 

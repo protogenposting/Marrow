@@ -4,6 +4,8 @@ import Bitmaps.Bitmap;
 import Bitmaps.Pixel;
 import Bitmaps.RGBColor;
 import Tools.Paintbrush;
+import Tools.Tool;
+import Tools.ToolContainer;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -21,6 +23,7 @@ public class BitmapLayer extends ChildLayer {
     //a silly billy graphics2D object
     private Graphics2D graphics;
     //mouse coordinates
+    ToolContainer toolContainer;
 
     private int currentX, currentY, oldX, oldY;
 
@@ -28,8 +31,9 @@ public class BitmapLayer extends ChildLayer {
 
     public RGBColor currentColor = new RGBColor(0,0,0,100);
 
-    public BitmapLayer() {
+    public BitmapLayer(ToolContainer toolContainer) {
         setDoubleBuffered(false);
+        this.toolContainer = toolContainer;
 
         bitmap.setSize(1366,768);
         //listener for mouse being pressed.
@@ -39,8 +43,8 @@ public class BitmapLayer extends ChildLayer {
                 //save the old coords
                 oldX = e.getX();
                 oldY = e.getY();
-                Paintbrush paintbrush = new Paintbrush();
-                paintbrush.onPress(oldX,oldY,bitmap);
+                Tool currentTool = toolContainer.currentTool;
+                currentTool.onPress(oldX,oldY,bitmap);
                 parent.repaint();
             }
         });
@@ -52,8 +56,8 @@ public class BitmapLayer extends ChildLayer {
                 currentY = e.getY();
                 //draw some lines
                 if(isCurrentLayer) {
-                    Paintbrush paintbrush = new Paintbrush();
-                    paintbrush.onDrag(oldX,oldY,currentX,currentY,bitmap);
+                    Tool currentTool = toolContainer.currentTool;
+                    currentTool.onDrag(oldX,oldY,currentX,currentY,bitmap);
                 }
                 oldX = currentX;
                 oldY = currentY;
