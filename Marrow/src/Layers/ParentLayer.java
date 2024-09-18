@@ -50,6 +50,8 @@ public class ParentLayer extends Layer {
 
         graphics.setColor(Color.black);
 
+        double time = System.nanoTime();
+        //RENDERING
         for(int i = 0; i < children.size(); i++)
         {
             ChildLayer child = children.get(i);
@@ -79,7 +81,9 @@ public class ParentLayer extends Layer {
                 }
             }
         }
-        long time2 = Calendar.getInstance().getTimeInMillis();
+        double time2 = System.nanoTime();
+
+        System.out.println((time2-time)/1000000);
 
         g.drawImage(image,0,0,null);
     }
