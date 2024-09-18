@@ -75,7 +75,7 @@ public class ParentLayer extends Layer {
                         Color pixelColor = new Color(pixel.red, pixel.green, pixel.blue);
                         if(pixel.alpha>0) {
                             graphics.setColor(pixelColor);
-                            graphics.fillRect(xPos, yPos, 1, 1);
+                            graphics.drawLine(xPos, yPos, xPos, yPos);
                         }
                     }
                 }
