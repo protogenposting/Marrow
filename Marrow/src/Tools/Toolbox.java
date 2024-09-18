@@ -55,8 +55,10 @@ public class Toolbox extends JPanel {
             toolContainer.currentTool = bucket.tool;
             toolContainer.currentTool.currentColor = toolContainer.currentColor;
         });
-        line.toolButton.addActionListener(e -> { toolContainer.currentTool = line.tool;
-            System.out.println("swapped"); });
+        line.toolButton.addActionListener(e -> {
+            toolContainer.currentTool = line.tool;
+            toolContainer.currentTool.currentColor = toolContainer.currentColor;
+        });
         
         //line.addActionListener(e -> { line.swapTool(ToolID.LINE); });
         //shape.addActionListener(e -> { shape.swapTool(ToolID.SHAPE); });
@@ -88,8 +90,4 @@ public class Toolbox extends JPanel {
         //endregion
 
     }
-
-
-
-
-}
+    }
