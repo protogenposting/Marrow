@@ -31,9 +31,8 @@ class CheckPoint
                     continue;
                 }
                 if (
-                        bitmap.isInBounds(x + xDir, y + yDir)
-                        && bitmap.pixelColorMatches(x + xDir, y + yDir, new Pixel(startingColor))
-                        && !bitmap.pixelColorMatches(x + xDir, y + yDir, new Pixel(currentColor))
+                        bitmap.isInBounds(x + xDir, y + yDir)&&
+                        bitmap.pixelColorMatches(x + xDir, y + yDir, new Pixel(startingColor))
                 )
                 {
                     bitmap.addPixel(x + xDir, y + yDir, new Pixel(currentColor));
@@ -47,11 +46,11 @@ class CheckPoint
 
 public class Bucket extends Tool {
     public void onPress(int x, int y, Bitmap bitmap) {
-        RGBColor startColor = bitmap.getPixelAt(x,y).toRGBColor();
+        RGBColor startColor = bitmap.getPixelAt(x, y).toRGBColor();
 
         ArrayList<CheckPoint> pixels = new ArrayList<>();
 
-        pixels.add(new CheckPoint(x, y, bitmap, currentColor,startColor));
+        pixels.add(new CheckPoint(x, y, bitmap, currentColor, startColor));
 
         while (!pixels.isEmpty()) {
             ArrayList<CheckPoint> newPixels = new ArrayList<>();

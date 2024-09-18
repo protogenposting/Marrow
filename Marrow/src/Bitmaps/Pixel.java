@@ -18,7 +18,7 @@ public class Pixel {
     }
     public RGBColor toRGBColor()
     {
-        return new RGBColor(red,green,blue,100);
+        return new RGBColor(red,green,blue,alpha);
     }
     public Pixel(RGBColor color)
     {
