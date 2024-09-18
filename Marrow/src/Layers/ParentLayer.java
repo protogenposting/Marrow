@@ -70,7 +70,9 @@ public class ParentLayer extends Layer {
                     for(int yPos = 0; yPos < map.get(xPos).size(); yPos++)
                     {
                         Pixel pixel = map.get(xPos).get(yPos);
+                        Color pixelColor = new Color(pixel.red, pixel.green, pixel.blue);
                         if(pixel.alpha>0) {
+                            graphics.setColor(pixelColor);
                             graphics.fillRect(xPos, yPos, 1, 1);
                         }
                     }

@@ -9,7 +9,7 @@ import java.awt.*;
  * Tools are used to draw in different ways
  */
 public class Tool {
-    public RGBColor currentColor = new RGBColor(0,0,0,100);
+    public RGBColor currentColor = new RGBColor(255,25,25,100);
     /**
      * call this when the mouse is clicked
      * @param x

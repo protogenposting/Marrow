@@ -16,11 +16,19 @@ public class Pixel {
         this.blue = blue;
         this.alpha = alpha;
     }
+    public RGBColor toRGBColor()
+    {
+        return new RGBColor(red,green,blue,100);
+    }
     public Pixel(RGBColor color)
     {
         this.red = color.red;
         this.green = color.green;
         this.blue = color.blue;
         this.alpha = color.alpha;
+    }
+    public boolean equals(Pixel pixel)
+    {
+        return pixel.red == red&&pixel.blue == blue&&pixel.green == green;
     }
 }
