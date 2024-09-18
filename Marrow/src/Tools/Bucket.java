@@ -32,7 +32,7 @@ class CheckPoint
                 }
                 if (
                         bitmap.isInBounds(x + xDir, y + yDir)
-                        && !bitmap.pixelColorMatches(x + xDir, y + yDir, new Pixel(startingColor))
+                        && bitmap.pixelColorMatches(x + xDir, y + yDir, new Pixel(startingColor))
                         && !bitmap.pixelColorMatches(x + xDir, y + yDir, new Pixel(currentColor))
                 )
                 {

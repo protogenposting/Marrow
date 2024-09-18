@@ -29,6 +29,6 @@ public class Pixel {
     }
     public boolean equals(Pixel pixel)
     {
-        return pixel.red == red&&pixel.blue == blue&&pixel.green == green;
+        return pixel.red == red&&pixel.blue == blue&&pixel.green == green&&pixel.alpha==alpha;
     }
 }
