@@ -23,22 +23,22 @@ class CheckPoint
     public ArrayList<CheckPoint> updateNearbyPoints()
     {
         ArrayList<CheckPoint> list = new ArrayList<>();
-        if(!bitmap.pixelAt(x-1,y) && bitmap.isInBounds(x-1,y))
+        if(bitmap.isInBounds(x-1,y) && !bitmap.pixelAt(x-1,y))
         {
             bitmap.addPixel(x-1,y,new Pixel(currentColor));
             list.add(new CheckPoint(x-1,y,bitmap,currentColor));
         }
-        if(!bitmap.pixelAt(x+1,y) && bitmap.isInBounds(x+1,y))
+        if(bitmap.isInBounds(x+1,y) && !bitmap.pixelAt(x+1,y))
         {
             bitmap.addPixel(x+1,y,new Pixel(currentColor));
             list.add(new CheckPoint(x+1,y,bitmap,currentColor));
         }
-        if(!bitmap.pixelAt(x,y-1) && bitmap.isInBounds(x,y-1))
+        if(bitmap.isInBounds(x,y-1) && !bitmap.pixelAt(x,y-1))
         {
             bitmap.addPixel(x,y-1,new Pixel(currentColor));
             list.add(new CheckPoint(x,y-1,bitmap,currentColor));
         }
-        if(!bitmap.pixelAt(x,y+1) && bitmap.isInBounds(x,y+1))
+        if(bitmap.isInBounds(x,y+1) && !bitmap.pixelAt(x,y+1))
         {
             bitmap.addPixel(x,y+1,new Pixel(currentColor));
             list.add(new CheckPoint(x,y+1,bitmap,currentColor));
