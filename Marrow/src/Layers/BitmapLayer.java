@@ -21,7 +21,7 @@ public class BitmapLayer extends ChildLayer {
     //image being drawn
     private Image image;
     //a silly billy graphics2D object
-    private Graphics2D graphics;
+    public Graphics2D graphics; //changing this to public so it can use drawLine
     //mouse coordinates
     ToolContainer toolContainer;
 
