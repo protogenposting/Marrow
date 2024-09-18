@@ -40,14 +40,11 @@ public class Toolbox extends JPanel {
         this.toolContainer = toolContainer;
 
         // "if button is pressed, do this event"
-        paintBrush.addActionListener(e -> {
-            System.out.println("teehee");
+        paintBrush.toolButton.addActionListener(e -> {
             toolContainer.currentTool = paintBrush.tool;
-            System.out.println(toolContainer.currentTool.toString());
         });
-        bucket.addActionListener(e -> {
+        bucket.toolButton.addActionListener(e -> {
             toolContainer.currentTool = bucket.tool;
-            System.out.println(toolContainer.currentTool.toString());
         });
         //line.addActionListener(e -> { line.swapTool(ToolID.LINE); });
         //shape.addActionListener(e -> { shape.swapTool(ToolID.SHAPE); });

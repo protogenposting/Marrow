@@ -62,6 +62,7 @@ public class ToolButton extends JButton {
 
         tempButton.setVisible(true);
         tempButton.setSize(windowSize);
+        tempButton.setEnabled(true);
 
         return tempButton;
     }
