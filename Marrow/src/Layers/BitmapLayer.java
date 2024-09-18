@@ -45,6 +45,7 @@ public class BitmapLayer extends ChildLayer {
                 oldY = e.getY();
                 Tool currentTool = toolContainer.currentTool;
                 currentTool.onPress(oldX,oldY,bitmap);
+                System.out.println(toolContainer.currentTool.toString());
                 parent.repaint();
             }
         });

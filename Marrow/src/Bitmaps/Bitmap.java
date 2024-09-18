@@ -30,4 +30,18 @@ public class Bitmap {
         bitmap.get(x).set(y,pixel);
         return true;
     }
+    public boolean pixelAt(int x, int y)
+    {
+        if(x<0||y<0||x>bitmap.size()||y>bitmap.getFirst().size()) {
+            return false;
+        }
+        return bitmap.get(x).get(y).alpha>0;
+    }
+    public boolean isInBounds(int x, int y)
+    {
+        if(x<0||y<0||x>bitmap.size()||y>bitmap.getFirst().size()) {
+            return false;
+        }
+        return true;
+    }
 }

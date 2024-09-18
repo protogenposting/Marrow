@@ -26,7 +26,10 @@ public class Main {
 
     static void frameSetup(){
         Container content = frame.getContentPane();
+
         ToolContainer toolContainer = new ToolContainer();
+
+        System.out.println(toolContainer.currentTool.toString());
 
         ArrayList<Layer> layers = new ArrayList<>();
 
@@ -53,8 +56,6 @@ public class Main {
         frame.setLocationRelativeTo(null); //places window at the center of the screen
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
 
         Toolbox tools = new Toolbox(toolContainer);
         LayerWindow layerOrganization = new LayerWindow("Marrow Layers",layers);

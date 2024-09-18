@@ -14,10 +14,10 @@ public class Toolbox extends JPanel {
     //JButton line = initializeButton("line", "iconImages/lineTool.png");
     //JButton shape = initializeButton("shape", "iconImages/shapeTool.png"); //circle or rectangle idk
 
-    ToolButton paintBrush = new ToolButton("iconImages/brushTool.png", new Paintbrush());
-    ToolButton bucket = new ToolButton("iconImages/brushTool.png", new Bucket());
-    ToolButton line = new ToolButton("iconImages/lineTool.png", new LineTool());
-    ToolButton shape = new ToolButton("iconImages/shapeTool.png", new ShapeTool());
+    ToolButton paintBrush = new ToolButton("src/iconImages/brushTool.png", new Paintbrush());
+    ToolButton bucket = new ToolButton("src/iconImages/bucketTool.png", new Bucket());
+    ToolButton line = new ToolButton("src/iconImages/lineTool.png", new LineTool());
+    ToolButton shape = new ToolButton("src/iconImages/shapeTool.png", new ShapeTool());
 
     /**
      * initializes the toolbox window
@@ -40,10 +40,15 @@ public class Toolbox extends JPanel {
         this.toolContainer = toolContainer;
 
         // "if button is pressed, do this event"
+
         paintBrush.addActionListener(e -> { toolContainer.currentTool = paintBrush.tool; });
-        //bucket.addActionListener(e -> { bucket.swapTool(ToolID.BUCKET); });
+        bucket.toolButton.addActionListener(e -> {
+            toolContainer.currentTool = bucket.tool;
+        });
         line.addActionListener(e -> { toolContainer.currentTool = line.tool;
             System.out.println("swapped"); });
+        
+        //line.addActionListener(e -> { line.swapTool(ToolID.LINE); });
         //shape.addActionListener(e -> { shape.swapTool(ToolID.SHAPE); });
 
         //region experimental code
