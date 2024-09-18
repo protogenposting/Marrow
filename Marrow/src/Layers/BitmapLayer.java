@@ -65,5 +65,15 @@ public class BitmapLayer extends ChildLayer {
                 parent.repaint();
             }
         });
+        addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                currentX = e.getX();
+                currentY = e.getY();
+                Tool currentTool = toolContainer.currentTool;
+                currentTool.onRelease(oldX,oldY,currentX,currentY,bitmap);
+                parent.repaint();
+            }
+        });
     }
 }

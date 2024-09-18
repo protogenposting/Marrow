@@ -10,7 +10,6 @@ import java.util.Random;
  */
 public class Bitmap {
     public ArrayList<ArrayList<Pixel>> bitmap = new ArrayList<>();
-    public DebugGraphics graphics;
 
     public void setSize(int width, int height) {
         for (int x = 0; x < width; x++) {
