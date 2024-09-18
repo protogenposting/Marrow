@@ -21,7 +21,7 @@ public class BitmapLayer extends ChildLayer {
     //image being drawn
     private Image image;
     //a silly billy graphics2D object
-    private Graphics2D graphics;
+    public Graphics2D graphics; //changing this to public so it can use drawLine
     //mouse coordinates
     ToolContainer toolContainer;
 
@@ -46,6 +46,14 @@ public class BitmapLayer extends ChildLayer {
                 Tool currentTool = toolContainer.currentTool;
                 currentTool.onPress(oldX,oldY,bitmap);
                 System.out.println(toolContainer.currentTool.toString());
+                parent.repaint();
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                currentX = e.getX();
+                currentY = e.getY();
+                Tool currentTool = toolContainer.currentTool;
+                currentTool.onRelease(oldX,oldY,currentX,currentY,bitmap);
                 parent.repaint();
             }
         });

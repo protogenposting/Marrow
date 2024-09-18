@@ -19,10 +19,11 @@ public class Toolbox extends JPanel {
     //JButton line = initializeButton("line", "iconImages/lineTool.png");
     //JButton shape = initializeButton("shape", "iconImages/shapeTool.png"); //circle or rectangle idk
 
-    ToolButton paintBrush = new ToolButton("src/iconImages/brushTool.png", new Paintbrush());
-    ToolButton bucket = new ToolButton("src/iconImages/bucketTool.png", new Bucket());
-    ToolButton line = new ToolButton("src/iconImages/lineTool.png", new LineTool());
-    ToolButton shape = new ToolButton("src/iconImages/shapeTool.png", new ShapeTool());
+    // icon file shouldn't have src/, otherwise images don't render for some reason
+    ToolButton paintBrush = new ToolButton("iconImages/brushTool.png", new Paintbrush());
+    ToolButton bucket = new ToolButton("iconImages/bucketTool.png", new Bucket());
+    ToolButton line = new ToolButton("iconImages/lineTool.png", new LineTool());
+    ToolButton shape = new ToolButton("iconImages/shapeTool.png", new ShapeTool());
 
     /**
      * initializes the toolbox window
@@ -45,6 +46,7 @@ public class Toolbox extends JPanel {
         this.toolContainer = toolContainer;
 
         // "if button is pressed, do this event"
+
         paintBrush.toolButton.addActionListener(e -> {
             toolContainer.currentTool = paintBrush.tool;
             toolContainer.currentTool.currentColor = toolContainer.currentColor;
@@ -53,6 +55,11 @@ public class Toolbox extends JPanel {
             toolContainer.currentTool = bucket.tool;
             toolContainer.currentTool.currentColor = toolContainer.currentColor;
         });
+        line.toolButton.addActionListener(e -> {
+            toolContainer.currentTool = line.tool;
+            toolContainer.currentTool.currentColor = toolContainer.currentColor;
+        });
+        
         //line.addActionListener(e -> { line.swapTool(ToolID.LINE); });
         //shape.addActionListener(e -> { shape.swapTool(ToolID.SHAPE); });
 
@@ -83,8 +90,4 @@ public class Toolbox extends JPanel {
         //endregion
 
     }
-
-
-
-
-}
+    }
