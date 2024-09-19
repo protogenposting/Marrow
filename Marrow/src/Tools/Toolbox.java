@@ -25,6 +25,7 @@ public class Toolbox extends JPanel {
     ToolButton bucket = new ToolButton("Marrow/src/iconImages/bucketTool.png", new Bucket());
     ToolButton line = new ToolButton("Marrow/src/iconImages/lineTool.png", new LineTool());
     ToolButton shape = new ToolButton("Marrow/src/iconImages/shapeTool.png", new ShapeTool());
+    ToolButton eraser = new ToolButton("Marrow/src/iconImages/shapeTool.png", new Eraser());
 
     /**
      * initializes the toolbox window
@@ -41,6 +42,7 @@ public class Toolbox extends JPanel {
         buttonPanel.add(bucket.toolButton);
         buttonPanel.add(line.toolButton);
         buttonPanel.add(shape.toolButton);
+        buttonPanel.add(eraser.toolButton);
 
         frame.add(buttonPanel);
 
@@ -50,16 +52,23 @@ public class Toolbox extends JPanel {
 
         paintBrush.toolButton.addActionListener(e -> {
             toolContainer.currentTool = paintBrush.tool;
-            toolContainer.currentTool.currentColor = toolContainer.currentColor;
         });
         bucket.toolButton.addActionListener(e -> {
             toolContainer.currentTool = bucket.tool;
-            toolContainer.currentTool.currentColor = toolContainer.currentColor;
         });
         line.toolButton.addActionListener(e -> {
             toolContainer.currentTool = line.tool;
+        });
+        eraser.toolButton.addActionListener(e -> {
+            toolContainer.currentTool = eraser.tool;
             toolContainer.currentTool.currentColor = toolContainer.currentColor;
         });
+        shape.toolButton.addActionListener(e -> {
+            toolContainer.currentTool = shape.tool;
+			toolContainer.currentTool.currentColor = toolContainer.currentColor;
+        });
+
+        
         
         //line.addActionListener(e -> { line.swapTool(ToolID.LINE); });
         //shape.addActionListener(e -> { shape.swapTool(ToolID.SHAPE); });

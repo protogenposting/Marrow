@@ -1,6 +1,9 @@
 package Bitmaps;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
@@ -29,6 +32,14 @@ public class Bitmap {
         bitmap.get(x).set(y,pixel);
         return true;
     }
+    public boolean removePixel(int x, int y)
+    {
+        if(!isInBounds(x,y)) {
+            return false;
+        }
+        bitmap.get(x).set(y,new Pixel(0,0,0,0));
+        return true;
+    }
     public boolean pixelAt(int x, int y)
     {
         if(!isInBounds(x,y)) {
@@ -53,5 +64,10 @@ public class Bitmap {
             return false;
         }
         return true;
+    }
+    public Image toImage()
+    {
+        Image image = new BufferedImage(1,1,0);
+        return image;
     }
 }
