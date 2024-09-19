@@ -20,10 +20,10 @@ public class Toolbox extends JPanel {
     //JButton shape = initializeButton("shape", "iconImages/shapeTool.png"); //circle or rectangle idk
 
     // icon file shouldn't have src/, otherwise images don't render for some reason
-    ToolButton paintBrush = new ToolButton("iconImages/brushTool.png", new Paintbrush());
-    ToolButton bucket = new ToolButton("iconImages/bucketTool.png", new Bucket());
-    ToolButton line = new ToolButton("iconImages/lineTool.png", new LineTool());
-    ToolButton shape = new ToolButton("iconImages/shapeTool.png", new ShapeTool());
+    ToolButton paintBrush = new ToolButton("Marrow/src/iconImages/brushTool.png", new Paintbrush());
+    ToolButton bucket = new ToolButton("Marrow/src/iconImages/bucketTool.png", new Bucket());
+    ToolButton line = new ToolButton("Marrow/src/iconImages/lineTool.png", new LineTool());
+    ToolButton shape = new ToolButton("Marrow/src/iconImages/shapeTool.png", new ShapeTool());
 
     /**
      * initializes the toolbox window
