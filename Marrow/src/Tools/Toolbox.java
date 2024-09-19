@@ -51,20 +51,23 @@ public class Toolbox extends JPanel {
 
         paintBrush.toolButton.addActionListener(e -> {
             toolContainer.currentTool = paintBrush.tool;
-            toolContainer.currentTool.currentColor = toolContainer.currentColor;
         });
         bucket.toolButton.addActionListener(e -> {
             toolContainer.currentTool = bucket.tool;
-            toolContainer.currentTool.currentColor = toolContainer.currentColor;
         });
         line.toolButton.addActionListener(e -> {
             toolContainer.currentTool = line.tool;
-            toolContainer.currentTool.currentColor = toolContainer.currentColor;
         });
         eraser.toolButton.addActionListener(e -> {
             toolContainer.currentTool = eraser.tool;
             toolContainer.currentTool.currentColor = toolContainer.currentColor;
         });
+        shape.toolButton.addActionListener(e -> {
+            toolContainer.currentTool = shape.tool;
+			toolContainer.currentTool.currentColor = toolContainer.currentColor;
+        });
+
+        
         
         //line.addActionListener(e -> { line.swapTool(ToolID.LINE); });
         //shape.addActionListener(e -> { shape.swapTool(ToolID.SHAPE); });
