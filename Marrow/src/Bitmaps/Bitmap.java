@@ -1,6 +1,9 @@
 package Bitmaps;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
@@ -53,5 +56,10 @@ public class Bitmap {
             return false;
         }
         return true;
+    }
+    public Image toImage()
+    {
+        Image image = new BufferedImage(1,1,0);
+        return image;
     }
 }

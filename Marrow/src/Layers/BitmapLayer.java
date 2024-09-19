@@ -17,11 +17,6 @@ import java.awt.event.MouseMotionAdapter;
  * we will have to separate this into a rendering and an image component later
  */
 public class BitmapLayer extends ChildLayer {
-
-    //image being drawn
-    private Image image;
-    //a silly billy graphics2D object
-    public Graphics2D graphics; //changing this to public so it can use drawLine
     //mouse coordinates
     ToolContainer toolContainer;
 
@@ -30,6 +25,8 @@ public class BitmapLayer extends ChildLayer {
     public Bitmap bitmap = new Bitmap();
 
     public RGBColor currentColor = new RGBColor(0,0,0,100);
+
+    public Image image;
 
     public BitmapLayer(ToolContainer toolContainer) {
         setDoubleBuffered(false);
@@ -46,6 +43,7 @@ public class BitmapLayer extends ChildLayer {
                 Tool currentTool = toolContainer.currentTool;
                 currentTool.onPress(oldX,oldY,bitmap);
                 System.out.println(toolContainer.currentTool.toString());
+                image = bitmap.toImage();
                 parent.repaint();
             }
             @Override
@@ -54,6 +52,7 @@ public class BitmapLayer extends ChildLayer {
                 currentY = e.getY();
                 Tool currentTool = toolContainer.currentTool;
                 currentTool.onRelease(oldX,oldY,currentX,currentY,bitmap);
+                image = bitmap.toImage();
                 parent.repaint();
             }
         });
@@ -70,6 +69,7 @@ public class BitmapLayer extends ChildLayer {
                 }
                 oldX = currentX;
                 oldY = currentY;
+                image = bitmap.toImage();
                 parent.repaint();
             }
         });
