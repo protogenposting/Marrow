@@ -7,6 +7,7 @@ public class Timeline extends JFrame {
 
     JFrame frame = new JFrame();
     static JPanel timeLengthPanelU = new JPanel();
+    static JPanel contentPane = new JPanel(null);
 
     static int timeLength_Num = 3;
     static String timeLength_String = String.valueOf(timeLength_Num);
@@ -16,6 +17,7 @@ public class Timeline extends JFrame {
     static JTextField timePrompt = new JTextField(timeLength_String);
     JLabel promptCloser = new JLabel("Frames");
     JButton activateChange = new JButton("Submit");
+    JScrollPane HScrolling  = new JScrollPane(timeLengthPanelU);
     
 
     public Timeline(String windowName){
@@ -27,6 +29,15 @@ public class Timeline extends JFrame {
 
         frame.setResizable(true);
         frame.setVisible(true);
+
+        timeLengthPanelU.setSize(1366,768);
+        HScrolling.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        HScrolling.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        HScrolling.setBounds(25, 50, 300, 150);
+        contentPane.setPreferredSize(new Dimension(300, 150));
+        contentPane.add(HScrolling);
+        frame.setContentPane(contentPane);
+        frame.pack();
 
         //INNER FRAME, DISPLAYS LENGTH OF ANIMATION
         timeLengthPanelU.setVisible(true);
@@ -83,10 +94,10 @@ public class Timeline extends JFrame {
     public static void changeLength(int frames){
         while(true){
             if (frameCount>frames){
-                timeLengthPanelU.getComponent(frameCount+3).setVisible(false);
-                timeLengthPanelU.remove(frameCount + 3);
+                contentPane.getComponent(frameCount).setVisible(false);
+                contentPane.remove(frameCount);
                 frameCount--;
-                timeLengthPanelU.revalidate();
+                contentPane.revalidate();
             }
             if (frameCount==frames){
                 break;
@@ -101,9 +112,9 @@ public class Timeline extends JFrame {
                     System.out.println("Frame: " + tempButton.getText() + " loaded.");
                 });
 
-                timeLengthPanelU.add(tempButton);
+                contentPane.add(tempButton);
                 frameCount++;
-                timeLengthPanelU.revalidate();
+                contentPane.revalidate();
             }
         }
     }
