@@ -32,6 +32,14 @@ public class Bitmap {
         bitmap.get(x).set(y,pixel);
         return true;
     }
+    public boolean removePixel(int x, int y)
+    {
+        if(!isInBounds(x,y)) {
+            return false;
+        }
+        bitmap.get(x).set(y,new Pixel(0,0,0,0));
+        return true;
+    }
     public boolean pixelAt(int x, int y)
     {
         if(!isInBounds(x,y)) {

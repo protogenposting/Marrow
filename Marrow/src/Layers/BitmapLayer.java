@@ -43,7 +43,7 @@ public class BitmapLayer extends ChildLayer {
                 Tool currentTool = toolContainer.currentTool;
                 currentTool.onPress(oldX,oldY,bitmap);
                 System.out.println(toolContainer.currentTool.toString());
-                image = bitmap.toImage();
+                //image = bitmap.toImage();
                 parent.repaint();
             }
             @Override
@@ -52,7 +52,7 @@ public class BitmapLayer extends ChildLayer {
                 currentY = e.getY();
                 Tool currentTool = toolContainer.currentTool;
                 currentTool.onRelease(oldX,oldY,currentX,currentY,bitmap);
-                image = bitmap.toImage();
+                //image = bitmap.toImage();
                 parent.repaint();
             }
         });
@@ -69,7 +69,7 @@ public class BitmapLayer extends ChildLayer {
                 }
                 oldX = currentX;
                 oldY = currentY;
-                image = bitmap.toImage();
+                //image = bitmap.toImage();
                 parent.repaint();
             }
         });

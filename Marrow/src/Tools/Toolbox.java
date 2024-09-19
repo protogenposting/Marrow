@@ -24,6 +24,7 @@ public class Toolbox extends JPanel {
     ToolButton bucket = new ToolButton("src/iconImages/bucketTool.png", new Bucket());
     ToolButton line = new ToolButton("src/iconImages/lineTool.png", new LineTool());
     ToolButton shape = new ToolButton("src/iconImages/shapeTool.png", new ShapeTool());
+    ToolButton eraser = new ToolButton("src/iconImages/shapeTool.png", new Eraser());
 
     /**
      * initializes the toolbox window
@@ -40,6 +41,7 @@ public class Toolbox extends JPanel {
         buttonPanel.add(bucket.toolButton);
         buttonPanel.add(line.toolButton);
         buttonPanel.add(shape.toolButton);
+        buttonPanel.add(eraser.toolButton);
 
         frame.add(buttonPanel);
 
@@ -57,6 +59,10 @@ public class Toolbox extends JPanel {
         });
         line.toolButton.addActionListener(e -> {
             toolContainer.currentTool = line.tool;
+            toolContainer.currentTool.currentColor = toolContainer.currentColor;
+        });
+        eraser.toolButton.addActionListener(e -> {
+            toolContainer.currentTool = eraser.tool;
             toolContainer.currentTool.currentColor = toolContainer.currentColor;
         });
         

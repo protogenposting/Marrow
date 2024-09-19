@@ -59,7 +59,7 @@ public class Main {
 
         Toolbox tools = new Toolbox(toolContainer);
         LayerWindow layerOrganization = new LayerWindow("Marrow Layers",layers);
-        Timeline timeline = new Timeline("Marrow Timeline");
+        //Timeline timeline = new Timeline("Marrow Timeline");
     }
 
 }
