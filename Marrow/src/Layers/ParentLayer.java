@@ -50,6 +50,8 @@ public class ParentLayer extends Layer {
 
         graphics.setColor(Color.black);
 
+        double time = System.nanoTime();
+        //RENDERING
         for(int i = 0; i < children.size(); i++)
         {
             ChildLayer child = children.get(i);
@@ -73,13 +75,15 @@ public class ParentLayer extends Layer {
                         Color pixelColor = new Color(pixel.red, pixel.green, pixel.blue);
                         if(pixel.alpha>0) {
                             graphics.setColor(pixelColor);
-                            graphics.fillRect(xPos, yPos, 1, 1);
+                            graphics.drawLine(xPos, yPos, xPos, yPos);
                         }
                     }
                 }
             }
         }
-        long time2 = Calendar.getInstance().getTimeInMillis();
+        double time2 = System.nanoTime();
+
+        System.out.println((time2-time)/1000000);
 
         g.drawImage(image,0,0,null);
     }
