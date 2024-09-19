@@ -30,6 +30,7 @@ public class Timeline extends JFrame {
 
         //INNER FRAME, DISPLAYS LENGTH OF ANIMATION
         timeLengthPanelU.setVisible(true);
+
         lengthPrompt.setSize(200, 120);
         lengthPrompt.setVisible(true);
 
@@ -62,8 +63,6 @@ public class Timeline extends JFrame {
             }
         });
 
-
-
     }
 
 
@@ -76,18 +75,23 @@ public class Timeline extends JFrame {
         changeLength(newTime);
     }
 
-    public static void changeLength(int length){
+
+    /**
+     * adds & removes frames
+     * @param frames
+     */
+    public static void changeLength(int frames){
         while(true){
-            if (frameCount>length){
+            if (frameCount>frames){
                 timeLengthPanelU.getComponent(frameCount+3).setVisible(false);
                 timeLengthPanelU.remove(frameCount + 3);
                 frameCount--;
                 timeLengthPanelU.revalidate();
             }
-            if (frameCount==length){
+            if (frameCount==frames){
                 break;
             }
-            if (frameCount<length){
+            if (frameCount<frames){
                 JButton tempButton = new JButton("frame" + (frameCount + 1));
                 Dimension windowSize = new Dimension(200, 120);
                 tempButton.setVisible(true);
@@ -103,4 +107,9 @@ public class Timeline extends JFrame {
             }
         }
     }
+
+
+
+
+
 }
