@@ -21,11 +21,11 @@ public class Toolbox extends JPanel {
 
     // icon file shouldn't have src/, otherwise images don't render for some reason
 
-    ToolButton paintBrush = new ToolButton("src/iconImages/brushTool.png", new Paintbrush());
-    ToolButton bucket = new ToolButton("src/iconImages/bucketTool.png", new Bucket());
-    ToolButton line = new ToolButton("src/iconImages/lineTool.png", new LineTool());
-    ToolButton shape = new ToolButton("src/iconImages/shapeTool.png", new ShapeTool());
-    ToolButton eraser = new ToolButton("src/iconImages/shapeTool.png", new Eraser());
+    ToolButton paintBrush = new ToolButton("iconImages/brushTool.png", new Paintbrush());
+    ToolButton bucket = new ToolButton("iconImages/bucketTool.png", new Bucket());
+    ToolButton line = new ToolButton("iconImages/lineTool.png", new LineTool());
+    ToolButton shape = new ToolButton("iconImages/shapeTool.png", new ShapeTool());
+    ToolButton eraser = new ToolButton("iconImages/shapeTool.png", new Eraser());
 
     /**
      * initializes the toolbox window
