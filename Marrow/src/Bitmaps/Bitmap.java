@@ -65,9 +65,19 @@ public class Bitmap {
         }
         return true;
     }
-    public Image toImage()
+    public BufferedImage toImage()
     {
-        Image image = new BufferedImage(1,1,0);
+        BufferedImage image = new BufferedImage(
+                bitmap.size(),
+                bitmap.getFirst().size(),
+                BufferedImage.TYPE_INT_ARGB);
+        for (int x = 0; x < image.getWidth(); x++) {
+            for (int y = 0; y < image.getHeight(); y++) {
+                if(getPixelAt(x,y).alpha>0) {
+                    image.setRGB(x, y, getPixelAt(x, y).toColor().getRGB());
+                }
+            }
+        }
         return image;
     }
 }

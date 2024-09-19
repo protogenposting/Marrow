@@ -52,11 +52,12 @@ public class Bucket extends Tool {
 
         pixels.add(new CheckPoint(x, y, bitmap, currentColor, startColor));
 
+        if(startColor.equals(currentColor))
+        {
+            pixels = new ArrayList<>();
+        }
+
         while (!pixels.isEmpty()) {
-            if(startColor == currentColor)
-            {
-                break;
-            }
             ArrayList<CheckPoint> newPixels = new ArrayList<>();
 
             for (int i = 0; i < pixels.size(); i++) {

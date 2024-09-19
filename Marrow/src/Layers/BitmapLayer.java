@@ -1,9 +1,7 @@
 package Layers;
 
 import Bitmaps.Bitmap;
-import Bitmaps.Pixel;
 import Bitmaps.RGBColor;
-import Tools.Paintbrush;
 import Tools.Tool;
 import Tools.ToolContainer;
 
@@ -11,6 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferedImage;
 
 /**
  * This is where the user draws images as well as rendering images
@@ -24,9 +23,9 @@ public class BitmapLayer extends ChildLayer {
 
     public Bitmap bitmap = new Bitmap();
 
-    public RGBColor currentColor = new RGBColor(0,0,0,100);
+    public RGBColor currentColor = new RGBColor(0,0,0,255);
 
-    public Image image;
+    public BufferedImage drawnImage;
 
     public BitmapLayer(ToolContainer toolContainer) {
         setDoubleBuffered(false);
@@ -43,7 +42,7 @@ public class BitmapLayer extends ChildLayer {
                 Tool currentTool = toolContainer.currentTool;
                 currentTool.onPress(oldX,oldY,bitmap);
                 System.out.println(toolContainer.currentTool.toString());
-                //image = bitmap.toImage();
+                drawnImage = bitmap.toImage();
                 parent.repaint();
             }
             @Override
@@ -52,7 +51,7 @@ public class BitmapLayer extends ChildLayer {
                 currentY = e.getY();
                 Tool currentTool = toolContainer.currentTool;
                 currentTool.onRelease(oldX,oldY,currentX,currentY,bitmap);
-                //image = bitmap.toImage();
+                drawnImage = bitmap.toImage();
                 parent.repaint();
             }
         });
@@ -69,7 +68,7 @@ public class BitmapLayer extends ChildLayer {
                 }
                 oldX = currentX;
                 oldY = currentY;
-                //image = bitmap.toImage();
+                drawnImage = bitmap.toImage();
                 parent.repaint();
             }
         });

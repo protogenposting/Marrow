@@ -21,11 +21,11 @@ public class Toolbox extends JPanel {
 
     // icon file shouldn't have src/, otherwise images don't render for some reason
 
-    ToolButton paintBrush = new ToolButton("Marrow/src/iconImages/brushTool.png", new Paintbrush());
-    ToolButton bucket = new ToolButton("Marrow/src/iconImages/bucketTool.png", new Bucket());
-    ToolButton line = new ToolButton("Marrow/src/iconImages/lineTool.png", new LineTool());
-    ToolButton shape = new ToolButton("Marrow/src/iconImages/shapeTool.png", new ShapeTool());
-    ToolButton eraser = new ToolButton("Marrow/src/iconImages/shapeTool.png", new Eraser());
+    ToolButton paintBrush = new ToolButton("src/iconImages/brushTool.png", new Paintbrush());
+    ToolButton bucket = new ToolButton("src/iconImages/bucketTool.png", new Bucket());
+    ToolButton line = new ToolButton("src/iconImages/lineTool.png", new LineTool());
+    ToolButton shape = new ToolButton("src/iconImages/shapeTool.png", new ShapeTool());
+    ToolButton eraser = new ToolButton("src/iconImages/shapeTool.png", new Eraser());
 
     /**
      * initializes the toolbox window
@@ -83,7 +83,7 @@ public class Toolbox extends JPanel {
                         currentColor.getRed(),
                         currentColor.getGreen(),
                         currentColor.getBlue(),
-                        100);
+                        255);
                 toolContainer.currentTool.currentColor = toolContainer.currentColor;
             }
         });
