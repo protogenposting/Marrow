@@ -18,38 +18,6 @@ public class ToolButton extends JButton {
         this.tool = tool;
     }
 
-
-    /*
-    public void getOldMouseCoordinates(){
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                //save the old coords
-                oldX = e.getX();
-                oldY = e.getY();
-            }
-        });
-    }
-
-     */
-
-    public void paintBrush(BitmapLayer bitmap){
-        System.out.println("WIP paintbrush");
-
-    }
-
-    public void bucket(BitmapLayer bitmap){
-        System.out.println("WIP bucket");
-    }
-
-    public void line(BitmapLayer bitmap){
-        System.out.println("WIP line");
-    }
-
-    public void shape(BitmapLayer bitmap){
-        System.out.println("WIP shape");
-    }
-
     /**
      * initializes each tool button with its size and icon
      * @param iconFile the url to the icon png
