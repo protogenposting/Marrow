@@ -14,16 +14,7 @@ public class Main {
     static JFrame frame = new JFrame("Marrow");
 
     public static void main(String[] args) {
-
         frameSetup();
-
-        //update loop
-        while(true)
-        {
-            //move these to a key pressed event
-            //ImageConversions.SaveImage(bitmapLayer.getImage());
-            //System.out.println("saved");
-        }
     }
 
     public static void saveLayers(){
