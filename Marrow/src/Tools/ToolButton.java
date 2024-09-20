@@ -33,6 +33,7 @@ public class ToolButton extends JButton {
         } catch (IOException _) {
 
         }
+        assert image != null;
         Icon icon = new ImageIcon(image);
         JButton tempButton = new JButton(icon);
         Dimension windowSize = new Dimension(200, 120);

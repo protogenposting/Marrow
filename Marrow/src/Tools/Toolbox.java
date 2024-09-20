@@ -82,8 +82,10 @@ public class Toolbox extends JPanel {
 
     }
 
+
     /**
      * sets the user's current tool to the tool parameter entered
+     * @param tool the tool that the player's tool is being set to
      */
     private void setTool(ToolButton tool){
         toolContainer.currentTool = tool.tool;
