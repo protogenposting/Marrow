@@ -58,6 +58,9 @@ public class Toolbox extends JPanel {
             toolContainer.currentTool = shape.tool;
 			toolContainer.currentTool.currentColor = toolContainer.currentColor;
         });
+        colorWheel.toolButton.addActionListener(e -> {
+            toolContainer.currentTool = colorWheel.tool;
+        });
 
         
         

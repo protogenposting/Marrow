@@ -28,28 +28,11 @@ public class ShapeTool extends Tool {
         int signX = (int) Math.signum(x2 - x1);
         int signY = (int) Math.signum(y2 - y1);
 
-        int xProgress = signX;
-        for (int i = 0; i < width; i++) {
-            bitmap.addPixel(xProgress + x1, y1, new Pixel(currentColor));
-            xProgress += signX;
-        }
-        xProgress = -1 * signX;
-        for (int i = 0; i < width; i++) {
-            bitmap.addPixel(xProgress + x2, y2, new Pixel(currentColor));
-            xProgress += -1 * signX;
-        }
+        addXPixelsInALine(x1, y1, signX, 1, width, bitmap);
+        addXPixelsInALine(x2, y2, signX, -1, width, bitmap);
 
-        int yProgress = signY;
-        for (int i = 0; i < height; i++) {
-            bitmap.addPixel(x1, yProgress + y1, new Pixel(currentColor));
-            yProgress += signY;
-        }
-        yProgress = -1 * signY;
-        for (int i = 0; i < height; i++) {
-            bitmap.addPixel(x2, yProgress + y2, new Pixel(currentColor));
-            yProgress += -1 * signY;
-        }
-
+        addYPixelsInALine(x1, y1, signY, 1, height, bitmap);
+        addYPixelsInALine(x2, y2, signY, -1, height, bitmap);
 
         /*
         if (width > height) {
@@ -71,6 +54,24 @@ public class ShapeTool extends Tool {
             }
         }
         */
+    }
+
+    public void addXPixelsInALine(int x, int y, int xProgress, int progressDirection, int width, Bitmap bitmap){
+        int signX = xProgress;
+        xProgress = xProgress * progressDirection;
+        for(int i = 0; i < width; i++){
+            bitmap.addPixel(x + xProgress, y, new Pixel(currentColor));
+            xProgress += progressDirection * signX;
+        }
+    }
+
+    public void addYPixelsInALine(int x, int y, int yProgress, int progressDirection, int height, Bitmap bitmap){
+        int signY = yProgress;
+        yProgress = yProgress * progressDirection;
+        for(int i = 0; i < height; i++){
+            bitmap.addPixel(x, y + yProgress, new Pixel(currentColor));
+            yProgress += progressDirection * signY;
+        }
     }
 
 }
