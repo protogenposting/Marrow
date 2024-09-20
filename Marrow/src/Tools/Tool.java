@@ -10,7 +10,7 @@ import java.awt.*;
  */
 public class Tool {
 
-    public RGBColor currentColor = new RGBColor(0,0,0,100);
+    public RGBColor currentColor = new RGBColor(0,0,0,255);
 
     /**
      * call this when the mouse is clicked

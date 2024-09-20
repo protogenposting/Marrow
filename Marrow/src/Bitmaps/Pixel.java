@@ -1,5 +1,7 @@
 package Bitmaps;
 
+import java.awt.*;
+
 /**
  * Pixels are used to make up a bitmap.
  */
@@ -19,6 +21,10 @@ public class Pixel {
     public RGBColor toRGBColor()
     {
         return new RGBColor(red,green,blue,alpha);
+    }
+    public Color toColor()
+    {
+        return new Color(red,green,blue,alpha);
     }
     public Pixel(RGBColor color)
     {

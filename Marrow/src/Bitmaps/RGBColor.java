@@ -12,4 +12,11 @@ public class RGBColor {
         this.blue = blue;
         this.alpha = alpha;
     }
+    public boolean equals(RGBColor color)
+    {
+        return red == color.red&&
+               green == color.green&&
+               blue == color.blue&&
+               alpha == color.alpha;
+    }
 }
