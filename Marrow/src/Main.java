@@ -4,6 +4,8 @@ import Tools.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 public class Main {
@@ -23,6 +25,17 @@ public class Main {
             //System.out.println("saved");
         }
     }
+
+    public static void saveLayers(){
+
+
+
+    }
+
+
+
+
+
 
     static void frameSetup(){
         Container content = frame.getContentPane();
@@ -55,7 +68,16 @@ public class Main {
         frame.setVisible(true);
         frame.setLocationRelativeTo(null); //places window at the center of the screen
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+                
+
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            }
+        });
+
 
         Toolbox tools = new Toolbox(toolContainer);
         LayerWindow layerOrganization = new LayerWindow("Marrow Layers",layers);
