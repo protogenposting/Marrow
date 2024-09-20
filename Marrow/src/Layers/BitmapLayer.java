@@ -27,9 +27,11 @@ public class BitmapLayer extends ChildLayer {
 
     public BufferedImage drawnImage;
 
-    public BitmapLayer(ToolContainer toolContainer) {
+    public BitmapLayer(ToolContainer toolContainer,String name) {
         setDoubleBuffered(false);
         this.toolContainer = toolContainer;
+
+        this.name = name;
 
         bitmap.setSize(1366,768);
         //listener for mouse being pressed.

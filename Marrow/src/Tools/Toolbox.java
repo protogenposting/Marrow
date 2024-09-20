@@ -21,8 +21,6 @@ public class Toolbox extends JPanel {
 
     // icon file shouldn't have src/, otherwise images don't render for some reason
 
-
-
     ToolButton paintBrush = new ToolButton("/iconImages/brushTool.png", new Paintbrush());
     ToolButton bucket = new ToolButton("/iconImages/bucketTool.png", new Bucket());
     ToolButton line = new ToolButton("/iconImages/lineTool.png", new LineTool());
@@ -39,32 +37,13 @@ public class Toolbox extends JPanel {
         this.toolContainer = toolContainer;
 
         // "if button is pressed, do this event"
+        // the code below makes it so when you press the corresponding tool button, your current tool will swap to it
 
-        paintBrush.toolButton.addActionListener(e -> {
-            toolContainer.currentTool = paintBrush.tool;
-            toolContainer.currentTool.currentColor = toolContainer.currentColor;
-        });
-        bucket.toolButton.addActionListener(e -> {
-            toolContainer.currentTool = bucket.tool;
-            toolContainer.currentTool.currentColor = toolContainer.currentColor;
-        });
-        line.toolButton.addActionListener(e -> {
-            toolContainer.currentTool = line.tool;
-            toolContainer.currentTool.currentColor = toolContainer.currentColor;
-        });
-        eraser.toolButton.addActionListener(e -> {
-            toolContainer.currentTool = eraser.tool;
-            toolContainer.currentTool.currentColor = toolContainer.currentColor;
-        });
-        shape.toolButton.addActionListener(e -> {
-            toolContainer.currentTool = shape.tool;
-			toolContainer.currentTool.currentColor = toolContainer.currentColor;
-        });
-
-        
-        
-        //line.addActionListener(e -> { line.swapTool(ToolID.LINE); });
-        //shape.addActionListener(e -> { shape.swapTool(ToolID.SHAPE); });
+        paintBrush.toolButton.addActionListener(e -> {setTool(paintBrush);});
+        bucket.toolButton.addActionListener(e -> {setTool(bucket);});
+        line.toolButton.addActionListener(e -> {setTool(line);});
+        eraser.toolButton.addActionListener(e -> {setTool(eraser);});
+        shape.toolButton.addActionListener(e -> {setTool(shape);});
 
         JColorChooser colorChooser = new JColorChooser();
 
@@ -84,13 +63,10 @@ public class Toolbox extends JPanel {
         JFrame colorFrame = new JFrame();
 
         colorFrame.setSize(768,768);
-
         colorFrame.add(colorChooser);
-
         colorFrame.setVisible(true);
 
         frame.setJMenuBar(createMenuBar());
-
         frame.setLocationByPlatform(true);
 
         frame.setResizable(true);
@@ -104,18 +80,17 @@ public class Toolbox extends JPanel {
 
         frame.add(buttonPanel);
 
-        //buttonPanel.setVisible(true);
-
-        //region experimental code
-        /*
-        setCurrentTool(ButtonID.PAINTBRUSH);
-        setCurrentTool(ButtonID.BUCKET);
-        setCurrentTool(ButtonID.LINE);
-        setCurrentTool(ButtonID.SHAPE);
-         */
-        //endregion
-
     }
+
+    /**
+     * sets the user's current tool to the tool parameter entered
+     */
+    private void setTool(ToolButton tool){
+        toolContainer.currentTool = tool.tool;
+        toolContainer.currentTool.currentColor = toolContainer.currentColor;
+    }
+
+    //region menus
     private JMenu createEditMenu() {
         JMenu editMenu = new JMenu("Edit");
         JMenuItem cutItem = new JMenuItem("Cut");
@@ -144,4 +119,5 @@ public class Toolbox extends JPanel {
         menuBar.add(createEditMenu());
         return menuBar;
     }
+    //endregion
 }

@@ -11,7 +11,6 @@ public class Layer extends JComponent {
     public ArrayList<ChildLayer> children = new ArrayList<>();
 
     public double x = 0;
-
     public double y = 0;
 
     public ArrayList<ChildLayer> getChildren()

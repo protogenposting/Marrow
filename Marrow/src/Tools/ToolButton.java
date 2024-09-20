@@ -30,7 +30,7 @@ public class ToolButton extends JButton {
         Image image = null;
         try {
             image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(iconFile)));
-        } catch (IOException e) {
+        } catch (IOException _) {
 
         }
         Icon icon = new ImageIcon(image);

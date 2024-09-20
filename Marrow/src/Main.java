@@ -4,9 +4,13 @@ import Tools.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+
+import java.io.*;
 
 public class Main {
 
@@ -17,9 +21,30 @@ public class Main {
         frameSetup();
     }
 
-    public static void saveLayers(){
+    public static void saveLayers(ParentLayer parentLayer){
+        try {
+            String currentSaveDirectory = "MarrowSaves"; // change later on to be able to find the directory user saved it at
+            File path = new File(currentSaveDirectory);
+            path.mkdirs();
+            File saveFile = new File(currentSaveDirectory + "/save.marrow");
+            saveFile.createNewFile();
+
+            FileWriter writer = new FileWriter(currentSaveDirectory + "save.marrow");
 
 
+
+
+
+
+
+
+
+
+
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
 
     }
 
@@ -46,7 +71,7 @@ public class Main {
         //add the bitmap layer to the main window
         content.add(parentLayer, BorderLayout.CENTER);
 
-        parentLayer.addChild(new BitmapLayer(toolContainer));
+        parentLayer.addChild(new BitmapLayer(toolContainer,"pussy"));
 
         parentLayer.setSize(1366,768);
 
@@ -64,11 +89,27 @@ public class Main {
             @Override
             public void windowClosing(WindowEvent e) {
 
-                System.out.println("this code ran even when window closed");
+                saveLayers(parentLayer);
+
                 frame.dispose();
                 System.exit(0);
 
             }
+        });
+
+        frame.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode()==KeyEvent.VK_S){
+                    saveLayers(parentLayer);
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
         });
 
         Toolbox tools = new Toolbox(toolContainer);
