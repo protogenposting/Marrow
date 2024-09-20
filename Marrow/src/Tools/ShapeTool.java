@@ -6,7 +6,7 @@ import Bitmaps.RGBColor;
 
 public class ShapeTool extends Tool {
 
-    public RGBColor currentColor = new RGBColor(0,0,0,100);
+    public RGBColor currentColor = new RGBColor(0,0,0,255);
 
     int xStart;
     int yStart;

@@ -20,11 +20,12 @@ public class Toolbox extends JPanel {
     //JButton shape = initializeButton("shape", "iconImages/shapeTool.png"); //circle or rectangle idk
 
     // icon file shouldn't have src/, otherwise images don't render for some reason
-    ToolButton paintBrush = new ToolButton("Marrow/Marrow/src/iconImages/brushTool.png", new Paintbrush());
-    ToolButton bucket = new ToolButton("Marrow/Marrow/src/iconImages/bucketTool.png", new Bucket());
-    ToolButton line = new ToolButton("Marrow/Marrow/src/iconImages/lineTool.png", new LineTool());
-    ToolButton shape = new ToolButton("Marrow/Marrow/src/iconImages/shapeTool.png", new ShapeTool());
-    ToolButton colorWheel = new ToolButton("Marrow/Marrow/src/iconImages/brushTool.png", new ColorWheel());
+
+    ToolButton paintBrush = new ToolButton("src/iconImages/brushTool.png", new Paintbrush());
+    ToolButton bucket = new ToolButton("src/iconImages/bucketTool.png", new Bucket());
+    ToolButton line = new ToolButton("src/iconImages/lineTool.png", new LineTool());
+    ToolButton shape = new ToolButton("src/iconImages/shapeTool.png", new ShapeTool());
+    ToolButton eraser = new ToolButton("src/iconImages/shapeTool.png", new Eraser());
 
     /**
      * initializes the toolbox window
@@ -41,7 +42,7 @@ public class Toolbox extends JPanel {
         buttonPanel.add(bucket.toolButton);
         buttonPanel.add(line.toolButton);
         buttonPanel.add(shape.toolButton);
-        buttonPanel.add(colorWheel.toolButton);
+        buttonPanel.add(eraser.toolButton);
 
         frame.add(buttonPanel);
 
@@ -58,14 +59,19 @@ public class Toolbox extends JPanel {
         line.toolButton.addActionListener(e -> {
             toolContainer.currentTool = line.tool;
         });
+        eraser.toolButton.addActionListener(e -> {
+            toolContainer.currentTool = eraser.tool;
+            toolContainer.currentTool.currentColor = toolContainer.currentColor;
+        });
         shape.toolButton.addActionListener(e -> {
             toolContainer.currentTool = shape.tool;
+			toolContainer.currentTool.currentColor = toolContainer.currentColor;
         });
         colorWheel.toolButton.addActionListener(e -> {
             toolContainer.currentTool = colorWheel.tool;
         });
 
-        toolContainer.currentTool.currentColor = toolContainer.currentColor;
+        
         
         //line.addActionListener(e -> { line.swapTool(ToolID.LINE); });
         //shape.addActionListener(e -> { shape.swapTool(ToolID.SHAPE); });
@@ -80,7 +86,7 @@ public class Toolbox extends JPanel {
                         currentColor.getRed(),
                         currentColor.getGreen(),
                         currentColor.getBlue(),
-                        100);
+                        255);
                 toolContainer.currentTool.currentColor = toolContainer.currentColor;
             }
         });
