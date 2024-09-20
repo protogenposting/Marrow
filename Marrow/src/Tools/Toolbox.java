@@ -10,22 +10,18 @@ import java.awt.*;
 public class Toolbox extends JPanel {
 
     JFrame frame = new JFrame();
-    JPanel buttonPanel = new JPanel();
-    ToolContainer toolContainer;// adds all buttons to this
+    JPanel buttonPanel = new JPanel(); //adds all buttons to this
+    ToolContainer toolContainer;
 
-    // these 4 buttons will connect to their corresponding methods / classes (?)
-    //JButton paintBrush = initializeButton("paint brush", "iconImages/brushTool.png");
-    //JButton bucket = initializeButton("bucket", "iconImages/bucketTool.png");
-    //JButton line = initializeButton("line", "iconImages/lineTool.png");
-    //JButton shape = initializeButton("shape", "iconImages/shapeTool.png"); //circle or rectangle idk
+    //region button initializations
 
     // icon file shouldn't have src/, otherwise images don't render for some reason
-
     ToolButton paintBrush = new ToolButton("/iconImages/brushTool.png", new Paintbrush());
     ToolButton bucket = new ToolButton("/iconImages/bucketTool.png", new Bucket());
     ToolButton line = new ToolButton("/iconImages/lineTool.png", new LineTool());
     ToolButton shape = new ToolButton("/iconImages/shapeTool.png", new ShapeTool());
     ToolButton eraser = new ToolButton("/iconImages/shapeTool.png", new Eraser());
+    //endregion
 
     /**
      * initializes the toolbox window
@@ -36,6 +32,8 @@ public class Toolbox extends JPanel {
 
         this.toolContainer = toolContainer;
 
+        //region add events to the tool buttons and add buttons to button panel
+
         // "if button is pressed, do this event"
         // the code below makes it so when you press the corresponding tool button, your current tool will swap to it
 
@@ -44,6 +42,14 @@ public class Toolbox extends JPanel {
         line.toolButton.addActionListener(e -> {setTool(line);});
         eraser.toolButton.addActionListener(e -> {setTool(eraser);});
         shape.toolButton.addActionListener(e -> {setTool(shape);});
+
+        buttonPanel.add(paintBrush.toolButton);
+        buttonPanel.add(bucket.toolButton);
+        buttonPanel.add(line.toolButton);
+        buttonPanel.add(shape.toolButton);
+        buttonPanel.add(eraser.toolButton);
+
+        //endregion
 
         JColorChooser colorChooser = new JColorChooser();
 
@@ -71,12 +77,6 @@ public class Toolbox extends JPanel {
 
         frame.setResizable(true);
         frame.setVisible(true);
-
-        buttonPanel.add(paintBrush.toolButton);
-        buttonPanel.add(bucket.toolButton);
-        buttonPanel.add(line.toolButton);
-        buttonPanel.add(shape.toolButton);
-        buttonPanel.add(eraser.toolButton);
 
         frame.add(buttonPanel);
 
