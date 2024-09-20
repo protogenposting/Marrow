@@ -59,16 +59,17 @@ public class Main {
         frame.setVisible(true);
         frame.setLocationRelativeTo(null); //places window at the center of the screen
 
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // this allows it to save the stuff when user exits
         frame.addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosed(WindowEvent e) {
+            public void windowClosing(WindowEvent e) {
 
-                
+                System.out.println("this code ran even when window closed");
+                frame.dispose();
+                System.exit(0);
 
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             }
         });
-
 
         Toolbox tools = new Toolbox(toolContainer);
         LayerWindow layerOrganization = new LayerWindow("Marrow Layers",layers);
