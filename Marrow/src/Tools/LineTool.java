@@ -11,10 +11,9 @@ public class LineTool extends Tool {
 
     public LineTool(){}
 
-    public RGBColor currentColor = new RGBColor(0,0,0,100);
+    public RGBColor currentColor = new RGBColor(0,0,0,255);
 
     int xStart;
-
     int yStart;
 
     public void onPress(int x, int y, Bitmap bitmap)

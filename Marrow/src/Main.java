@@ -4,6 +4,8 @@ import Tools.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 public class Main {
@@ -12,17 +14,19 @@ public class Main {
     static JFrame frame = new JFrame("Marrow");
 
     public static void main(String[] args) {
-
         frameSetup();
-
-        //update loop
-        while(true)
-        {
-            //move these to a key pressed event
-            //ImageConversions.SaveImage(bitmapLayer.getImage());
-            //System.out.println("saved");
-        }
     }
+
+    public static void saveLayers(){
+
+
+
+    }
+
+
+
+
+
 
     static void frameSetup(){
         Container content = frame.getContentPane();
@@ -55,11 +59,21 @@ public class Main {
         frame.setVisible(true);
         frame.setLocationRelativeTo(null); //places window at the center of the screen
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // this allows it to save the stuff when user exits
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+                System.out.println("this code ran even when window closed");
+                frame.dispose();
+                System.exit(0);
+
+            }
+        });
 
         Toolbox tools = new Toolbox(toolContainer);
         LayerWindow layerOrganization = new LayerWindow("Marrow Layers",layers);
-        Timeline timeline = new Timeline("Marrow Timeline");
+        //Timeline timeline = new Timeline("Marrow Timeline");
     }
 
 }

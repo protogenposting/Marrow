@@ -1,10 +1,13 @@
 package Tools;
 import Layers.BitmapLayer;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.util.Objects;
 
 public class ToolButton extends JButton {
 
@@ -18,45 +21,19 @@ public class ToolButton extends JButton {
         this.tool = tool;
     }
 
-
-    /*
-    public void getOldMouseCoordinates(){
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                //save the old coords
-                oldX = e.getX();
-                oldY = e.getY();
-            }
-        });
-    }
-
-     */
-
-    public void paintBrush(BitmapLayer bitmap){
-        System.out.println("WIP paintbrush");
-
-    }
-
-    public void bucket(BitmapLayer bitmap){
-        System.out.println("WIP bucket");
-    }
-
-    public void line(BitmapLayer bitmap){
-        System.out.println("WIP line");
-    }
-
-    public void shape(BitmapLayer bitmap){
-        System.out.println("WIP shape");
-    }
-
     /**
      * initializes each tool button with its size and icon
      * @param iconFile the url to the icon png
      * @return the initialized button
      */
-    public JButton initializeButton(String iconFile){
-        Icon icon = new ImageIcon(iconFile);
+    public JButton initializeButton(String iconFile) {
+        Image image = null;
+        try {
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(iconFile)));
+        } catch (IOException e) {
+
+        }
+        Icon icon = new ImageIcon(image);
         JButton tempButton = new JButton(icon);
         Dimension windowSize = new Dimension(200, 120);
 

@@ -20,28 +20,21 @@ public class Toolbox extends JPanel {
     //JButton shape = initializeButton("shape", "iconImages/shapeTool.png"); //circle or rectangle idk
 
     // icon file shouldn't have src/, otherwise images don't render for some reason
-    ToolButton paintBrush = new ToolButton("Marrow/src/iconImages/brushTool.png", new Paintbrush());
-    ToolButton bucket = new ToolButton("Marrow/src/iconImages/bucketTool.png", new Bucket());
-    ToolButton line = new ToolButton("Marrow/src/iconImages/lineTool.png", new LineTool());
-    ToolButton shape = new ToolButton("Marrow/src/iconImages/shapeTool.png", new ShapeTool());
+
+
+
+    ToolButton paintBrush = new ToolButton("/iconImages/brushTool.png", new Paintbrush());
+    ToolButton bucket = new ToolButton("/iconImages/bucketTool.png", new Bucket());
+    ToolButton line = new ToolButton("/iconImages/lineTool.png", new LineTool());
+    ToolButton shape = new ToolButton("/iconImages/shapeTool.png", new ShapeTool());
+    ToolButton eraser = new ToolButton("/iconImages/shapeTool.png", new Eraser());
 
     /**
      * initializes the toolbox window
      */
     public Toolbox(ToolContainer toolContainer) {
         frame.setTitle("Marrow Toolbox");
-        frame.setSize(1366,128);
-
-        frame.setResizable(true);
-        frame.setVisible(true);
-        buttonPanel.setVisible(true);
-
-        buttonPanel.add(paintBrush.toolButton);
-        buttonPanel.add(bucket.toolButton);
-        buttonPanel.add(line.toolButton);
-        buttonPanel.add(shape.toolButton);
-
-        frame.add(buttonPanel);
+        frame.setSize(1366,512);
 
         this.toolContainer = toolContainer;
 
@@ -59,6 +52,16 @@ public class Toolbox extends JPanel {
             toolContainer.currentTool = line.tool;
             toolContainer.currentTool.currentColor = toolContainer.currentColor;
         });
+        eraser.toolButton.addActionListener(e -> {
+            toolContainer.currentTool = eraser.tool;
+            toolContainer.currentTool.currentColor = toolContainer.currentColor;
+        });
+        shape.toolButton.addActionListener(e -> {
+            toolContainer.currentTool = shape.tool;
+			toolContainer.currentTool.currentColor = toolContainer.currentColor;
+        });
+
+        
         
         //line.addActionListener(e -> { line.swapTool(ToolID.LINE); });
         //shape.addActionListener(e -> { shape.swapTool(ToolID.SHAPE); });
@@ -73,12 +76,35 @@ public class Toolbox extends JPanel {
                         currentColor.getRed(),
                         currentColor.getGreen(),
                         currentColor.getBlue(),
-                        100);
+                        255);
                 toolContainer.currentTool.currentColor = toolContainer.currentColor;
             }
         });
 
-        frame.add(colorChooser);
+        JFrame colorFrame = new JFrame();
+
+        colorFrame.setSize(768,768);
+
+        colorFrame.add(colorChooser);
+
+        colorFrame.setVisible(true);
+
+        frame.setJMenuBar(createMenuBar());
+
+        frame.setLocationByPlatform(true);
+
+        frame.setResizable(true);
+        frame.setVisible(true);
+
+        buttonPanel.add(paintBrush.toolButton);
+        buttonPanel.add(bucket.toolButton);
+        buttonPanel.add(line.toolButton);
+        buttonPanel.add(shape.toolButton);
+        buttonPanel.add(eraser.toolButton);
+
+        frame.add(buttonPanel);
+
+        //buttonPanel.setVisible(true);
 
         //region experimental code
         /*
@@ -90,4 +116,32 @@ public class Toolbox extends JPanel {
         //endregion
 
     }
+    private JMenu createEditMenu() {
+        JMenu editMenu = new JMenu("Edit");
+        JMenuItem cutItem = new JMenuItem("Cut");
+        editMenu.add(cutItem);
+        JMenuItem copyItem = new JMenuItem("Copy");
+        editMenu.add(copyItem);
+        JMenuItem pasteItem = new JMenuItem("Paste");
+        editMenu.add(pasteItem);
+        return editMenu;
     }
+
+    private JMenu createFileMenu() {
+        JMenu fileMenu = new JMenu("File");
+        JMenuItem newItem = new JMenuItem("New");
+        fileMenu.add(newItem);
+        JMenuItem openItem = new JMenuItem("Open");
+        fileMenu.add(openItem);
+        JMenuItem saveItem = new JMenuItem("Save");
+        fileMenu.add(saveItem);
+        return fileMenu;
+    }
+
+    private JMenuBar createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.add(createFileMenu());
+        menuBar.add(createEditMenu());
+        return menuBar;
+    }
+}

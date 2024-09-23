@@ -5,6 +5,13 @@ import Tools.ToolContainer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ColorModel;
+import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -50,6 +57,9 @@ public class ParentLayer extends Layer {
 
         graphics.setColor(Color.black);
 
+        double time = System.nanoTime();
+        clear();
+        //RENDERING
         for(int i = 0; i < children.size(); i++)
         {
             ChildLayer child = children.get(i);
@@ -65,21 +75,12 @@ public class ParentLayer extends Layer {
                 BitmapLayer bitmapChild = (BitmapLayer)children.get(i);
                 Bitmap bitmap = bitmapChild.bitmap;
                 ArrayList<ArrayList<Pixel>> map = bitmap.bitmap;
-                for(int xPos = 0; xPos < map.size(); xPos++)
-                {
-                    for(int yPos = 0; yPos < map.get(xPos).size(); yPos++)
-                    {
-                        Pixel pixel = map.get(xPos).get(yPos);
-                        Color pixelColor = new Color(pixel.red, pixel.green, pixel.blue);
-                        if(pixel.alpha>0) {
-                            graphics.setColor(pixelColor);
-                            graphics.fillRect(xPos, yPos, 1, 1);
-                        }
-                    }
-                }
+                graphics.drawImage(bitmapChild.drawnImage,0,0,this);
             }
         }
-        long time2 = Calendar.getInstance().getTimeInMillis();
+        double time2 = System.nanoTime();
+
+        System.out.println((time2-time)/1000000);
 
         g.drawImage(image,0,0,null);
     }
