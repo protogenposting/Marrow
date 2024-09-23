@@ -31,7 +31,23 @@ public class Main {
 
             FileWriter writer = new FileWriter(currentSaveDirectory + "save.marrow");
 
-            
+            /*
+            example of what it should look like
+            parentLayer
+            -childLayer1
+            --childLayer1~1  the reason it ends with ~1 is so computer doesn't get confused reading the same names
+            --childLayer1~2
+            --childLayer1~3
+            ---childLayer1~3~1
+            -childLayer2
+            --childLayer2~1
+             */
+
+            ArrayList<ChildLayer> childLayers = parentLayer.getChildren();
+
+            writer.write("MARROW\n\nParentLayer");
+
+            findChildrenInChildLayer(childLayers, 1, writer, 0, "ChildLayer");
 
 
 
@@ -48,9 +64,43 @@ public class Main {
 
     }
 
+    static boolean isThereChildrenInChildLayer(ChildLayer childLayer){
+        ArrayList<ChildLayer> childLayers = childLayer.getChildren();
+        return !childLayers.isEmpty();
+    }
+
+    public static void findChildrenInChildLayer(ArrayList<ChildLayer> childLayers, int dashCount, FileWriter writer,
+                                                int repeatedTimes, String childLayerName){
+        boolean thereIsChild;
+        if(repeatedTimes > 0){
+            childLayerName += "~";
+        }
 
 
+        for (int i = 0; i < childLayers.size(); i++) {
+            thereIsChild = isThereChildrenInChildLayer(childLayers.get(i));
 
+            try {
+                writer.write("\n" + dashCount + childLayerName + (i + 1));
+            }
+            catch (IOException ignore){}
+
+            if(thereIsChild){
+                ArrayList<ChildLayer> secondChildLayers = childLayers.get(i).getChildren();
+
+                findChildrenInChildLayer(secondChildLayers, dashCount + 1, writer,
+                        repeatedTimes + 1, childLayerName);
+
+
+            }
+
+            /* for int childNum; childExists; childExists=true; childNum++
+
+                    when writing add ~ + childNum
+
+             */
+        }
+    }
 
 
     static void frameSetup(){
