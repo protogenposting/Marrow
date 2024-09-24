@@ -29,13 +29,16 @@ public class Toolbox extends JPanel {
     ToolButton shape = new ToolButton("/iconImages/shapeTool.png", new ShapeTool());
     ToolButton eraser = new ToolButton("/iconImages/eraserTool.png", new Eraser());
 
+    static JTextField timePrompt = new JTextField("1");
+    JLabel promptCloser = new JLabel("Draw Size(In Pixels)");
+    JButton activateChange = new JButton("Submit");
 
     /**
      * initializes the toolbox window
      */
     public Toolbox(ToolContainer toolContainer) {
         frame.setTitle("Marrow Toolbox");
-        frame.setSize(600,150);
+        frame.setSize(800,150);
 
         this.toolContainer = toolContainer;
 
@@ -62,7 +65,6 @@ public class Toolbox extends JPanel {
 			toolContainer.currentTool.currentColor = toolContainer.currentColor;
         });
 
-        
         
         //line.addActionListener(e -> { line.swapTool(ToolID.LINE); });
         //shape.addActionListener(e -> { shape.swapTool(ToolID.SHAPE); });
@@ -103,7 +105,29 @@ public class Toolbox extends JPanel {
         buttonPanel.add(shape.toolButton);
         buttonPanel.add(eraser.toolButton);
 
+        buttonPanel.add(promptCloser);
+        promptCloser.setSize(200,120);
+        promptCloser.setVisible(true);
+
+        buttonPanel.add(timePrompt);
+        timePrompt.setSize(200,120);
+        timePrompt.setVisible(true);
+
+        buttonPanel.add(activateChange);
+        activateChange.setSize(200,120);
+        activateChange.setVisible(true);
+        activateChange.addActionListener(e -> {
+            try{
+                int drawSize = Integer.parseInt(timePrompt.getText());
+                // setPixels drawn to drawsize WHEN YOU FIND THE VARIABLE NAME
+                System.out.println("Draw size changed");
+            } catch (NumberFormatException Ex){
+                System.out.println("ERROR: INVALID INPUT");
+            }
+        });
+
         frame.add(buttonPanel);
+
 
         //buttonPanel.setVisible(true);
 
