@@ -10,28 +10,18 @@ import java.awt.*;
 public class Toolbox extends JPanel {
 
     JFrame frame = new JFrame();
-    JPanel buttonPanel = new JPanel();
-    ToolContainer toolContainer;// adds all buttons to this
+    JPanel buttonPanel = new JPanel(); //adds all buttons to this
+    ToolContainer toolContainer;
 
-    // these 4 buttons will connect to their corresponding methods / classes (?)
-    //JButton paintBrush = initializeButton("paint brush", "iconImages/brushTool.png");
-    //JButton bucket = initializeButton("bucket", "iconImages/bucketTool.png");
-    //JButton line = initializeButton("line", "iconImages/lineTool.png");
-    //JButton shape = initializeButton("shape", "iconImages/shapeTool.png"); //circle or rectangle idk
+    //region button initializations
 
     // icon file shouldn't have src/, otherwise images don't render for some reason
-
-
-
     ToolButton paintBrush = new ToolButton("/iconImages/brushTool.png", new Paintbrush());
     ToolButton bucket = new ToolButton("/iconImages/bucketTool.png", new Bucket());
     ToolButton line = new ToolButton("/iconImages/lineTool.png", new LineTool());
     ToolButton shape = new ToolButton("/iconImages/shapeTool.png", new ShapeTool());
     ToolButton eraser = new ToolButton("/iconImages/eraserTool.png", new Eraser());
-
-    static JTextField timePrompt = new JTextField("1");
-    JLabel promptCloser = new JLabel("Draw Size(In Pixels)");
-    JButton activateChange = new JButton("Submit");
+    //endregion
 
     /**
      * initializes the toolbox window
@@ -42,32 +32,18 @@ public class Toolbox extends JPanel {
 
         this.toolContainer = toolContainer;
 
+        //region add events to the tool buttons and add buttons to button panel
+
         // "if button is pressed, do this event"
+        // the code below makes it so when you press the corresponding tool button, your current tool will swap to it
 
-        paintBrush.toolButton.addActionListener(e -> {
-            toolContainer.currentTool = paintBrush.tool;
-            toolContainer.currentTool.currentColor = toolContainer.currentColor;
-        });
-        bucket.toolButton.addActionListener(e -> {
-            toolContainer.currentTool = bucket.tool;
-            toolContainer.currentTool.currentColor = toolContainer.currentColor;
-        });
-        line.toolButton.addActionListener(e -> {
-            toolContainer.currentTool = line.tool;
-            toolContainer.currentTool.currentColor = toolContainer.currentColor;
-        });
-        eraser.toolButton.addActionListener(e -> {
-            toolContainer.currentTool = eraser.tool;
-            toolContainer.currentTool.currentColor = toolContainer.currentColor;
-        });
-        shape.toolButton.addActionListener(e -> {
-            toolContainer.currentTool = shape.tool;
-			toolContainer.currentTool.currentColor = toolContainer.currentColor;
-        });
+        paintBrush.toolButton.addActionListener(e -> {setTool(paintBrush);});
+        bucket.toolButton.addActionListener(e -> {setTool(bucket);});
+        line.toolButton.addActionListener(e -> {setTool(line);});
+        eraser.toolButton.addActionListener(e -> {setTool(eraser);});
+        shape.toolButton.addActionListener(e -> {setTool(shape);});
 
-        
-        //line.addActionListener(e -> { line.swapTool(ToolID.LINE); });
-        //shape.addActionListener(e -> { shape.swapTool(ToolID.SHAPE); });
+        //endregion
 
         JColorChooser colorChooser = new JColorChooser();
 
@@ -87,13 +63,10 @@ public class Toolbox extends JPanel {
         JFrame colorFrame = new JFrame();
 
         colorFrame.setSize(768,768);
-
         colorFrame.add(colorChooser);
-
         colorFrame.setVisible(true);
 
         frame.setJMenuBar(createMenuBar());
-
         frame.setLocationByPlatform(true);
 
         frame.setResizable(true);
@@ -182,4 +155,5 @@ public class Toolbox extends JPanel {
         menuBar.add(createEditMenu());
         return menuBar;
     }
+    //endregion
 }

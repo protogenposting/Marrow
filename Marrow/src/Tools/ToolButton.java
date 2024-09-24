@@ -30,9 +30,10 @@ public class ToolButton extends JButton {
         Image image = null;
         try {
             image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(iconFile)));
-        } catch (IOException e) {
+        } catch (IOException _) {
 
         }
+        assert image != null;
         Icon icon = new ImageIcon(image);
         JButton tempButton = new JButton(icon);
         Dimension windowSize = new Dimension(200, 120);
