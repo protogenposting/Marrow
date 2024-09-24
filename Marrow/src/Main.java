@@ -13,12 +13,30 @@ import java.util.ArrayList;
 import java.io.*;
 
 public class Main {
-
+    static boolean test = false;
     //the main frame we will be drawing on
     static JFrame frame = new JFrame("Marrow");
 
     public static void main(String[] args) {
-        frameSetup();
+
+        if(test){
+            ToolContainer toolContainer = new ToolContainer();
+
+            ParentLayer parentLayer = new ParentLayer(frame, toolContainer);
+            ChildLayer childLayer2 = new ChildLayer();
+
+            childLayer2.addChild(new ChildLayer());
+            childLayer2.addChild(new ChildLayer());
+            childLayer2.addChild(new ChildLayer());
+
+            parentLayer.addChild(new ChildLayer());
+            parentLayer.addChild(childLayer2);
+
+            saveLayers(parentLayer);
+
+        }else {
+            frameSetup();
+        }
     }
 
     public static void saveLayers(ParentLayer parentLayer){
@@ -46,15 +64,9 @@ public class Main {
             ArrayList<ChildLayer> childLayers = parentLayer.getChildren();
 
             writer.write("MARROW\n\nParentLayer");
+            System.out.println("MARROW\n\nParentLayer");
 
-            findChildrenInChildLayer(childLayers, 1, writer, 0, "ChildLayer");
-
-
-
-
-
-
-
+            findChildrenInChildLayer(childLayers, 1, writer, false, "ChildLayer");
 
 
         } catch (IOException e) {
@@ -70,27 +82,42 @@ public class Main {
     }
 
     public static void findChildrenInChildLayer(ArrayList<ChildLayer> childLayers, int dashCount, FileWriter writer,
-                                                int repeatedTimes, String childLayerName){
+                                                boolean hasRepeated, String childLayerName){
         boolean thereIsChild;
-        if(repeatedTimes > 0){
-            childLayerName += "~";
-        }
-
 
         for (int i = 0; i < childLayers.size(); i++) {
             thereIsChild = isThereChildrenInChildLayer(childLayers.get(i));
 
-            try {
-                writer.write("\n" + dashCount + childLayerName + (i + 1));
+            if(!hasRepeated) {
+                try {
+                    writer.write("\n");
+                    printDashes(dashCount, writer);
+                    writer.write(childLayerName + (i + 1));
+
+                    System.out.print("\n");
+                    printDashes(dashCount, writer);
+                    System.out.println(childLayerName + (i + 1));
+                } catch (IOException ignore) {}
             }
-            catch (IOException ignore){}
+            else{
+                try {
+                    writer.write("\n");
+                    printDashes(dashCount, writer);
+                    writer.write(childLayerName);
+
+                    System.out.print("\n");
+                    printDashes(dashCount, writer);
+                    writer.write(childLayerName);
+                } catch (IOException ignore) {}
+            }
 
             if(thereIsChild){
                 ArrayList<ChildLayer> secondChildLayers = childLayers.get(i).getChildren();
 
-                findChildrenInChildLayer(secondChildLayers, dashCount + 1, writer,
-                        repeatedTimes + 1, childLayerName);
-
+                for (int j = 0; j < secondChildLayers.size(); j++) {
+                    findChildrenInChildLayer(secondChildLayers, dashCount + 1, writer,
+                            true, childLayerName + (i + 1) + "~" + (j + 1));
+                }
 
             }
 
@@ -98,7 +125,15 @@ public class Main {
 
                     when writing add ~ + childNum
 
+                    if dashcount = same , add ~1
              */
+        }
+    }
+
+    public static void printDashes(int dashCount, FileWriter writer) throws IOException {
+        for (int i = 0; i < dashCount; i++) {
+            writer.write("-");
+            System.out.print("-");
         }
     }
 
