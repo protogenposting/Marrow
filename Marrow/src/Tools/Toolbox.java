@@ -27,7 +27,8 @@ public class Toolbox extends JPanel {
     ToolButton bucket = new ToolButton("/iconImages/bucketTool.png", new Bucket());
     ToolButton line = new ToolButton("/iconImages/lineTool.png", new LineTool());
     ToolButton shape = new ToolButton("/iconImages/shapeTool.png", new ShapeTool());
-    ToolButton eraser = new ToolButton("/iconImages/shapeTool.png", new Eraser());
+    ToolButton eraser = new ToolButton("/iconImages/eraserTool.png", new Eraser());
+
 
     /**
      * initializes the toolbox window
