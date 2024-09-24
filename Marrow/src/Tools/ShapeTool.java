@@ -11,11 +11,26 @@ public class ShapeTool extends Tool {
     int xStart;
     int yStart;
 
+    /**
+     * Sets xStart and yStart
+     * @param x starting x position
+     * @param y starting y position
+     * @param bitmap the bitmap to add to
+     */
     public void onPress(int x, int y, Bitmap bitmap)
     {
         xStart = x;
         yStart = y;
     }
+
+    /**
+     * On release, calls the functions that paint a box as the user designed
+     * @param x1 the starting x position
+     * @param y1 the starting y position
+     * @param x2 the ending x position
+     * @param y2 the ending y position
+     * @param bitmap the bitmap to add to
+     */
     public void onRelease(int x1, int y1, int x2, int y2, Bitmap bitmap) {
         x1 = xStart;
         y1 = yStart;
@@ -56,6 +71,16 @@ public class ShapeTool extends Tool {
         */
     }
 
+
+    /**
+     * Paints a line along the X axis
+     * @param x
+     * @param y
+     * @param xProgress
+     * @param progressDirection
+     * @param width
+     * @param bitmap
+     */
     public void addXPixelsInALine(int x, int y, int xProgress, int progressDirection, int width, Bitmap bitmap){
         int signX = xProgress;
         xProgress = xProgress * progressDirection;
@@ -65,6 +90,15 @@ public class ShapeTool extends Tool {
         }
     }
 
+    /**
+     * Paints a line along the Y axis
+     * @param x
+     * @param y
+     * @param yProgress
+     * @param progressDirection
+     * @param height
+     * @param bitmap
+     */
     public void addYPixelsInALine(int x, int y, int yProgress, int progressDirection, int height, Bitmap bitmap){
         int signY = yProgress;
         yProgress = yProgress * progressDirection;

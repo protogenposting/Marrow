@@ -117,6 +117,11 @@ public class Toolbox extends JPanel {
         //endregion
 
     }
+
+    /**
+     * Creates the edit menu
+     * @return
+     */
     private JMenu createEditMenu() {
         JMenu editMenu = new JMenu("Edit");
         JMenuItem cutItem = new JMenuItem("Cut");
@@ -128,6 +133,10 @@ public class Toolbox extends JPanel {
         return editMenu;
     }
 
+    /**
+     * creates the File menu
+     * @return
+     */
     private JMenu createFileMenu() {
         JMenu fileMenu = new JMenu("File");
         JMenuItem newItem = new JMenuItem("New");
@@ -139,6 +148,10 @@ public class Toolbox extends JPanel {
         return fileMenu;
     }
 
+    /**
+     * creates the menu bar
+     * @return
+     */
     private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createFileMenu());

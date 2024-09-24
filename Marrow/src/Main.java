@@ -24,10 +24,9 @@ public class Main {
     }
 
 
-
-
-
-
+    /**
+     * Sets up the main frame that the user draws on
+     */
     static void frameSetup(){
         Container content = frame.getContentPane();
 
