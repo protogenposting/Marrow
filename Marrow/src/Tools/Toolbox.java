@@ -28,7 +28,7 @@ public class Toolbox extends JPanel {
      */
     public Toolbox(ToolContainer toolContainer) {
         frame.setTitle("Marrow Toolbox");
-        frame.setSize(1366,512);
+        frame.setSize(600,150);
 
         this.toolContainer = toolContainer;
 
