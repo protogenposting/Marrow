@@ -76,7 +76,7 @@ public class Main {
     public static void findChildrenInChildLayer(ArrayList<ChildLayer> childLayers, int dashCount, FileWriter writer,
                                                 boolean hasRepeated, String childLayerName){
         boolean thereIsChild;
-
+		
         for (int i = 0; i < childLayers.size(); i++) {
             thereIsChild = isThereChildrenInChildLayer(childLayers.get(i));
 
@@ -146,6 +146,10 @@ public class Main {
     }
 
 
+
+     /**
+     * Sets up the main frame that the user draws on
+     */
     static void frameSetup(){
         Container content = frame.getContentPane();
 

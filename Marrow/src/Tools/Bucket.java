@@ -6,8 +6,7 @@ import Bitmaps.RGBColor;
 
 import java.util.ArrayList;
 
-class CheckPoint
-{
+class CheckPoint {
     int x;
     int y;
     Bitmap bitmap;
@@ -21,6 +20,11 @@ class CheckPoint
         this.currentColor = currentColor;
         this.startingColor = startingColor;
     }
+
+    /**
+     * list of all pixels on screen
+     * @return
+     */
     public ArrayList<CheckPoint> updateNearbyPoints()
     {
         ArrayList<CheckPoint> list = new ArrayList<>();
@@ -44,7 +48,14 @@ class CheckPoint
     }
 }
 
+
 public class Bucket extends Tool {
+    /**
+     * on press, converts all connected pixels of the same color into the new color
+     * @param x starting x position
+     * @param y starting y position
+     * @param bitmap the bitmap to add to
+     */
     public void onPress(int x, int y, Bitmap bitmap) {
         RGBColor startColor = bitmap.getPixelAt(x, y).toRGBColor();
 

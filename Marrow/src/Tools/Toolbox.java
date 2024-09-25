@@ -20,7 +20,7 @@ public class Toolbox extends JPanel {
     ToolButton bucket = new ToolButton("/iconImages/bucketTool.png", new Bucket());
     ToolButton line = new ToolButton("/iconImages/lineTool.png", new LineTool());
     ToolButton shape = new ToolButton("/iconImages/shapeTool.png", new ShapeTool());
-    ToolButton eraser = new ToolButton("/iconImages/shapeTool.png", new Eraser());
+    ToolButton eraser = new ToolButton("/iconImages/eraserTool.png", new Eraser());
     //endregion
 
     /**
@@ -28,7 +28,7 @@ public class Toolbox extends JPanel {
      */
     public Toolbox(ToolContainer toolContainer) {
         frame.setTitle("Marrow Toolbox");
-        frame.setSize(600,150);
+        frame.setSize(800,150);
 
         this.toolContainer = toolContainer;
 
@@ -42,12 +42,6 @@ public class Toolbox extends JPanel {
         line.toolButton.addActionListener(e -> {setTool(line);});
         eraser.toolButton.addActionListener(e -> {setTool(eraser);});
         shape.toolButton.addActionListener(e -> {setTool(shape);});
-
-        buttonPanel.add(paintBrush.toolButton);
-        buttonPanel.add(bucket.toolButton);
-        buttonPanel.add(line.toolButton);
-        buttonPanel.add(shape.toolButton);
-        buttonPanel.add(eraser.toolButton);
 
         //endregion
 
@@ -78,21 +72,53 @@ public class Toolbox extends JPanel {
         frame.setResizable(true);
         frame.setVisible(true);
 
+        buttonPanel.add(paintBrush.toolButton);
+        buttonPanel.add(bucket.toolButton);
+        buttonPanel.add(line.toolButton);
+        buttonPanel.add(shape.toolButton);
+        buttonPanel.add(eraser.toolButton);
+
+        buttonPanel.add(promptCloser);
+        promptCloser.setSize(200,120);
+        promptCloser.setVisible(true);
+
+        buttonPanel.add(timePrompt);
+        timePrompt.setSize(200,120);
+        timePrompt.setVisible(true);
+
+        buttonPanel.add(activateChange);
+        activateChange.setSize(200,120);
+        activateChange.setVisible(true);
+        activateChange.addActionListener(e -> {
+            try{
+                int drawSize = Integer.parseInt(timePrompt.getText());
+                // setPixels drawn to drawsize WHEN YOU FIND THE VARIABLE NAME
+                System.out.println("Draw size changed");
+            } catch (NumberFormatException Ex){
+                System.out.println("ERROR: INVALID INPUT");
+            }
+        });
+
         frame.add(buttonPanel);
 
-    }
 
+        //buttonPanel.setVisible(true);
+
+        //region experimental code
+        /*
+        setCurrentTool(ButtonID.PAINTBRUSH);
+        setCurrentTool(ButtonID.BUCKET);
+        setCurrentTool(ButtonID.LINE);
+        setCurrentTool(ButtonID.SHAPE);
+         */
+        //endregion
+
+    }
 
     /**
-     * sets the user's current tool to the tool parameter entered
-     * @param tool the tool that the player's tool is being set to
+     * Creates the edit menu
+     * @return
      */
-    private void setTool(ToolButton tool){
-        toolContainer.currentTool = tool.tool;
-        toolContainer.currentTool.currentColor = toolContainer.currentColor;
-    }
-
-    //region menus
     private JMenu createEditMenu() {
         JMenu editMenu = new JMenu("Edit");
         JMenuItem cutItem = new JMenuItem("Cut");
@@ -104,6 +130,10 @@ public class Toolbox extends JPanel {
         return editMenu;
     }
 
+    /**
+     * creates the File menu
+     * @return
+     */
     private JMenu createFileMenu() {
         JMenu fileMenu = new JMenu("File");
         JMenuItem newItem = new JMenuItem("New");
@@ -115,6 +145,10 @@ public class Toolbox extends JPanel {
         return fileMenu;
     }
 
+    /**
+     * creates the menu bar
+     * @return
+     */
     private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createFileMenu());
