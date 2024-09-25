@@ -13,39 +13,26 @@ import java.util.ArrayList;
 import java.io.*;
 
 public class Main {
-    static boolean test = false;
     //the main frame we will be drawing on
     static JFrame frame = new JFrame("Marrow");
 
     public static void main(String[] args) {
-
-        if(test){
-            ToolContainer toolContainer = new ToolContainer();
-
-            ParentLayer parentLayer = new ParentLayer(frame, toolContainer);
-            ChildLayer childLayer2 = new ChildLayer();
-
-            childLayer2.addChild(new ChildLayer());
-            childLayer2.addChild(new ChildLayer());
-            childLayer2.addChild(new ChildLayer());
-
-            parentLayer.addChild(new ChildLayer());
-            parentLayer.addChild(childLayer2);
-
-            saveLayers(parentLayer);
-
-        }else {
-            frameSetup();
-        }
+        frameSetup();
     }
 
     public static void saveLayers(ParentLayer parentLayer){
         try {
             String currentSaveDirectory = "MarrowSaves"; // change later on to be able to find the directory user saved it at
+
             File path = new File(currentSaveDirectory);
-            path.mkdirs();
+            boolean pathExists = path.mkdirs();
+
             File saveFile = new File(currentSaveDirectory + "/save.marrow");
-            saveFile.createNewFile();
+            boolean saveExists = saveFile.createNewFile();
+
+            if(!pathExists && !saveExists){
+                System.out.println("uh oh");
+            }
 
             FileWriter writer = new FileWriter(currentSaveDirectory + "save.marrow");
 
@@ -63,11 +50,15 @@ public class Main {
 
             ArrayList<ChildLayer> childLayers = parentLayer.getChildren();
 
+
+
             writer.write("MARROW\n\nParentLayer");
-            System.out.println("MARROW\n\nParentLayer");
+            System.out.println();
+            System.out.print("MARROW\n\nParentLayer");
 
             findChildrenInChildLayer(childLayers, 1, writer, false, "ChildLayer");
 
+            writer.close();
 
         } catch (IOException e) {
             System.out.println("An error occurred.");
@@ -76,9 +67,14 @@ public class Main {
 
     }
 
+    /**
+     * checks if there are children in childLayer
+     * @param childLayer the childLayer being checked for children
+     * @return true if there are, false if empty
+     */
     static boolean isThereChildrenInChildLayer(ChildLayer childLayer){
         ArrayList<ChildLayer> childLayers = childLayer.getChildren();
-        return !childLayers.isEmpty();
+        return !childLayers.isEmpty(); // if it isn't empty, there are children
     }
 
     public static void findChildrenInChildLayer(ArrayList<ChildLayer> childLayers, int dashCount, FileWriter writer,
@@ -91,23 +87,25 @@ public class Main {
             if(!hasRepeated) {
                 try {
                     writer.write("\n");
-                    printDashes(dashCount, writer);
+                    printDashes(dashCount, writer, false);
                     writer.write(childLayerName + (i + 1));
 
                     System.out.print("\n");
-                    printDashes(dashCount, writer);
-                    System.out.println(childLayerName + (i + 1));
+                    printDashes(dashCount, writer, true);
+                    System.out.print(childLayerName + (i + 1));
+
                 } catch (IOException ignore) {}
             }
             else{
                 try {
                     writer.write("\n");
-                    printDashes(dashCount, writer);
+                    printDashes(dashCount, writer, false);
                     writer.write(childLayerName);
 
                     System.out.print("\n");
-                    printDashes(dashCount, writer);
-                    writer.write(childLayerName);
+                    printDashes(dashCount, writer, true);
+                    System.out.print(childLayerName);
+
                 } catch (IOException ignore) {}
             }
 
@@ -115,10 +113,18 @@ public class Main {
                 ArrayList<ChildLayer> secondChildLayers = childLayers.get(i).getChildren();
 
                 for (int j = 0; j < secondChildLayers.size(); j++) {
-                    findChildrenInChildLayer(secondChildLayers, dashCount + 1, writer,
-                            true, childLayerName + (i + 1) + "~" + (j + 1));
+                    if(!hasRepeated) {
+                        findChildrenInChildLayer(secondChildLayers, dashCount + 1, writer,
+                                true, childLayerName + (i + 1) + "~" + (j + 1));
+                    }
+                    else{
+                        findChildrenInChildLayer(secondChildLayers, dashCount + 1, writer,
+                                true, childLayerName + "~" + (j + 1));
+                    }
                 }
-
+            }
+            if(hasRepeated){
+                break;
             }
 
             /* for int childNum; childExists; childExists=true; childNum++
@@ -130,10 +136,16 @@ public class Main {
         }
     }
 
-    public static void printDashes(int dashCount, FileWriter writer) throws IOException {
-        for (int i = 0; i < dashCount; i++) {
-            writer.write("-");
-            System.out.print("-");
+    public static void printDashes(int dashCount, FileWriter writer, boolean isTesting) throws IOException {
+        if(!isTesting) {
+            for (int i = 0; i < dashCount; i++) {
+                writer.write("-");
+            }
+        }
+        else{
+            for (int i = 0; i < dashCount; i++) {
+                System.out.print("-");
+            }
         }
     }
 
@@ -157,6 +169,41 @@ public class Main {
         content.add(parentLayer, BorderLayout.CENTER);
 
         parentLayer.addChild(new BitmapLayer(toolContainer,"pussy"));
+
+        //region TESTING THE SAVE
+        /*
+        ChildLayer childLayer2 = new ChildLayer();
+        ChildLayer childLayer3 = new ChildLayer();
+        ChildLayer childLayer4 = new ChildLayer();
+
+        childLayer4.addChild(new ChildLayer());
+
+        childLayer3.addChild(childLayer4);
+        childLayer3.addChild(childLayer4);
+        childLayer3.addChild(childLayer4);
+        childLayer3.addChild(childLayer4);
+
+        childLayer2.addChild(childLayer3);
+
+        parentLayer.addChild(childLayer2);
+        parentLayer.addChild(childLayer3);
+        parentLayer.addChild(childLayer4);
+
+        /*
+        end result should be:
+        ParentLayer
+        -CL1
+        -CL2
+        --CL2~1
+        ---CL2~1~1
+        ---CL2~1~2
+        ---CL2~1~3
+        ---CL2~1~4
+        ----CL2~1~4~1
+        -CL3
+        --CL3~1
+         */
+        //endregion
 
         parentLayer.setSize(1366,768);
 
