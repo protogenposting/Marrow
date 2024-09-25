@@ -30,11 +30,7 @@ public class Main {
             File saveFile = new File(currentSaveDirectory + "/save.marrow");
             boolean saveExists = saveFile.createNewFile();
 
-            if(!pathExists && !saveExists){
-                System.out.println("uh oh");
-            }
-
-            FileWriter writer = new FileWriter(currentSaveDirectory + "save.marrow");
+            FileWriter writer = new FileWriter(currentSaveDirectory + "/save.marrow");
 
             /*
             example of what it should look like
@@ -171,7 +167,7 @@ public class Main {
         parentLayer.addChild(new BitmapLayer(toolContainer,"pussy"));
 
         //region TESTING THE SAVE
-        /*
+
         ChildLayer childLayer2 = new ChildLayer();
         ChildLayer childLayer3 = new ChildLayer();
         ChildLayer childLayer4 = new ChildLayer();
