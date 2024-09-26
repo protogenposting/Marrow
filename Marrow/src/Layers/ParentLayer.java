@@ -26,6 +26,7 @@ public class ParentLayer extends Layer {
     Image image;
     ToolContainer toolContainer;
     public ChildLayer currentLayer;
+
     public ParentLayer(JFrame frame, ToolContainer toolContainer)
     {
         this.frame = frame;
@@ -44,6 +45,7 @@ public class ParentLayer extends Layer {
         layer.parent = this;
         layer.setSize(1366,768);
     }
+
     protected void paintComponent(Graphics g) {
         if(image==null)
         {
@@ -86,11 +88,14 @@ public class ParentLayer extends Layer {
         g.drawImage(image,0,0,null);
     }
 
+    /**
+     * clears the entire window with white
+     */
     public void clear()
     {
         graphics.setPaint(Color.WHITE);
         //draw white on the entire draw area
-        graphics.fillRect(0,0,getSize().width,getSize().height);
+        graphics.fillRect(0,0, getSize().width, getSize().height);
         graphics.setPaint(Color.black);
         repaint();
     }
