@@ -155,28 +155,6 @@ public class Main {
         //add the bitmap layer to the main window
         content.add(parentLayer, BorderLayout.CENTER);
 
-        parentLayer.addChild(new BitmapLayer(toolContainer,"pussy"));
-
-        // if you want to get rid of the tests, simply comment this code out
-        //region TESTING THE SAVE
-
-        ChildLayer childLayer2 = new ChildLayer();
-        ChildLayer childLayer3 = new ChildLayer();
-        ChildLayer childLayer4 = new ChildLayer();
-
-        childLayer4.addChild(new ChildLayer());
-
-        childLayer3.addChild(childLayer4);
-        childLayer3.addChild(childLayer4);
-        childLayer3.addChild(childLayer4);
-        childLayer3.addChild(childLayer4);
-
-        childLayer2.addChild(childLayer3);
-
-        parentLayer.addChild(childLayer2);
-        parentLayer.addChild(childLayer3);
-        parentLayer.addChild(childLayer4);
-
         /*
         end result should be:
         ParentLayer
@@ -232,8 +210,8 @@ public class Main {
         });
 
         Toolbox tools = new Toolbox(toolContainer);
-        LayerWindow layerOrganization = new LayerWindow("Marrow Layers",layers);
-        //Timeline timeline = new Timeline("Marrow Timeline");
+        LayerWindow layerOrganization = new LayerWindow("Marrow Layers",parentLayer);
+        Timeline timeline = new Timeline("Marrow Timeline");
     }
 
 }
