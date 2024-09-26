@@ -60,9 +60,11 @@ public class Main {
     /**
      * gets a FileWriter that will write to a save file for the computer to write to
      * @return the FileWriter that will write to a save file
-     * @throws IOException
+     * @throws IOException for the case a file does not exist
      */
     private static FileWriter getSaveFileWriter() throws IOException {
+        //NOTE: IF IT DOESN'T WORK OR IS UNABLE TO FIND A FILE, CHECK FOR TYPOS
+
         String currentSaveDirectory = "MarrowSaves"; // change later on to be able to find the directory user saved it at
 
         File path = new File(currentSaveDirectory);
