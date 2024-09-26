@@ -37,11 +37,11 @@ public class Toolbox extends JPanel {
         // "if button is pressed, do this event"
         // the code below makes it so when you press the corresponding tool button, your current tool will swap to it
 
-        paintBrush.toolButton.addActionListener(e -> {setTool(paintBrush);});
-        bucket.toolButton.addActionListener(e -> {setTool(bucket);});
-        line.toolButton.addActionListener(e -> {setTool(line);});
-        eraser.toolButton.addActionListener(e -> {setTool(eraser);});
-        shape.toolButton.addActionListener(e -> {setTool(shape);});
+        ToolButton paintBrush = new ToolButton("/iconImages/brushTool.png", new Paintbrush());
+        ToolButton bucket = new ToolButton("/iconImages/bucketTool.png", new Bucket());
+        ToolButton line = new ToolButton("/iconImages/lineTool.png", new LineTool());
+        ToolButton shape = new ToolButton("/iconImages/shapeTool.png", new ShapeTool());
+        ToolButton eraser = new ToolButton("/iconImages/eraserTool.png", new Eraser());
 
         //endregion
 
@@ -78,6 +78,8 @@ public class Toolbox extends JPanel {
         buttonPanel.add(shape.toolButton);
         buttonPanel.add(eraser.toolButton);
 
+        //region ANTHONY'S UNFINISHED CODE
+        /*
         buttonPanel.add(promptCloser);
         promptCloser.setSize(200,120);
         promptCloser.setVisible(true);
@@ -98,6 +100,8 @@ public class Toolbox extends JPanel {
                 System.out.println("ERROR: INVALID INPUT");
             }
         });
+         */
+        //endregion
 
         frame.add(buttonPanel);
 
