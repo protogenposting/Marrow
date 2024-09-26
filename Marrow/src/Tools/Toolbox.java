@@ -39,6 +39,12 @@ public class Toolbox extends JPanel {
         buttonPanel.add(shape.toolButton);
         buttonPanel.add(eraser.toolButton);
 
+        paintBrush.toolButton.addActionListener(e -> {setTool(paintBrush);});
+        bucket.toolButton.addActionListener(e -> {setTool(bucket);});
+        line.toolButton.addActionListener(e -> {setTool(line);});
+        eraser.toolButton.addActionListener(e -> {setTool(eraser);});
+        shape.toolButton.addActionListener(e -> {setTool(shape);});
+
         //endregion
 
         JColorChooser colorChooser = new JColorChooser();
@@ -95,6 +101,11 @@ public class Toolbox extends JPanel {
 
         frame.add(buttonPanel);
 
+    }
+
+    private void setTool(ToolButton toolButton){
+        toolContainer.currentTool = toolButton.tool;
+        toolContainer.currentTool.currentColor = toolContainer.currentColor;
     }
 
     //region create menus
