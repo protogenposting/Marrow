@@ -227,7 +227,6 @@ public class Main {
                     saveLayers(parentLayer);
                 }
             }
-
             @Override
             public void keyReleased(KeyEvent e) {}
         });

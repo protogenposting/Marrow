@@ -13,16 +13,6 @@ public class Toolbox extends JPanel {
     JPanel buttonPanel = new JPanel(); //adds all buttons to this
     ToolContainer toolContainer;
 
-    //region button initializations
-
-    // icon file shouldn't have src/, otherwise images don't render for some reason
-    ToolButton paintBrush = new ToolButton("/iconImages/brushTool.png", new Paintbrush());
-    ToolButton bucket = new ToolButton("/iconImages/bucketTool.png", new Bucket());
-    ToolButton line = new ToolButton("/iconImages/lineTool.png", new LineTool());
-    ToolButton shape = new ToolButton("/iconImages/shapeTool.png", new ShapeTool());
-    ToolButton eraser = new ToolButton("/iconImages/eraserTool.png", new Eraser());
-    //endregion
-
     /**
      * initializes the toolbox window
      */
@@ -42,6 +32,12 @@ public class Toolbox extends JPanel {
         ToolButton line = new ToolButton("/iconImages/lineTool.png", new LineTool());
         ToolButton shape = new ToolButton("/iconImages/shapeTool.png", new ShapeTool());
         ToolButton eraser = new ToolButton("/iconImages/eraserTool.png", new Eraser());
+
+        buttonPanel.add(paintBrush.toolButton);
+        buttonPanel.add(bucket.toolButton);
+        buttonPanel.add(line.toolButton);
+        buttonPanel.add(shape.toolButton);
+        buttonPanel.add(eraser.toolButton);
 
         //endregion
 
@@ -72,12 +68,6 @@ public class Toolbox extends JPanel {
         frame.setResizable(true);
         frame.setVisible(true);
 
-        buttonPanel.add(paintBrush.toolButton);
-        buttonPanel.add(bucket.toolButton);
-        buttonPanel.add(line.toolButton);
-        buttonPanel.add(shape.toolButton);
-        buttonPanel.add(eraser.toolButton);
-
         //region ANTHONY'S UNFINISHED CODE
         /*
         buttonPanel.add(promptCloser);
@@ -105,23 +95,12 @@ public class Toolbox extends JPanel {
 
         frame.add(buttonPanel);
 
-
-        //buttonPanel.setVisible(true);
-
-        //region experimental code
-        /*
-        setCurrentTool(ButtonID.PAINTBRUSH);
-        setCurrentTool(ButtonID.BUCKET);
-        setCurrentTool(ButtonID.LINE);
-        setCurrentTool(ButtonID.SHAPE);
-         */
-        //endregion
-
     }
 
+    //region create menus
     /**
      * Creates the edit menu
-     * @return
+     * @return the created edit menu
      */
     private JMenu createEditMenu() {
         JMenu editMenu = new JMenu("Edit");
@@ -136,7 +115,7 @@ public class Toolbox extends JPanel {
 
     /**
      * creates the File menu
-     * @return
+     * @return the created file menu
      */
     private JMenu createFileMenu() {
         JMenu fileMenu = new JMenu("File");
@@ -151,7 +130,7 @@ public class Toolbox extends JPanel {
 
     /**
      * creates the menu bar
-     * @return
+     * @return the created menu bar
      */
     private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
