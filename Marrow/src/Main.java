@@ -20,17 +20,14 @@ public class Main {
         frameSetup();
     }
 
+    /**
+     * saves the parentLayer and its children into a custom text file named "save.marrow"
+     * @param parentLayer the layer and its children being saved
+     */
     public static void saveLayers(ParentLayer parentLayer){
         try {
-            String currentSaveDirectory = "MarrowSaves"; // change later on to be able to find the directory user saved it at
 
-            File path = new File(currentSaveDirectory);
-            boolean pathExists = path.mkdirs();
-
-            File saveFile = new File(currentSaveDirectory + "/save.marrow");
-            boolean saveExists = saveFile.createNewFile();
-
-            FileWriter writer = new FileWriter(currentSaveDirectory + "/save.marrow");
+            FileWriter writer = getSaveFileWriter();
 
             /*
             example of what it should look like
@@ -46,13 +43,10 @@ public class Main {
 
             ArrayList<ChildLayer> childLayers = parentLayer.getChildren();
 
-
-
             writer.write("MARROW\n\nParentLayer");
-            System.out.println();
-            System.out.print("MARROW\n\nParentLayer");
+            System.out.print("\nMARROW\n\nParentLayer");
 
-            findChildrenInChildLayer(childLayers, 1, writer, false, "ChildLayer");
+            saveChildrenInChildLayer(childLayers, "-", writer, false, "ChildLayer");
 
             writer.close();
 
@@ -64,88 +58,79 @@ public class Main {
     }
 
     /**
+     * gets a FileWriter that will write to a save file for the computer to write to
+     * @return the FileWriter that will write to a save file
+     * @throws IOException
+     */
+    private static FileWriter getSaveFileWriter() throws IOException {
+        String currentSaveDirectory = "MarrowSaves"; // change later on to be able to find the directory user saved it at
+
+        File path = new File(currentSaveDirectory);
+        boolean pathExists = path.mkdirs();
+
+        File saveFile = new File(currentSaveDirectory + "/save.marrow");
+        boolean saveExists = saveFile.createNewFile();
+
+        // Currently, this will simply overwrite the current save file. Find way to resolve issue, maybe?
+
+        return new FileWriter(currentSaveDirectory + "/save.marrow");
+    }
+
+    /**
      * checks if there are children in childLayer
      * @param childLayer the childLayer being checked for children
      * @return true if there are, false if empty
      */
-    static boolean isThereChildrenInChildLayer(ChildLayer childLayer){
+    private static boolean isThereChildrenInChildLayer(ChildLayer childLayer){
         ArrayList<ChildLayer> childLayers = childLayer.getChildren();
-        return !childLayers.isEmpty(); // if it isn't empty, there are children
+        return !childLayers.isEmpty();
     }
 
-    public static void findChildrenInChildLayer(ArrayList<ChildLayer> childLayers, int dashCount, FileWriter writer,
+    /**
+     * finds children in childLayer and prints them accordingly in a specific format into a custom save file
+     * @param childLayers the childLayers being saved
+     * @param dashCount the "hierarchy" of the childLayer
+     * @param writer the file writer that saves the childLayers into the save file
+     * @param hasRepeated checks for if it has repeated at least once
+     * @param childLayerName the name being saved to the file for each childLayer that exists
+     */
+    public static void saveChildrenInChildLayer(ArrayList<ChildLayer> childLayers, String dashCount, FileWriter writer,
                                                 boolean hasRepeated, String childLayerName){
         boolean thereIsChild;
 		
         for (int i = 0; i < childLayers.size(); i++) {
             thereIsChild = isThereChildrenInChildLayer(childLayers.get(i));
 
-            if(!hasRepeated) {
-                try {
-                    writer.write("\n");
-                    printDashes(dashCount, writer, false);
-                    writer.write(childLayerName + (i + 1));
+            try {
+                writer.write("\n" + dashCount + childLayerName);
+                System.out.print("\n" + dashCount + childLayerName);
 
-                    System.out.print("\n");
-                    printDashes(dashCount, writer, true);
-                    System.out.print(childLayerName + (i + 1));
-
-                } catch (IOException ignore) {}
+                if(!hasRepeated){ //if it has repeated, it'll already have a number at the front
+                    writer.write(i + 1);
+                    System.out.print(i + 1);
+                }
             }
-            else{
-                try {
-                    writer.write("\n");
-                    printDashes(dashCount, writer, false);
-                    writer.write(childLayerName);
-
-                    System.out.print("\n");
-                    printDashes(dashCount, writer, true);
-                    System.out.print(childLayerName);
-
-                } catch (IOException ignore) {}
-            }
+            catch (IOException ignore) {}
 
             if(thereIsChild){
-                ArrayList<ChildLayer> secondChildLayers = childLayers.get(i).getChildren();
+                ArrayList<ChildLayer> secondChildLayers = childLayers.get(i).getChildren(); //get the children of the child in childLayers
 
                 for (int j = 0; j < secondChildLayers.size(); j++) {
-                    if(!hasRepeated) {
-                        findChildrenInChildLayer(secondChildLayers, dashCount + 1, writer,
+                    if(!hasRepeated) { //needed so childLayerName prints "ChildLayer1~1" instead of "ChildLayer~1", for example
+                        saveChildrenInChildLayer(secondChildLayers, dashCount + "-", writer,
                                 true, childLayerName + (i + 1) + "~" + (j + 1));
                     }
                     else{
-                        findChildrenInChildLayer(secondChildLayers, dashCount + 1, writer,
+                        saveChildrenInChildLayer(secondChildLayers, dashCount + "-", writer,
                                 true, childLayerName + "~" + (j + 1));
                     }
                 }
-            }
+            } // if this is not here, it will print duplicate layers
             if(hasRepeated){
                 break;
             }
-
-            /* for int childNum; childExists; childExists=true; childNum++
-
-                    when writing add ~ + childNum
-
-                    if dashcount = same , add ~1
-             */
         }
     }
-
-    public static void printDashes(int dashCount, FileWriter writer, boolean isTesting) throws IOException {
-        if(!isTesting) {
-            for (int i = 0; i < dashCount; i++) {
-                writer.write("-");
-            }
-        }
-        else{
-            for (int i = 0; i < dashCount; i++) {
-                System.out.print("-");
-            }
-        }
-    }
-
-
 
      /**
      * Sets up the main frame that the user draws on
@@ -170,6 +155,7 @@ public class Main {
 
         parentLayer.addChild(new BitmapLayer(toolContainer,"pussy"));
 
+        // if you want to get rid of the tests, simply comment this code out
         //region TESTING THE SAVE
 
         ChildLayer childLayer2 = new ChildLayer();
@@ -203,7 +189,7 @@ public class Main {
         -CL3
         --CL3~1
          */
-        //endregion
+        //endregion //
 
         parentLayer.setSize(1366,768);
 
