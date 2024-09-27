@@ -40,6 +40,7 @@ public class ParentLayer extends Layer {
             currentLayer = layer;
         }
         children.add(layer);
+        onAddChild.accept(1);
         frame.getContentPane().add(layer);
         layer.setOpaque(false);
         layer.parent = this;
@@ -60,7 +61,6 @@ public class ParentLayer extends Layer {
 
         graphics.setColor(Color.black);
 
-        double time = System.nanoTime();
         clear();
         //RENDERING
         for(int i = 0; i < children.size(); i++)
@@ -81,9 +81,6 @@ public class ParentLayer extends Layer {
                 graphics.drawImage(bitmapChild.drawnImage,0,0,this);
             }
         }
-        double time2 = System.nanoTime();
-
-        System.out.println((time2-time)/1000000);
 
         g.drawImage(image,0,0,null);
     }
