@@ -39,7 +39,7 @@ public class ParentLayer extends Layer {
             currentLayer = layer;
         }
         children.add(layer);
-        onAddChild.accept(1);
+        onAddChild.accept(layer);
         frame.getContentPane().add(layer);
         layer.setOpaque(false);
         layer.parent = this;
@@ -64,19 +64,15 @@ public class ParentLayer extends Layer {
         for(int i = 0; i < children.size(); i++)
         {
             ChildLayer child = children.get(i);
-            
-            if(currentLayer.equals(child))
-            {
-                child.isCurrentLayer = true;
-            }
+
+            child.isCurrentLayer = currentLayer == child;
 
             if(child.getClass().equals(BitmapLayer.class))
             {
                 //draw lines from the bitmap
-                BitmapLayer bitmapChild = (BitmapLayer)children.get(i);
-                Bitmap bitmap = bitmapChild.bitmap;
-                ArrayList<ArrayList<Pixel>> map = bitmap.bitmap;
+                BitmapLayer bitmapChild = (BitmapLayer)child;
                 graphics.drawImage(bitmapChild.drawnImage,0,0,this);
+                System.out.println(child.isCurrentLayer);
             }
         }
 

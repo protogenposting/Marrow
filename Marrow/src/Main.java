@@ -210,7 +210,7 @@ public class Main {
         });
 
         Toolbox tools = new Toolbox(toolContainer);
-        LayerWindow layerOrganization = new LayerWindow("Marrow Layers",parentLayer);
+        LayerWindow layerOrganization = new LayerWindow("Marrow Layers",parentLayer,toolContainer);
         Timeline timeline = new Timeline("Marrow Timeline");
     }
 
