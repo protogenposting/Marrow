@@ -17,6 +17,7 @@ public class Paintbrush extends Tool{
     public void onPress(int x, int y, Bitmap bitmap)
     {
         bitmap.addPixel(x,y,new Pixel(currentColor));
+        System.out.println("is clicked");
     }
 
     /**
@@ -47,7 +48,6 @@ public class Paintbrush extends Tool{
             int xProgress = signX;
 
             for (int i = -radius / 2; i < radius; i++) {
-
                 for(int j = 0; j < width; j++) {
                     double tan = Math.tan(theta)*xProgress;
                     int yResult = (int)Math.round(tan) + i;
@@ -55,22 +55,21 @@ public class Paintbrush extends Tool{
                     xProgress += signX;
                 }
             }
+
+            System.out.println("has exited for loop");
         }
         else {
             int yProgress = signY;
 
-
-
-
-
-
-
-            for(int i = 0; i < height; i++)
-            {
-                int xResult = (int)Math.round(yProgress/Math.tan(theta));
-                bitmap.addPixel(xResult + x1,yProgress + y1,new Pixel(currentColor));
-                yProgress += signY;
+            for (int i = -radius / 2; i < radius; i++) {
+                for(int j = 0; j < width; j++) {
+                    int xResult = (int)Math.round(yProgress/Math.tan(theta) + i);
+                    bitmap.addPixel(xResult + x1,yProgress + y1,new Pixel(currentColor));
+                    yProgress += signY;
+                }
             }
+
+            System.out.println("has exited for loop");
         }
     }
 
