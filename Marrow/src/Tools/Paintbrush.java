@@ -6,7 +6,7 @@ import Bitmaps.RGBColor;
 
 public class Paintbrush extends Tool{
 
-    int size = 1;
+    int size = 5;
 
     /**
      * Paints a new pixel on the screen at the click location
@@ -17,7 +17,6 @@ public class Paintbrush extends Tool{
     public void onPress(int x, int y, Bitmap bitmap)
     {
         bitmap.addPixel(x,y,new Pixel(currentColor));
-        System.out.println("is clicked");
     }
 
     /**
@@ -39,38 +38,86 @@ public class Paintbrush extends Tool{
         int signX = (int)Math.signum(x2-x1);
         int signY = (int)Math.signum(y2-y1);
 
-        int radius = (drawSize - 1) / 2;
-
         double theta = Math.atan(((double)y2-y1)/(x2-x1));
-        double perpendicularTheta = Math.atan(((double)x2-x1)/(y2-y1)) * -1;
 
         if(width>Math.abs(y1-y2)) {
             int xProgress = signX;
 
-            for (int i = -radius / 2; i < radius; i++) {
-                for(int j = 0; j < width; j++) {
-                    double tan = Math.tan(theta)*xProgress;
-                    int yResult = (int)Math.round(tan) + i;
-                    bitmap.addPixel(xProgress + x1,yResult + y1,new Pixel(currentColor));
-                    xProgress += signX;
-                }
-            }
+            for(int j = 0; j < width; j++) {
 
-            System.out.println("has exited for loop");
+                double tan = (Math.tan(theta) * xProgress);
+                int yResult = (int)Math.round(tan);
+
+                if(drawSize == 1){
+                    bitmap.addPixel(xProgress + x1,yResult + y1, new Pixel(currentColor));
+                }
+                else {
+                    drawCircle(xProgress + x1, yResult + y1, bitmap);
+                }
+
+                xProgress += signX;
+            }
         }
         else {
             int yProgress = signY;
 
-            for (int i = -radius / 2; i < radius; i++) {
-                for(int j = 0; j < width; j++) {
-                    int xResult = (int)Math.round(yProgress/Math.tan(theta) + i);
-                    bitmap.addPixel(xResult + x1,yProgress + y1,new Pixel(currentColor));
-                    yProgress += signY;
+            for(int j = 0; j < height; j++) {
+                int xResult = (int)Math.round(yProgress/Math.tan(theta));
+
+                if(drawSize == 1){
+                    bitmap.addPixel(xResult + x1,yProgress + y1, new Pixel(currentColor));
                 }
+                else {
+                    drawCircle(xResult + x1, yProgress + y1, bitmap);
+                }
+
+                yProgress += signY;
             }
 
-            System.out.println("has exited for loop");
         }
+    }
+
+    private void drawCircle(int xCenter, int yCenter, Bitmap bitmap){
+        int radius = (drawSize) / 2;
+        int x = radius, y = 0;
+
+        int P = 1 - radius;
+
+        if (radius > 0){
+            bitmap.addPixel((x + xCenter), (-y + yCenter), new Pixel(currentColor));
+            bitmap.addPixel((y + xCenter), (x + yCenter), new Pixel(currentColor));
+            bitmap.addPixel((-y + xCenter), (x + yCenter), new Pixel(currentColor));
+        }
+
+
+        while (x > y){
+            y++;
+
+            if(P <= 0){
+                P = P + 2 * y + 1;
+            }
+            else{
+                x--;
+                P = P + 2 * y - 2 * x + 1;
+            }
+
+            if(x < y){
+                break;
+            }
+
+            bitmap.addPixel((x + xCenter), (y + yCenter), new Pixel(currentColor));
+            bitmap.addPixel((-x + xCenter), (y + yCenter), new Pixel(currentColor));
+            bitmap.addPixel((x + xCenter), (-y + yCenter), new Pixel(currentColor));
+            bitmap.addPixel((-x + xCenter), (-y + yCenter), new Pixel(currentColor));
+
+            if(x != y){
+                bitmap.addPixel((y + xCenter), (x + yCenter), new Pixel(currentColor));
+                bitmap.addPixel((-y + xCenter), (x + yCenter), new Pixel(currentColor));
+                bitmap.addPixel((y + xCenter), (-x + yCenter), new Pixel(currentColor));
+                bitmap.addPixel((-y + xCenter), (-x + yCenter), new Pixel(currentColor));
+            }
+        }
+
     }
 
 

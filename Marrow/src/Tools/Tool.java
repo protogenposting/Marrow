@@ -11,7 +11,7 @@ import java.awt.*;
 public class Tool {
 
     public RGBColor currentColor = new RGBColor(0,0,0,255);
-    public int drawSize = 3;
+    public int drawSize = 1;
 
     /**
      * call this when the mouse is clicked
