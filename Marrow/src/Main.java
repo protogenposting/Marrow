@@ -174,7 +174,6 @@ public class Main {
         //endregion //
 
         parentLayer.setSize(1366,768);
-        parentLayer.addChild(new BitmapLayer(toolContainer, "funny"));
 
         //controls, these will be used for buttons later
         JPanel controls = new JPanel();
