@@ -18,6 +18,8 @@ public class Main {
     //the main frame we will be drawing on
     static JFrame frame = new JFrame("Marrow");
 
+    public static String currentSaveDirectory = "MarrowSaves/Test Project"; // change later on to be able to find the directory user saved it at
+
     public static void main(String[] args) {
         frameSetup();
     }
@@ -48,7 +50,13 @@ public class Main {
             writer.write("MARROW\n\nParentLayer");
             System.out.print("\nMARROW\n\nParentLayer");
 
-            saveChildrenInChildLayer(childLayers, "-", writer, false, "ChildLayer");
+            saveChildrenInChildLayer(
+                    childLayers,
+                    "-",
+                    writer,
+                    false,
+                    "ChildLayer"
+            );
 
             writer.close();
 
@@ -65,9 +73,7 @@ public class Main {
      * @throws IOException for the case a file does not exist
      */
     private static FileWriter getSaveFileWriter() throws IOException {
-        //NOTE: IF IT DOESN'T WORK OR IS UNABLE TO FIND A FILE, CHECK FOR TYPOS
-
-        String currentSaveDirectory = "MarrowSaves"; // change later on to be able to find the directory user saved it at
+        //NOTE: IF IT DOESN'T WORK OR IS UNABLE TO FIND A FILE, CHECK FOR TYPO
 
         File path = new File(currentSaveDirectory);
         boolean pathExists = path.mkdirs();
