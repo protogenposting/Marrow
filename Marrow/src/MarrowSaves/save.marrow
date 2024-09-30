@@ -2,24 +2,3 @@ MARROW
 
 ParentLayer
 -ChildLayer
--ChildLayer
---ChildLayer2~1
----ChildLayer2~1~1
-----ChildLayer2~1~1~1
----ChildLayer2~1~2
-----ChildLayer2~1~2~1
----ChildLayer2~1~3
-----ChildLayer2~1~3~1
----ChildLayer2~1~4
-----ChildLayer2~1~4~1
--ChildLayer
---ChildLayer3~1
----ChildLayer3~1~1
---ChildLayer3~2
----ChildLayer3~2~1
---ChildLayer3~3
----ChildLayer3~3~1
---ChildLayer3~4
----ChildLayer3~4~1
--ChildLayer
---ChildLayer4~1

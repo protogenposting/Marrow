@@ -11,6 +11,7 @@ import java.awt.*;
 public class Tool {
 
     public RGBColor currentColor = new RGBColor(0,0,0,255);
+    int drawSize = 5; // diameter
 
     /**
      * call this when the mouse is clicked
