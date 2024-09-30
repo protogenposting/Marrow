@@ -112,12 +112,17 @@ public class Main {
             thereIsChild = isThereChildrenInChildLayer(childLayers.get(i));
 
             try {
+                ChildLayer child = childLayers.get(i);
+                childLayerName = child.name;
                 writer.write("\n" + dashCount + childLayerName);
                 System.out.print("\n" + dashCount + childLayerName);
 
-                if(!hasRepeated){ //if it has repeated, it'll already have a number at the front
-                    writer.write(i + 1);
-                    System.out.print(i + 1);
+                //SAVE THE IMAGE!!!
+                if(child.getClass().equals(BitmapLayer.class))
+                {
+                    BitmapLayer bitmapLayer = (BitmapLayer) child;
+
+                    ImageConversions.SaveImage(bitmapLayer.drawnImage,currentSaveDirectory+"/"+childLayerName+".png");
                 }
             }
             catch (IOException ignore) {}

@@ -121,7 +121,6 @@ public class ParentLayer extends Layer {
 
             frame.getContentPane().remove(child);
         }
-        layer.requestFocus();
         layer.isCurrentLayer = true;
         frame.getContentPane().add(layer);
     }
