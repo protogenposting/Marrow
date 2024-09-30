@@ -104,6 +104,15 @@ public class Main {
             thereIsChild = isThereChildrenInChildLayer(childLayers.get(i));
 
             try {
+                //if child layer has name, just print that instead
+                if(childLayers.get(i).hasName()){
+                    String childLayerRealName = childLayers.get(i).name;
+
+                    writer.write(childLayerRealName);
+                    System.out.println(childLayerRealName);
+                    continue;
+                }
+                //else, print something like "-ChildLayer1"
                 writer.write("\n" + dashCount + childLayerName);
                 System.out.print("\n" + dashCount + childLayerName);
 
