@@ -15,7 +15,7 @@ public class Toolbox extends JPanel {
 
 
     JLabel promptCloser = new JLabel("Set brush size(Pixels)");
-    JTextField timePrompt = new JTextField("1");
+    JTextField timePrompt = new JTextField("          1");
     JButton activateChange = new JButton("Submit");
 
     /**
@@ -86,7 +86,7 @@ public class Toolbox extends JPanel {
         promptCloser.setVisible(true);
 
         buttonPanel.add(timePrompt);
-        timePrompt.setSize(300,120);
+        timePrompt.setSize(200,120);
         timePrompt.setVisible(true);
 
         buttonPanel.add(activateChange);
@@ -95,9 +95,13 @@ public class Toolbox extends JPanel {
         activateChange.addActionListener(e -> {
             try{
                 int newDrawSize = Integer.parseInt(timePrompt.getText());
-                paintBrush.tool.drawSize = newDrawSize;
-                eraser.tool.drawSize = newDrawSize;
-                System.out.println("Draw size changed");
+                if (toolContainer.currentTool == paintBrush.tool) {
+                    paintBrush.tool.drawSize = newDrawSize;
+                    System.out.println("Paint Brush draw size is now " + paintBrush.tool.drawSize);
+                } else if (toolContainer.currentTool == eraser.tool) {
+                    eraser.tool.drawSize = newDrawSize;
+                    System.out.println("Eraser draw size is now " + eraser.tool.drawSize);
+                }
             } catch (NumberFormatException Ex){
                 System.out.println("ERROR: INVALID INPUT");
             }
