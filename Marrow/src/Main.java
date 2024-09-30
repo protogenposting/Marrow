@@ -1,3 +1,5 @@
+import Bitmaps.Bitmap;
+import Bitmaps.Pixel;
 import Layers.*;
 import Layers.LayerWindow.LayerWindow;
 import Tools.*;
@@ -202,7 +204,19 @@ public class Main {
             @Override
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode()==KeyEvent.VK_S){
-                    saveLayers(parentLayer);
+                    //saveLayers(parentLayer);
+                    BitmapLayer layer = (BitmapLayer) parentLayer.getChildren().get(1);
+                    ArrayList<ArrayList<Pixel>> bitmap = layer.bitmap.bitmap;
+                    for(int x = 0; x < bitmap.size(); x++)
+                    {
+                        for(int y = 0; y < bitmap.get(x).size(); y++)
+                        {
+                            if(bitmap.get(x).get(y).alpha!=0) {
+                                System.out.println(bitmap.get(x).get(y).alpha);
+                            }
+                        }
+                    }
+                    bitmap = bitmap;
                 }
             }
             @Override

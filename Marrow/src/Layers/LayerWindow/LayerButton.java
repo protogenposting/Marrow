@@ -21,8 +21,8 @@ public class LayerButton extends JButton
         addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                parentLayer.currentLayer = layer;
                 parentLayer.repaint();
+                parentLayer.setChildTo(layer);
                 repaint();
             }
         });
