@@ -1,15 +1,21 @@
 package Layers.LayerWindow;
 
+import Layers.BitmapLayer;
 import Layers.Layer;
+import Layers.ParentLayer;
+import Tools.ToolContainer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class LayerWindow extends JFrame {
     Layer parentLayer;
 
-    public LayerWindow(String name, Layer parentLayer)
+    public LayerWindow(String name, ParentLayer parentLayer, ToolContainer toolContainer)
     {
         this.setTitle(name);
         this.setVisible(true);
@@ -18,70 +24,44 @@ public class LayerWindow extends JFrame {
         this.parentLayer = parentLayer;
         this.setLayout(new FlowLayout());
 
-        parentLayer.onAddChild = (a) -> {
-            System.out.println("Added Child");
-        };
-
         JPanel panel = new JPanel();
-
-        panel.setPreferredSize(new Dimension(100,300));
-
-        panel.setLayout(new FlowLayout(FlowLayout.CENTER,0,1));
 
         //region buttons!
 
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
-        panel.add(new JButton("Add Layer"));
+        JButton layerAdding = new JButton("Add Layer");
 
+        layerAdding.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                parentLayer.addChild(new BitmapLayer(toolContainer,"Big Gay Layer " + new Random().nextInt()));
+                revalidate();
+                repaint();
+            }
+        });
+
+        add(layerAdding);
 
         //endregion
 
-        JScrollPane scrollPane = new JScrollPane(panel);
+        panel.setLayout(new BoxLayout(panel,BoxLayout.PAGE_AXIS));
+
+        JScrollPane scrollPane = new JScrollPane();
+
+        scrollPane.setViewportView(panel);
+
+        scrollPane.setPreferredSize(new Dimension(200,300));
 
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        parentLayer.onAddChild = (a) -> {
+            LayerButton layerButton = new LayerButton(a.name);
+
+            layerButton.layer = a;
+
+            layerButton.parentLayer = parentLayer;
+
+            panel.add(layerButton);
+        };
 
         this.getContentPane().add(scrollPane);
     }

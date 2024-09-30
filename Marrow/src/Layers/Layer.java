@@ -14,7 +14,7 @@ public class Layer extends JComponent {
     public double x = 0;
     public double y = 0;
 
-    public Consumer<Integer> onAddChild = (a) -> {};
+    public Consumer<ChildLayer> onAddChild = (a) -> {};
 
     public ArrayList<ChildLayer> getChildren()
     {
@@ -24,6 +24,6 @@ public class Layer extends JComponent {
     public void addChild(ChildLayer layer)
     {
         children.add(layer);
-        onAddChild.accept(1);
+        onAddChild.accept(layer);
     }
 }

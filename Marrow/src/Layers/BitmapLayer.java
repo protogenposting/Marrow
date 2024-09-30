@@ -41,8 +41,10 @@ public class BitmapLayer extends ChildLayer {
                 //save the old coords
                 oldX = e.getX();
                 oldY = e.getY();
-                Tool currentTool = toolContainer.currentTool;
-                currentTool.onPress(oldX,oldY,bitmap);
+                if(isCurrentLayer) {
+                    Tool currentTool = toolContainer.currentTool;
+                    currentTool.onPress(oldX, oldY, bitmap);
+                }
                 System.out.println(toolContainer.currentTool.toString());
                 drawnImage = bitmap.toImage();
                 parent.repaint();
@@ -51,8 +53,10 @@ public class BitmapLayer extends ChildLayer {
             public void mouseReleased(MouseEvent e) {
                 currentX = e.getX();
                 currentY = e.getY();
-                Tool currentTool = toolContainer.currentTool;
-                currentTool.onRelease(oldX,oldY,currentX,currentY,bitmap);
+                if(isCurrentLayer) {
+                    Tool currentTool = toolContainer.currentTool;
+                    currentTool.onRelease(oldX, oldY, currentX, currentY, bitmap);
+                }
                 drawnImage = bitmap.toImage();
                 parent.repaint();
             }

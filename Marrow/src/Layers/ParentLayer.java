@@ -33,21 +33,27 @@ public class ParentLayer extends Layer {
         this.toolContainer = toolContainer;
     }
 
+    /**
+     * this function adds a child
+     * @param layer the layer to add as a child
+     */
     public void addChild(ChildLayer layer)
     {
+        //if we have no child then the current layer is the one we just added
         if(children.isEmpty())
         {
-            currentLayer = layer;
+            setChildTo(layer);
         }
         children.add(layer);
-        onAddChild.accept(1);
-        frame.getContentPane().add(layer);
+        //run the function that runs on child add (used for the layer organizer)
+        onAddChild.accept(layer);
         layer.setOpaque(false);
         layer.parent = this;
         layer.setSize(1366,768);
     }
 
     protected void paintComponent(Graphics g) {
+        //if the image is null then make some graphics and stuff
         if(image==null)
         {
             //we create an image here
@@ -56,29 +62,24 @@ public class ParentLayer extends Layer {
             //enable antialiasing
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
+            //reset the image
             clear();
         }
 
         graphics.setColor(Color.black);
-
+        //clear the image again
         clear();
         //RENDERING
         for(int i = 0; i < children.size(); i++)
         {
             ChildLayer child = children.get(i);
-            
-            if(currentLayer.equals(child))
-            {
-                child.isCurrentLayer = true;
-            }
 
             if(child.getClass().equals(BitmapLayer.class))
             {
-                //draw lines from the bitmap
-                BitmapLayer bitmapChild = (BitmapLayer)children.get(i);
-                Bitmap bitmap = bitmapChild.bitmap;
-                ArrayList<ArrayList<Pixel>> map = bitmap.bitmap;
+                //draw the bitmap layer's image :3
+                BitmapLayer bitmapChild = (BitmapLayer)child;
                 graphics.drawImage(bitmapChild.drawnImage,0,0,this);
+                //System.out.println(child.isCurrentLayer);
             }
         }
 
@@ -97,8 +98,30 @@ public class ParentLayer extends Layer {
         repaint();
     }
 
+    /**
+     * use this to get the image of the layer, which is basically all the layers combined
+     * @return returns the image
+     */
     public Image getImage()
     {
         return image;
+    }
+
+    /**
+     * changes the current selected layer.
+     * @param layer the layer that will activate
+     */
+    public void setChildTo(ChildLayer layer) {
+        currentLayer = layer;
+        for(int i = 0; i < children.size(); i++)
+        {
+            ChildLayer child = children.get(i);
+
+            child.isCurrentLayer = currentLayer == child;
+
+            frame.getContentPane().remove(child);
+        }
+        layer.isCurrentLayer = true;
+        frame.getContentPane().add(layer);
     }
 }
