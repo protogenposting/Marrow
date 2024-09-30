@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.io.*;
 
 public class Main {
-
     //the main frame we will be drawing on
     static JFrame frame = new JFrame("Marrow");
 
@@ -21,15 +20,14 @@ public class Main {
         frameSetup();
     }
 
+    /**
+     * saves the parentLayer and its children into a custom text file named "save.marrow"
+     * @param parentLayer the layer and its children being saved
+     */
     public static void saveLayers(ParentLayer parentLayer){
         try {
-            String currentSaveDirectory = "MarrowSaves"; // change later on to be able to find the directory user saved it at
-            File path = new File(currentSaveDirectory);
-            path.mkdirs();
-            File saveFile = new File(currentSaveDirectory + "/save.marrow");
-            saveFile.createNewFile();
 
-            FileWriter writer = new FileWriter(currentSaveDirectory + "save.marrow");
+            FileWriter writer = getSaveFileWriter();
 
             /*
             example of what it should look like
@@ -46,16 +44,11 @@ public class Main {
             ArrayList<ChildLayer> childLayers = parentLayer.getChildren();
 
             writer.write("MARROW\n\nParentLayer");
+            System.out.print("\nMARROW\n\nParentLayer");
 
-            findChildrenInChildLayer(childLayers, 1, writer, 0, "ChildLayer");
+            saveChildrenInChildLayer(childLayers, "-", writer, false, "ChildLayer");
 
-
-
-
-
-
-
-
+            writer.close();
 
         } catch (IOException e) {
             System.out.println("An error occurred.");
@@ -64,39 +57,80 @@ public class Main {
 
     }
 
-    static boolean isThereChildrenInChildLayer(ChildLayer childLayer){
+    /**
+     * gets a FileWriter that will write to a save file for the computer to write to
+     * @return the FileWriter that will write to a save file
+     * @throws IOException for the case a file does not exist
+     */
+    private static FileWriter getSaveFileWriter() throws IOException {
+        //NOTE: IF IT DOESN'T WORK OR IS UNABLE TO FIND A FILE, CHECK FOR TYPOS
+
+        String currentSaveDirectory = "MarrowSaves"; // change later on to be able to find the directory user saved it at
+
+        File path = new File(currentSaveDirectory);
+        boolean pathExists = path.mkdirs();
+
+        File saveFile = new File(currentSaveDirectory + "/save.marrow");
+        boolean saveExists = saveFile.createNewFile();
+
+        // Currently, this will simply overwrite the current save file. Find way to resolve issue, maybe?
+
+        return new FileWriter(currentSaveDirectory + "/save.marrow");
+    }
+
+    /**
+     * checks if there are children in childLayer
+     * @param childLayer the childLayer being checked for children
+     * @return true if there are, false if empty
+     */
+    private static boolean isThereChildrenInChildLayer(ChildLayer childLayer){
         ArrayList<ChildLayer> childLayers = childLayer.getChildren();
         return !childLayers.isEmpty();
     }
 
-    public static void findChildrenInChildLayer(ArrayList<ChildLayer> childLayers, int dashCount, FileWriter writer,
-                                                int repeatedTimes, String childLayerName){
+    /**
+     * finds children in childLayer and prints them accordingly in a specific format into a custom save file
+     * @param childLayers the childLayers being saved
+     * @param dashCount the "hierarchy" of the childLayer
+     * @param writer the file writer that saves the childLayers into the save file
+     * @param hasRepeated checks for if it has repeated at least once
+     * @param childLayerName the name being saved to the file for each childLayer that exists
+     */
+    public static void saveChildrenInChildLayer(ArrayList<ChildLayer> childLayers, String dashCount, FileWriter writer,
+                                                boolean hasRepeated, String childLayerName){
         boolean thereIsChild;
-        if(repeatedTimes > 0){
-            childLayerName += "~";
-        }
+		
         for (int i = 0; i < childLayers.size(); i++) {
             thereIsChild = isThereChildrenInChildLayer(childLayers.get(i));
 
             try {
-                writer.write("\n" + dashCount + childLayerName + (i + 1));
+                writer.write("\n" + dashCount + childLayerName);
+                System.out.print("\n" + dashCount + childLayerName);
+
+                if(!hasRepeated){ //if it has repeated, it'll already have a number at the front
+                    writer.write(i + 1);
+                    System.out.print(i + 1);
+                }
             }
-            catch (IOException ignore){}
+            catch (IOException ignore) {}
 
             if(thereIsChild){
-                ArrayList<ChildLayer> secondChildLayers = childLayers.get(i).getChildren();
+                ArrayList<ChildLayer> secondChildLayers = childLayers.get(i).getChildren(); //get the children of the child in childLayers
 
-                findChildrenInChildLayer(secondChildLayers, dashCount + 1, writer,
-                        repeatedTimes + 1, childLayerName);
-
-
+                for (int j = 0; j < secondChildLayers.size(); j++) {
+                    if(!hasRepeated) { //needed so childLayerName prints "ChildLayer1~1" instead of "ChildLayer~1", for example
+                        saveChildrenInChildLayer(secondChildLayers, dashCount + "-", writer,
+                                true, childLayerName + (i + 1) + "~" + (j + 1));
+                    }
+                    else{
+                        saveChildrenInChildLayer(secondChildLayers, dashCount + "-", writer,
+                                true, childLayerName + "~" + (j + 1));
+                    }
+                }
+            } // if this is not here, it will print duplicate layers
+            if(hasRepeated){
+                break;
             }
-
-            /* for int childNum; childExists; childExists=true; childNum++
-
-                    when writing add ~ + childNum
-
-             */
         }
     }
 
@@ -121,9 +155,24 @@ public class Main {
         //add the bitmap layer to the main window
         content.add(parentLayer, BorderLayout.CENTER);
 
-        parentLayer.addChild(new BitmapLayer(toolContainer,"pussy"));
+        /*
+        end result should be:
+        ParentLayer
+        -CL1
+        -CL2
+        --CL2~1
+        ---CL2~1~1
+        ---CL2~1~2
+        ---CL2~1~3
+        ---CL2~1~4
+        ----CL2~1~4~1
+        -CL3
+        --CL3~1
+         */
+        //endregion //
 
         parentLayer.setSize(1366,768);
+        parentLayer.addChild(new BitmapLayer(toolContainer, "funny"));
 
         //controls, these will be used for buttons later
         JPanel controls = new JPanel();
@@ -157,14 +206,13 @@ public class Main {
                     saveLayers(parentLayer);
                 }
             }
-
             @Override
             public void keyReleased(KeyEvent e) {}
         });
 
         Toolbox tools = new Toolbox(toolContainer);
-        LayerWindow layerOrganization = new LayerWindow("Marrow Layers",layers);
-        //Timeline timeline = new Timeline("Marrow Timeline");
+        LayerWindow layerOrganization = new LayerWindow("Marrow Layers",parentLayer);
+        Timeline timeline = new Timeline("Marrow Timeline");
     }
 
 }

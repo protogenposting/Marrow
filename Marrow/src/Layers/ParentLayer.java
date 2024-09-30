@@ -17,7 +17,8 @@ import java.util.Calendar;
 import java.util.LinkedList;
 
 /**
- * This layer should always be on top of the hierarchy. It contains all other layers and draws them on a canvas. It should be responsible for drawing everything.
+ * The layer on top of the layer hierarchy. Contains all other layers and draws them on a canvas.
+ * Responsible for drawing everything.
  */
 public class ParentLayer extends Layer {
     JFrame frame;
@@ -25,6 +26,7 @@ public class ParentLayer extends Layer {
     Image image;
     ToolContainer toolContainer;
     public ChildLayer currentLayer;
+
     public ParentLayer(JFrame frame, ToolContainer toolContainer)
     {
         this.frame = frame;
@@ -38,11 +40,13 @@ public class ParentLayer extends Layer {
             currentLayer = layer;
         }
         children.add(layer);
+        onAddChild.accept(1);
         frame.getContentPane().add(layer);
         layer.setOpaque(false);
         layer.parent = this;
         layer.setSize(1366,768);
     }
+
     protected void paintComponent(Graphics g) {
         if(image==null)
         {
@@ -57,7 +61,6 @@ public class ParentLayer extends Layer {
 
         graphics.setColor(Color.black);
 
-        double time = System.nanoTime();
         clear();
         //RENDERING
         for(int i = 0; i < children.size(); i++)
@@ -78,18 +81,18 @@ public class ParentLayer extends Layer {
                 graphics.drawImage(bitmapChild.drawnImage,0,0,this);
             }
         }
-        double time2 = System.nanoTime();
-
-        System.out.println((time2-time)/1000000);
 
         g.drawImage(image,0,0,null);
     }
 
+    /**
+     * clears the entire window with white
+     */
     public void clear()
     {
         graphics.setPaint(Color.WHITE);
         //draw white on the entire draw area
-        graphics.fillRect(0,0,getSize().width,getSize().height);
+        graphics.fillRect(0,0, getSize().width, getSize().height);
         graphics.setPaint(Color.black);
         repaint();
     }

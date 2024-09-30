@@ -13,16 +13,6 @@ public class Toolbox extends JPanel {
     JPanel buttonPanel = new JPanel(); //adds all buttons to this
     ToolContainer toolContainer;
 
-    //region button initializations
-
-    // icon file shouldn't have src/, otherwise images don't render for some reason
-    ToolButton paintBrush = new ToolButton("/iconImages/brushTool.png", new Paintbrush());
-    ToolButton bucket = new ToolButton("/iconImages/bucketTool.png", new Bucket());
-    ToolButton line = new ToolButton("/iconImages/lineTool.png", new LineTool());
-    ToolButton shape = new ToolButton("/iconImages/shapeTool.png", new ShapeTool());
-    ToolButton eraser = new ToolButton("/iconImages/eraserTool.png", new Eraser());
-    //endregion
-
     /**
      * initializes the toolbox window
      */
@@ -37,11 +27,23 @@ public class Toolbox extends JPanel {
         // "if button is pressed, do this event"
         // the code below makes it so when you press the corresponding tool button, your current tool will swap to it
 
+        ToolButton paintBrush = new ToolButton("/iconImages/brushTool.png", new Paintbrush());
+        ToolButton bucket = new ToolButton("/iconImages/bucketTool.png", new Bucket());
+        ToolButton line = new ToolButton("/iconImages/lineTool.png", new LineTool());
+        ToolButton shape = new ToolButton("/iconImages/shapeTool.png", new ShapeTool());
+        ToolButton eraser = new ToolButton("/iconImages/eraserTool.png", new Eraser());
+
         paintBrush.toolButton.addActionListener(e -> {setTool(paintBrush);});
         bucket.toolButton.addActionListener(e -> {setTool(bucket);});
         line.toolButton.addActionListener(e -> {setTool(line);});
         eraser.toolButton.addActionListener(e -> {setTool(eraser);});
         shape.toolButton.addActionListener(e -> {setTool(shape);});
+
+        buttonPanel.add(paintBrush.toolButton);
+        buttonPanel.add(bucket.toolButton);
+        buttonPanel.add(line.toolButton);
+        buttonPanel.add(shape.toolButton);
+        buttonPanel.add(eraser.toolButton);
 
         //endregion
 
@@ -72,12 +74,8 @@ public class Toolbox extends JPanel {
         frame.setResizable(true);
         frame.setVisible(true);
 
-        buttonPanel.add(paintBrush.toolButton);
-        buttonPanel.add(bucket.toolButton);
-        buttonPanel.add(line.toolButton);
-        buttonPanel.add(shape.toolButton);
-        buttonPanel.add(eraser.toolButton);
-
+        //region ANTHONY'S UNFINISHED CODE
+        /*
         buttonPanel.add(promptCloser);
         promptCloser.setSize(200,120);
         promptCloser.setVisible(true);
@@ -98,26 +96,22 @@ public class Toolbox extends JPanel {
                 System.out.println("ERROR: INVALID INPUT");
             }
         });
-
-        frame.add(buttonPanel);
-
-
-        //buttonPanel.setVisible(true);
-
-        //region experimental code
-        /*
-        setCurrentTool(ButtonID.PAINTBRUSH);
-        setCurrentTool(ButtonID.BUCKET);
-        setCurrentTool(ButtonID.LINE);
-        setCurrentTool(ButtonID.SHAPE);
          */
         //endregion
 
+        frame.add(buttonPanel);
+
     }
 
+    private void setTool(ToolButton toolButton){
+        toolContainer.currentTool = toolButton.tool;
+        toolContainer.currentTool.currentColor = toolContainer.currentColor;
+    }
+
+    //region create menus
     /**
      * Creates the edit menu
-     * @return
+     * @return the created edit menu
      */
     private JMenu createEditMenu() {
         JMenu editMenu = new JMenu("Edit");
@@ -132,7 +126,7 @@ public class Toolbox extends JPanel {
 
     /**
      * creates the File menu
-     * @return
+     * @return the created file menu
      */
     private JMenu createFileMenu() {
         JMenu fileMenu = new JMenu("File");
@@ -147,7 +141,7 @@ public class Toolbox extends JPanel {
 
     /**
      * creates the menu bar
-     * @return
+     * @return the created menu bar
      */
     private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
