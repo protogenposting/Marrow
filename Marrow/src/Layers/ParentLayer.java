@@ -107,6 +107,10 @@ public class ParentLayer extends Layer {
         return image;
     }
 
+    /**
+     * changes the current selected layer.
+     * @param layer the layer that will activate
+     */
     public void setChildTo(ChildLayer layer) {
         currentLayer = layer;
         for(int i = 0; i < children.size(); i++)
