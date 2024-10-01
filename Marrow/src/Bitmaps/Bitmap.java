@@ -17,7 +17,7 @@ public class Bitmap {
 
     public Bitmap()
     {
-
+        
     }
 
     public Bitmap(BufferedImage image)
