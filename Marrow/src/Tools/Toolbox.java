@@ -1,11 +1,14 @@
 package Tools;
 
 import Bitmaps.RGBColor;
+import Layers.ParentLayer;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Toolbox extends JPanel {
 
@@ -13,19 +16,26 @@ public class Toolbox extends JPanel {
     JPanel buttonPanel = new JPanel(); //adds all buttons to this
     ToolContainer toolContainer;
 
-
     JLabel promptCloser = new JLabel("Set brush size(Pixels)");
     JTextField timePrompt = new JTextField("          1");
     JButton activateChange = new JButton("Submit");
 
+    SaveTool saver;
+
+    ParentLayer parentLayer;
+
     /**
      * initializes the toolbox window
      */
-    public Toolbox(ToolContainer toolContainer) {
+    public Toolbox(ToolContainer toolContainer, SaveTool saver, ParentLayer parentLayer) {
         frame.setTitle("Marrow Toolbox");
         frame.setSize(800,150);
 
         this.toolContainer = toolContainer;
+
+        this.saver = saver;
+
+        this.parentLayer = parentLayer;
 
         //region add events to the tool buttons and add buttons to button panel
 
@@ -139,12 +149,33 @@ public class Toolbox extends JPanel {
      */
     private JMenu createFileMenu() {
         JMenu fileMenu = new JMenu("File");
+
         JMenuItem newItem = new JMenuItem("New");
+
         fileMenu.add(newItem);
+
         JMenuItem openItem = new JMenuItem("Open");
+
+        openItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //tiger add a way to call some load layer function from here
+            }
+        });
+
         fileMenu.add(openItem);
+
         JMenuItem saveItem = new JMenuItem("Save");
+
+        saveItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saver.saveLayers(parentLayer);
+            }
+        });
+
         fileMenu.add(saveItem);
+
         return fileMenu;
     }
 
