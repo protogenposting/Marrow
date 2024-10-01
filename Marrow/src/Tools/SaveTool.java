@@ -1,13 +1,20 @@
 package Tools;
 
+import Bitmaps.Bitmap;
 import Layers.BitmapLayer;
 import Layers.ChildLayer;
 import Layers.ParentLayer;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Objects;
+import java.util.Scanner;
 
 public class SaveTool {
     public String currentSaveDirectory;
@@ -97,7 +104,7 @@ public class SaveTool {
      * @param hasRepeated checks for if it has repeated at least once
      * @param childLayerName the name being saved to the file for each childLayer that exists
      */
-    public void saveChildrenInChildLayer(ArrayList<ChildLayer> childLayers, String dashCount, FileWriter writer,
+    private void saveChildrenInChildLayer(ArrayList<ChildLayer> childLayers, String dashCount, FileWriter writer,
                                                 boolean hasRepeated, String childLayerName){
         boolean thereIsChild;
 
@@ -137,6 +144,33 @@ public class SaveTool {
             if(hasRepeated){
                 break;
             }
+        }
+    }
+
+    public ArrayList<Bitmap> loadLayers(Bitmap bitmap, BufferedImage bufferedImage) throws IOException {
+        File saveFile = new File(currentSaveDirectory + "/save.marrow");
+        Scanner fileReader = new Scanner(saveFile);
+
+        LinkedList<String> layerNames = new LinkedList<>();
+        ArrayList<Bitmap> bitmaps = new ArrayList<>();
+
+        while(fileReader.hasNextLine()){
+            layerNames.add(fileReader.nextLine());
+        }
+
+        for (int i = 0; i < layerNames.size(); i++) {
+            String filePath = currentSaveDirectory + layerNames.get(i);
+            File layer = new File(filePath);
+
+            if(layer.createNewFile()){
+                layer.delete();
+                continue; //if the layer doesn't exist, can't load it
+            }
+
+            BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(filePath)));
+            Bitmap imageToBitmap = new Bitmap(image);
+
+
         }
     }
 }

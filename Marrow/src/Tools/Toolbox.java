@@ -159,6 +159,7 @@ public class Toolbox extends JPanel {
         openItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //saver.loadLayers(parentLayer);
                 //tiger add a way to call some load layer function from here
             }
         });
@@ -166,13 +167,9 @@ public class Toolbox extends JPanel {
         fileMenu.add(openItem);
 
         JMenuItem saveItem = new JMenuItem("Save");
+        JMenuItem loadItem = new JMenuItem("Load");
 
-        saveItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                saver.saveLayers(parentLayer);
-            }
-        });
+        saveItem.addActionListener(e -> saver.saveLayers(parentLayer));
 
         fileMenu.add(saveItem);
 
