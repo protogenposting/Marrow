@@ -1,6 +1,7 @@
 package Tools;
 
 import Bitmaps.RGBColor;
+import Layers.ParentLayer;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -15,14 +16,22 @@ public class Toolbox extends JPanel {
     JPanel buttonPanel = new JPanel(); //adds all buttons to this
     ToolContainer toolContainer;
 
+    SaveTool saver;
+
+    ParentLayer parentLayer;
+
     /**
      * initializes the toolbox window
      */
-    public Toolbox(ToolContainer toolContainer) {
+    public Toolbox(ToolContainer toolContainer, SaveTool saver, ParentLayer parentLayer) {
         frame.setTitle("Marrow Toolbox");
         frame.setSize(800,150);
 
         this.toolContainer = toolContainer;
+
+        this.saver = saver;
+
+        this.parentLayer = parentLayer;
 
         //region add events to the tool buttons and add buttons to button panel
 
@@ -153,12 +162,12 @@ public class Toolbox extends JPanel {
         saveItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //tiger add a way to call saveLayers from here pleaseee
+                saver.saveLayers(parentLayer);
             }
         });
 
         fileMenu.add(saveItem);
-        a
+
         return fileMenu;
     }
 
