@@ -1,4 +1,4 @@
-package Tools;
+package Keyframes;
 
 import javax.swing.*;
 
