@@ -13,6 +13,11 @@ public class Toolbox extends JPanel {
     JPanel buttonPanel = new JPanel(); //adds all buttons to this
     ToolContainer toolContainer;
 
+
+    JLabel promptCloser = new JLabel("Set brush size(Pixels)");
+    JTextField timePrompt = new JTextField("          1");
+    JButton activateChange = new JButton("Submit");
+
     /**
      * initializes the toolbox window
      */
@@ -75,7 +80,7 @@ public class Toolbox extends JPanel {
         frame.setVisible(true);
 
         //region ANTHONY'S UNFINISHED CODE
-        /*
+
         buttonPanel.add(promptCloser);
         promptCloser.setSize(200,120);
         promptCloser.setVisible(true);
@@ -89,14 +94,18 @@ public class Toolbox extends JPanel {
         activateChange.setVisible(true);
         activateChange.addActionListener(e -> {
             try{
-                int drawSize = Integer.parseInt(timePrompt.getText());
-                // setPixels drawn to drawsize WHEN YOU FIND THE VARIABLE NAME
-                System.out.println("Draw size changed");
+                int newDrawSize = Integer.parseInt(timePrompt.getText());
+                if (toolContainer.currentTool == paintBrush.tool) {
+                    paintBrush.tool.drawSize = newDrawSize;
+                    System.out.println("Paint Brush draw size is now " + paintBrush.tool.drawSize);
+                } else if (toolContainer.currentTool == eraser.tool) {
+                    eraser.tool.drawSize = newDrawSize;
+                    System.out.println("Eraser draw size is now " + eraser.tool.drawSize);
+                }
             } catch (NumberFormatException Ex){
                 System.out.println("ERROR: INVALID INPUT");
             }
         });
-         */
         //endregion
 
         frame.add(buttonPanel);

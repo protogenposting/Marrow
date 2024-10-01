@@ -29,11 +29,11 @@ public class ImageConversions {
         // Return the buffered image
         return bimage;
     }
-    public static void SaveImage(Image image)
+    public static void SaveImage(Image image,String location)
     {
         BufferedImage newImage = toBufferedImage(image);
 
-        File outputfile = new File("image.png");
+        File outputfile = new File(location);
 
         try {
             ImageIO.write(newImage,"png",outputfile);

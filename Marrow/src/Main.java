@@ -1,3 +1,5 @@
+import Bitmaps.Bitmap;
+import Bitmaps.Pixel;
 import Layers.*;
 import Layers.LayerWindow.LayerWindow;
 import Tools.*;
@@ -15,6 +17,8 @@ import java.io.*;
 public class Main {
     //the main frame we will be drawing on
     static JFrame frame = new JFrame("Marrow");
+
+    public static String currentSaveDirectory = "MarrowSaves/Test Project"; // change later on to be able to find the directory user saved it at
 
     public static void main(String[] args) {
         frameSetup();
@@ -46,7 +50,13 @@ public class Main {
             writer.write("MARROW\n\nParentLayer");
             System.out.print("\nMARROW\n\nParentLayer");
 
-            saveChildrenInChildLayer(childLayers, "-", writer, false, "ChildLayer");
+            saveChildrenInChildLayer(
+                    childLayers,
+                    "-",
+                    writer,
+                    false,
+                    "ChildLayer"
+            );
 
             writer.close();
 
@@ -63,9 +73,7 @@ public class Main {
      * @throws IOException for the case a file does not exist
      */
     private static FileWriter getSaveFileWriter() throws IOException {
-        //NOTE: IF IT DOESN'T WORK OR IS UNABLE TO FIND A FILE, CHECK FOR TYPOS
-
-        String currentSaveDirectory = "MarrowSaves"; // change later on to be able to find the directory user saved it at
+        //NOTE: IF IT DOESN'T WORK OR IS UNABLE TO FIND A FILE, CHECK FOR TYPO
 
         File path = new File(currentSaveDirectory);
         boolean pathExists = path.mkdirs();
@@ -104,21 +112,18 @@ public class Main {
             thereIsChild = isThereChildrenInChildLayer(childLayers.get(i));
 
             try {
-                //if child layer has name, just print that instead
-                if(childLayers.get(i).hasName()){
-                    String childLayerRealName = childLayers.get(i).name;
-
-                    writer.write(childLayerRealName);
-                    System.out.println(childLayerRealName);
-                    continue;
-                }
-                //else, print something like "-ChildLayer1"
+                ChildLayer child = childLayers.get(i);
+                childLayerName = child.name;
+				
                 writer.write("\n" + dashCount + childLayerName);
                 System.out.print("\n" + dashCount + childLayerName);
 
-                if(!hasRepeated){ //if it has repeated, it'll already have a number at the front
-                    writer.write(i + 1);
-                    System.out.print(i + 1);
+                //SAVE THE IMAGE!!!
+                if(child.getClass().equals(BitmapLayer.class))
+                {
+                    BitmapLayer bitmapLayer = (BitmapLayer) child;
+
+                    ImageConversions.SaveImage(bitmapLayer.drawnImage,currentSaveDirectory+"/"+childLayerName+".png");
                 }
             }
             catch (IOException ignore) {}
@@ -181,7 +186,6 @@ public class Main {
         //endregion //
 
         parentLayer.setSize(1366,768);
-        parentLayer.addChild(new BitmapLayer(toolContainer, "funny"));
 
         //controls, these will be used for buttons later
         JPanel controls = new JPanel();
@@ -212,7 +216,19 @@ public class Main {
             @Override
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode()==KeyEvent.VK_S){
-                    saveLayers(parentLayer);
+                    //saveLayers(parentLayer);
+                    BitmapLayer layer = (BitmapLayer) parentLayer.getChildren().get(1);
+                    ArrayList<ArrayList<Pixel>> bitmap = layer.bitmap.bitmap;
+                    for(int x = 0; x < bitmap.size(); x++)
+                    {
+                        for(int y = 0; y < bitmap.get(x).size(); y++)
+                        {
+                            if(bitmap.get(x).get(y).alpha!=0) {
+                                System.out.println(bitmap.get(x).get(y).alpha);
+                            }
+                        }
+                    }
+                    bitmap = bitmap;
                 }
             }
             @Override
@@ -220,7 +236,7 @@ public class Main {
         });
 
         Toolbox tools = new Toolbox(toolContainer);
-        LayerWindow layerOrganization = new LayerWindow("Marrow Layers",parentLayer);
+        LayerWindow layerOrganization = new LayerWindow("Marrow Layers",parentLayer,toolContainer);
         Timeline timeline = new Timeline("Marrow Timeline");
     }
 
