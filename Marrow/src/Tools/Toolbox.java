@@ -6,6 +6,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Toolbox extends JPanel {
 
@@ -130,12 +132,33 @@ public class Toolbox extends JPanel {
      */
     private JMenu createFileMenu() {
         JMenu fileMenu = new JMenu("File");
+
         JMenuItem newItem = new JMenuItem("New");
+
         fileMenu.add(newItem);
+
         JMenuItem openItem = new JMenuItem("Open");
+
+        openItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //tiger add a way to call some load layer function from here
+            }
+        });
+
         fileMenu.add(openItem);
+
         JMenuItem saveItem = new JMenuItem("Save");
+
+        saveItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //tiger add a way to call saveLayers from here pleaseee
+            }
+        });
+
         fileMenu.add(saveItem);
+        a
         return fileMenu;
     }
 
