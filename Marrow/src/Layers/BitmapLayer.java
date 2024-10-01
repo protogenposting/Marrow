@@ -21,19 +21,24 @@ public class BitmapLayer extends ChildLayer {
 
     private int currentX, currentY, oldX, oldY;
 
-    public Bitmap bitmap = new Bitmap();
+    public Bitmap bitmap;
 
     public RGBColor currentColor = new RGBColor(0,0,0,255);
 
     public BufferedImage drawnImage;
 
     public BitmapLayer(ToolContainer toolContainer,String name) {
+        this(toolContainer,name,new Bitmap());
+        bitmap.setSize(1366,768);
+    }
+    public BitmapLayer(ToolContainer toolContainer,String name, Bitmap bitmap) {
         setDoubleBuffered(false);
         this.toolContainer = toolContainer;
 
         this.name = name;
 
-        bitmap.setSize(1366,768);
+        this.bitmap = bitmap;
+
         //listener for mouse being pressed.
         addMouseListener(new MouseAdapter() {
             @Override

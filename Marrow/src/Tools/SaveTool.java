@@ -147,22 +147,27 @@ public class SaveTool {
         }
     }
 
-    public ArrayList<Bitmap> loadLayers(Bitmap bitmap, BufferedImage bufferedImage) throws IOException {
+    public ArrayList<BitmapLayer> loadLayers(ToolContainer toolContainer) throws IOException {
         File saveFile = new File(currentSaveDirectory + "/save.marrow");
         Scanner fileReader = new Scanner(saveFile);
 
         LinkedList<String> layerNames = new LinkedList<>();
-        ArrayList<Bitmap> bitmaps = new ArrayList<>();
+        ArrayList<BitmapLayer> bitmapLayers = new ArrayList<>();
 
         while(fileReader.hasNextLine()){
             layerNames.add(fileReader.nextLine());
         }
 
-        for (int i = 0; i < layerNames.size(); i++) {
-            String filePath = currentSaveDirectory + layerNames.get(i);
+        for (String layerName : layerNames) {
+
+            if (layerName.equalsIgnoreCase("")){
+                continue;
+            }
+
+            String filePath = currentSaveDirectory + layerName;
             File layer = new File(filePath);
 
-            if(layer.createNewFile()){
+            if (layer.createNewFile()) {
                 layer.delete();
                 continue; //if the layer doesn't exist, can't load it
             }
@@ -170,7 +175,10 @@ public class SaveTool {
             BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(filePath)));
             Bitmap imageToBitmap = new Bitmap(image);
 
-
+            BitmapLayer bitmapLayer = new BitmapLayer(toolContainer, layerName, imageToBitmap);
+            bitmapLayers.add(bitmapLayer);
         }
+
+        return bitmapLayers;
     }
 }

@@ -43,6 +43,8 @@ public class Main {
         //add the bitmap layer to the main window
         content.add(parentLayer, BorderLayout.CENTER);
 
+        SaveTool saver = new SaveTool(currentSaveDirectory);
+
         /*
         end result should be:
         ParentLayer
@@ -79,7 +81,7 @@ public class Main {
             @Override
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode()==KeyEvent.VK_S){
-                    //saveLayers(parentLayer);
+                    saver.saveLayers(parentLayer);
                     BitmapLayer layer = (BitmapLayer) parentLayer.getChildren().get(1);
                     ArrayList<ArrayList<Pixel>> bitmap = layer.bitmap.bitmap;
                     for(int x = 0; x < bitmap.size(); x++)
@@ -100,7 +102,6 @@ public class Main {
 
         LayerWindow layerOrganization = new LayerWindow("Marrow Layers",parentLayer,toolContainer);
         Timeline timeline = new Timeline("Marrow Timeline",parentLayer);
-        SaveTool saver = new SaveTool(currentSaveDirectory);
         Toolbox tools = new Toolbox(toolContainer,saver,parentLayer);
 
         frame.addWindowListener(new WindowAdapter() {
