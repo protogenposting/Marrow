@@ -6,121 +6,45 @@ import java.awt.*;
 public class Timeline extends JFrame {
 
     JFrame frame = new JFrame();
-    static JPanel timeLengthPanelU = new JPanel();
-    static JPanel contentPane = new JPanel(null);
+    static JPanel panel = new JPanel();
 
-    static int timeLength_Num = 3;
-    static String timeLength_String = String.valueOf(timeLength_Num);
-    static int frameCount = 0;
-
-    JLabel lengthPrompt = new JLabel("Timeline Length: ");
-    static JTextField timePrompt = new JTextField(timeLength_String);
-    JLabel promptCloser = new JLabel("Frames");
-    JButton activateChange = new JButton("Submit");
-    JScrollPane HScrolling  = new JScrollPane(timeLengthPanelU);
+    JSlider timelineSlider = new JSlider(JSlider.HORIZONTAL, 0, 36,36);
+    JButton addFrames = new JButton("Add " + 1 + " Frame(s)");
+    JButton removeFrames = new JButton("Remove " + 1 + " Frame(s)");
     
 
     public Timeline(String windowName){
 
 
-        //MAIN FRAME, HOLDS
+        //MAIN FRAME, HOLDS PANEL
         frame.setTitle(windowName);
         frame.setSize(1366, 300);
 
         frame.setResizable(true);
         frame.setVisible(true);
 
-        timeLengthPanelU.setSize(1366,768);
-        HScrolling.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        HScrolling.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        HScrolling.setBounds(25, 50, 300, 150);
-        contentPane.setPreferredSize(new Dimension(300, 150));
-        contentPane.add(HScrolling);
-        frame.setContentPane(contentPane);
-        frame.pack();
+        addFrames.setSize(200,120);
+        addFrames.setVisible(true);
 
-        //INNER FRAME, DISPLAYS LENGTH OF ANIMATION
-        timeLengthPanelU.setVisible(true);
+        removeFrames.setSize(200,120);
+        removeFrames.setVisible(true);
 
-        lengthPrompt.setSize(200, 120);
-        lengthPrompt.setVisible(true);
+        panel.add(addFrames);
+        panel.add(removeFrames);
 
-        timePrompt.setSize(200,120);
-        timePrompt.setVisible(true);
+        timelineSlider.setMinorTickSpacing(1);
+        timelineSlider.setMajorTickSpacing(12);
+        timelineSlider.setPaintLabels(true);
+        timelineSlider.setPaintTicks(true);
 
-        promptCloser.setSize(200,120);
-        promptCloser.setVisible(true);
+        timelineSlider.setMaximum(timelineSlider.getMaximum()+1);
 
-        activateChange.setSize(200,120);
-        activateChange.setVisible(true);
+        panel.add(timelineSlider);
 
-        timeLengthPanelU.add(lengthPrompt);
-        timeLengthPanelU.add(timePrompt);
-        timeLengthPanelU.add(promptCloser);
-        timeLengthPanelU.add(activateChange);
 
         //FINALIZING DISPLAY
-        frame.add(timeLengthPanelU);
-        changeLength(timeLength_Num);
+        frame.add(panel);
 
-
-        activateChange.addActionListener(e -> {
-            try{
-                int newTime = Integer.parseInt(timePrompt.getText());
-                addTime(newTime);
-                System.out.println("lengthChanged");
-            } catch (NumberFormatException Ex){
-                System.out.println("ERROR: INVALID INPUT");
-            }
-        });
 
     }
-
-
-    public static void addTime(int newTime){
-
-        // changes the timeCap/length of the timeline
-
-        changeLength(newTime);
-        timePrompt.setText(String.valueOf(newTime));
-        changeLength(newTime);
-    }
-
-
-    /**
-     * adds & removes frames
-     * @param frames
-     */
-    public static void changeLength(int frames){
-        while(true){
-            if (frameCount>frames){
-                contentPane.getComponent(frameCount).setVisible(false);
-                contentPane.remove(frameCount);
-                frameCount--;
-                contentPane.revalidate();
-            }
-            if (frameCount==frames){
-                break;
-            }
-            if (frameCount<frames){
-                JButton tempButton = new JButton("frame" + (frameCount + 1));
-                Dimension windowSize = new Dimension(200, 120);
-                tempButton.setVisible(true);
-                tempButton.setSize(windowSize);
-
-                tempButton.addActionListener(e -> {
-                    System.out.println("Frame: " + tempButton.getText() + " loaded.");
-                });
-
-                contentPane.add(tempButton);
-                frameCount++;
-                contentPane.revalidate();
-            }
-        }
-    }
-
-
-
-
-
 }
