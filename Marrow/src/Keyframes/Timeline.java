@@ -1,9 +1,11 @@
 package Keyframes;
 
+import Layers.ParentLayer;
+
 import javax.swing.*;
 
 public class Timeline extends JFrame {
-
+    /*
     JFrame mainFrame = new JFrame();
     static JPanel panel = new JPanel();
 
@@ -59,5 +61,15 @@ public class Timeline extends JFrame {
         mainFrame.add(panel);
 
 
+    }*/
+
+    public ParentLayer parentLayer;
+    public Timeline(String windowName,ParentLayer parentLayer) {
+        setTitle(windowName);
+        setResizable(true);
+        setSize(1366,200);
+        setVisible(true);
+
+        this.parentLayer = parentLayer;
     }
 }
