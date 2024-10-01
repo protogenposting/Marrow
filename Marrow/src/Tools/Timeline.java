@@ -21,7 +21,7 @@ public class Timeline extends JFrame {
 
         //MAIN FRAME, HOLDS PANEL
         mainFrame.setTitle(windowName);
-        mainFrame.setSize(1366, 300);
+        mainFrame.setSize(400, 300);
 
         mainFrame.setResizable(true);
         mainFrame.setVisible(true);
@@ -42,8 +42,8 @@ public class Timeline extends JFrame {
 
 
 
-        panel.add(addFrames);
-        panel.add(removeFrames);
+        //panel.add(addFrames);
+        //panel.add(removeFrames);
 
         timelineSlider.setMinorTickSpacing(1);
         timelineSlider.setMajorTickSpacing(framesPerIncrease);
