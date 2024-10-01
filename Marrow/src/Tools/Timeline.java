@@ -1,27 +1,30 @@
 package Tools;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class Timeline extends JFrame {
 
-    JFrame frame = new JFrame();
+    JFrame mainFrame = new JFrame();
     static JPanel panel = new JPanel();
 
     JSlider timelineSlider = new JSlider(JSlider.HORIZONTAL, 0, 36,36);
-    JButton addFrames = new JButton("Add " + 1 + " Frame(s)");
-    JButton removeFrames = new JButton("Remove " + 1 + " Frame(s)");
-    
+    JButton addFrames = new JButton("Add " + timelineSlider + " Frame(s)");
+    JButton removeFrames = new JButton("Remove " + timelineSlider + " Frame(s)");
+
+    JTextField changeFPSTextBox = new JTextField("                   ");
+    JButton changeFramesPer = new JButton("Set Frames per Second(DEFAULT 24)");
+
+    int framesPerIncrease = 24;
 
     public Timeline(String windowName){
 
 
         //MAIN FRAME, HOLDS PANEL
-        frame.setTitle(windowName);
-        frame.setSize(1366, 300);
+        mainFrame.setTitle(windowName);
+        mainFrame.setSize(1366, 300);
 
-        frame.setResizable(true);
-        frame.setVisible(true);
+        mainFrame.setResizable(true);
+        mainFrame.setVisible(true);
 
         addFrames.setSize(200,120);
         addFrames.setVisible(true);
@@ -29,11 +32,21 @@ public class Timeline extends JFrame {
         removeFrames.setSize(200,120);
         removeFrames.setVisible(true);
 
+        addFrames.addActionListener(e -> {
+            timelineSlider.setMaximum(timelineSlider.getMaximum()+framesPerIncrease);
+            timelineSlider.validate();
+        });
+        removeFrames.addActionListener(e -> {
+            timelineSlider.setMaximum(timelineSlider.getMaximum()-framesPerIncrease);
+        });
+
+
+
         panel.add(addFrames);
         panel.add(removeFrames);
 
         timelineSlider.setMinorTickSpacing(1);
-        timelineSlider.setMajorTickSpacing(12);
+        timelineSlider.setMajorTickSpacing(framesPerIncrease);
         timelineSlider.setPaintLabels(true);
         timelineSlider.setPaintTicks(true);
 
@@ -43,7 +56,7 @@ public class Timeline extends JFrame {
 
 
         //FINALIZING DISPLAY
-        frame.add(panel);
+        mainFrame.add(panel);
 
 
     }
