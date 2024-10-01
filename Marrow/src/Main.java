@@ -1,4 +1,5 @@
 import Bitmaps.Pixel;
+import Keyframes.Timeline;
 import Layers.*;
 import Layers.LayerWindow.LayerWindow;
 import Tools.*;
@@ -98,7 +99,7 @@ public class Main {
         });
 
         LayerWindow layerOrganization = new LayerWindow("Marrow Layers",parentLayer,toolContainer);
-        Timeline timeline = new Timeline("Marrow Timeline");
+        Timeline timeline = new Timeline("Marrow Timeline",parentLayer);
         SaveTool saver = new SaveTool(currentSaveDirectory);
         Toolbox tools = new Toolbox(toolContainer,saver,parentLayer);
 
