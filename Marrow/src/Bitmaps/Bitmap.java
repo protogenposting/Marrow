@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
@@ -13,6 +14,22 @@ import java.util.Random;
  */
 public class Bitmap {
     public ArrayList<ArrayList<Pixel>> bitmap = new ArrayList<>();
+
+    public Bitmap()
+    {
+
+    }
+
+    public Bitmap(BufferedImage image)
+    {
+        setSize(image.getWidth(), image.getHeight());
+        for (int x = 0; x < image.getWidth(); x++) {
+            for (int y = 0; y < image.getHeight(); y++) {
+                Color color = new Color(image.getRGB(x,y));
+                addPixel(x,y,new Pixel(new RGBColor(color)));
+            }
+        }
+    }
 
     public void setSize(int width, int height) {
         for (int x = 0; x < width; x++) {
