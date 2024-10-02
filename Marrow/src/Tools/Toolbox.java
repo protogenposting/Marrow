@@ -169,6 +169,8 @@ public class Toolbox extends JPanel {
                     for (BitmapLayer bitmapLayer : bitmapLayers) {
                         parentLayer.add(bitmapLayer);
                     }
+
+                    System.out.println("load successful");
                 }
                 catch (IOException ex) {
                     throw new RuntimeException(ex);

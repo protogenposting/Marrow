@@ -30,6 +30,7 @@ public class BitmapLayer extends ChildLayer {
     public BitmapLayer(ToolContainer toolContainer,String name) {
         this(toolContainer,name,new Bitmap());
         bitmap.setSize(1366,768);
+        drawnImage = bitmap.toImage();
     }
     public BitmapLayer(ToolContainer toolContainer,String name, Bitmap bitmap) {
         setDoubleBuffered(false);

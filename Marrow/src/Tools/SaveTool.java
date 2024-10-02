@@ -29,6 +29,8 @@ public class SaveTool {
      * @param parentLayer the layer and its children being saved
      */
     public void saveLayers(ParentLayer parentLayer){
+        Scanner scan = new Scanner(System.in);
+
         try {
 
             FileWriter writer = getSaveFileWriter();
@@ -155,10 +157,17 @@ public class SaveTool {
         ArrayList<BitmapLayer> bitmapLayers = new ArrayList<>();
 
         while(fileReader.hasNextLine()){
-            layerNames.add(fileReader.nextLine());
+            String layerName = fileReader.nextLine();
+            layerName = removeDashes(layerName);
+            layerNames.add(layerName);
         }
 
+        int iterator = 1;
         for (String layerName : layerNames) {
+            if(iterator < 3){
+                iterator++;
+                continue;
+            }
 
             if (layerName.equalsIgnoreCase("")){
                 continue;
@@ -180,5 +189,26 @@ public class SaveTool {
         }
 
         return bitmapLayers;
+    }
+
+    /**
+     * removes the dashes at the back of a layer name
+     * @param layerName the name having its dashes removed
+     * @return the layer name with the removed dashes
+     */
+    private String removeDashes(String layerName){
+        StringBuilder returningName = new StringBuilder();
+        boolean firstDashesPassed = false;
+
+        for (int i = 0; i < layerName.length(); i++) {
+
+            if(!(layerName.charAt(i) == '-') || firstDashesPassed){
+                returningName.append(layerName.charAt(i));
+                firstDashesPassed = true; //don't need to care about dashes in the middle of a name
+            }
+
+        }
+
+        return returningName.toString();
     }
 }

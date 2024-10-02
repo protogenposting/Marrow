@@ -108,7 +108,7 @@ public class Main {
             @Override
             public void windowClosing(WindowEvent e) {
                 frame.dispose();
-                saver.saveLayers(parentLayer);
+                //saver.saveLayers(parentLayer);
                 System.exit(0);
             }
         });
