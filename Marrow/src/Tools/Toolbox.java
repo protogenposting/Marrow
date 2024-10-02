@@ -167,7 +167,7 @@ public class Toolbox extends JPanel {
                     ArrayList<BitmapLayer> bitmapLayers = saver.loadLayers(toolContainer);
 
                     for (BitmapLayer bitmapLayer : bitmapLayers) {
-                        parentLayer.add(bitmapLayer);
+                        parentLayer.addChild(bitmapLayer);
                     }
 
                     System.out.println("load successful");

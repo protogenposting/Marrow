@@ -158,22 +158,24 @@ public class SaveTool {
 
         while(fileReader.hasNextLine()){
             String layerName = fileReader.nextLine();
-            layerName = removeDashes(layerName);
+
+            if( layerName.isEmpty() ) { continue; }
+
+            if( layerName.charAt(0) == '-') {
+                layerName = removeDashes(layerName);
+            }
+
             layerNames.add(layerName);
         }
 
-        int iterator = 1;
-        for (String layerName : layerNames) {
-            if(iterator < 3){
-                iterator++;
+        for (int i = 0; i < layerNames.size(); i++) {
+            if(i < 2){
                 continue;
             }
 
-            if (layerName.equalsIgnoreCase("")){
-                continue;
-            }
+            String layerName = layerNames.get(i);
 
-            String filePath = currentSaveDirectory + layerName;
+            String filePath = currentSaveDirectory + "/" + layerName + ".png";
             File layer = new File(filePath);
 
             if (layer.createNewFile()) {
@@ -181,7 +183,7 @@ public class SaveTool {
                 continue; //if the layer doesn't exist, can't load it
             }
 
-            BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(filePath)));
+            BufferedImage image = ImageIO.read(layer);
             Bitmap imageToBitmap = new Bitmap(image);
 
             BitmapLayer bitmapLayer = new BitmapLayer(toolContainer, layerName, imageToBitmap);

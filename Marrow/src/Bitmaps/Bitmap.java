@@ -26,7 +26,8 @@ public class Bitmap {
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
                 Color color = new Color(image.getRGB(x,y));
-                addPixel(x,y,new Pixel(new RGBColor(color)));
+                Pixel pixel = new Pixel(new RGBColor(color));  //fixme do stuff to make sure alpha gets passed in
+                addPixel(x,y,pixel);
             }
         }
     }
