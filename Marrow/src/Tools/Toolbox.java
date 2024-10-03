@@ -83,7 +83,7 @@ public class Toolbox extends JPanel {
 
         JFrame colorFrame = new JFrame();
 
-        colorFrame.setSize(768,768);
+        colorFrame.setSize(500,384);
         colorFrame.add(colorChooser);
         colorFrame.setVisible(true);
 
