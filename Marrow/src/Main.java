@@ -16,16 +16,199 @@ public class Main {
     //the main frame we will be drawing on
     static JFrame frame = new JFrame("Marrow");
 
+    static JSplitPane mainSP = new JSplitPane();
+    static JSplitPane topScreenSP = new JSplitPane();
+    static JSplitPane bottomScreenSPVert = new JSplitPane();
+    static JSplitPane bottomScreenSPHor = new JSplitPane();
+
+    //region SPLIT PANE DEBUGGING
+    static JPanel colorWheelDEBUG = new JPanel();
+    static JPanel drawScreenDEBUG = new JPanel();
+    static JPanel toolBarDEBUG = new JPanel();
+    static JPanel timeLineDEBUG = new JPanel();
+    static JPanel childLayerDEBUG = new JPanel();
+    static JButton colourButton = new JButton("Color wheel");
+    static JButton toolButton = new JButton("Tool Bar");
+    static JButton drawButton = new JButton("Draw Screen");
+    static JButton timeButton = new JButton("Time Line");
+    static JButton childButton = new JButton("Child Layer");
+    //endregion
+
     public static String currentSaveDirectory = "MarrowSaves/Test Project"; // change later on to be able to find the directory user saved it at
 
     public static void main(String[] args) {
         frameSetup();
+    }
+    /**
+     * saves the parentLayer and its children into a custom text file named "save.marrow"
+     * @param parentLayer the layer and its children being saved
+     */
+    public static void saveLayers(ParentLayer parentLayer){
+        try {
+
+            FileWriter writer = getSaveFileWriter();
+
+            /*
+            example of what it should look like
+            parentLayer
+            -childLayer1
+            --childLayer1~1  the reason it ends with ~1 is so computer doesn't get confused reading the same names
+            --childLayer1~2
+            --childLayer1~3
+            ---childLayer1~3~1
+            -childLayer2
+            --childLayer2~1
+             */
+
+            ArrayList<ChildLayer> childLayers = parentLayer.getChildren();
+
+            writer.write("MARROW\n\nParentLayer");
+            System.out.print("\nMARROW\n\nParentLayer");
+
+            saveChildrenInChildLayer(
+                    childLayers,
+                    "-",
+                    writer,
+                    false,
+                    "ChildLayer"
+            );
+
+            writer.close();
+
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * gets a FileWriter that will write to a save file for the computer to write to
+     * @return the FileWriter that will write to a save file
+     * @throws IOException for the case a file does not exist
+     */
+    private static FileWriter getSaveFileWriter() throws IOException {
+        //NOTE: IF IT DOESN'T WORK OR IS UNABLE TO FIND A FILE, CHECK FOR TYPO
+
+        File path = new File(currentSaveDirectory);
+        boolean pathExists = path.mkdirs();
+
+        File saveFile = new File(currentSaveDirectory + "/save.marrow");
+        boolean saveExists = saveFile.createNewFile();
+
+        // Currently, this will simply overwrite the current save file. Find way to resolve issue, maybe?
+
+        return new FileWriter(currentSaveDirectory + "/save.marrow");
+    }
+
+    /**
+     * checks if there are children in childLayer
+     * @param childLayer the childLayer being checked for children
+     * @return true if there are, false if empty
+     */
+    private static boolean isThereChildrenInChildLayer(ChildLayer childLayer){
+        ArrayList<ChildLayer> childLayers = childLayer.getChildren();
+        return !childLayers.isEmpty();
+    }
+
+    /**
+     * finds children in childLayer and prints them accordingly in a specific format into a custom save file
+     * @param childLayers the childLayers being saved
+     * @param dashCount the "hierarchy" of the childLayer
+     * @param writer the file writer that saves the childLayers into the save file
+     * @param hasRepeated checks for if it has repeated at least once
+     * @param childLayerName the name being saved to the file for each childLayer that exists
+     */
+    public static void saveChildrenInChildLayer(ArrayList<ChildLayer> childLayers, String dashCount,
+                                                FileWriter writer, boolean hasRepeated,
+                                                String childLayerName){
+        boolean thereIsChild;
+		
+        for (int i = 0; i < childLayers.size(); i++) {
+            thereIsChild = isThereChildrenInChildLayer(childLayers.get(i));
+
+            try {
+                ChildLayer child = childLayers.get(i);
+                childLayerName = child.name;
+                writer.write("\n" + dashCount + childLayerName);
+                System.out.print("\n" + dashCount + childLayerName);
+
+                //SAVE THE IMAGE!!!
+                if(child.getClass().equals(BitmapLayer.class))
+                {
+                    BitmapLayer bitmapLayer = (BitmapLayer) child;
+
+                    ImageConversions.SaveImage(bitmapLayer.drawnImage,currentSaveDirectory+"/"+childLayerName+".png");
+                }
+            }
+            catch (IOException ignore) {}
+
+            if(thereIsChild){
+                ArrayList<ChildLayer> secondChildLayers = childLayers.get(i).getChildren(); //get the children of the child in childLayers
+
+                for (int j = 0; j < secondChildLayers.size(); j++) {
+                    if(!hasRepeated) { //needed so childLayerName prints "ChildLayer1~1" instead of "ChildLayer~1", for example
+                        saveChildrenInChildLayer(secondChildLayers, dashCount + "-", writer,
+                                true, childLayerName + (i + 1) + "~" + (j + 1));
+                    }
+                    else{
+                        saveChildrenInChildLayer(secondChildLayers, dashCount + "-", writer,
+                                true, childLayerName + "~" + (j + 1));
+                    }
+                }
+            } // if this is not here, it will print duplicate layers
+            if(hasRepeated){
+                break;
+            }
+        }
     }
 
      /**
      * Sets up the main frame that the user draws on
      */
     static void frameSetup(){
+
+
+        frame.getContentPane().add(mainSP);
+
+        //region SPLIT PANE DEBUG
+        colorWheelDEBUG.add(colourButton);
+        drawScreenDEBUG.add(drawButton);
+        toolBarDEBUG.add(toolButton);
+        timeLineDEBUG.add(timeButton);
+        childLayerDEBUG.add(childButton);
+
+        colorWheelDEBUG.setVisible(true);
+        drawScreenDEBUG.setVisible(true);
+        toolBarDEBUG.setVisible(true);
+        timeLineDEBUG.setVisible(true);
+        childLayerDEBUG.setVisible(true);
+
+        //endregion
+
+        mainSP.setOrientation(JSplitPane.VERTICAL_SPLIT);
+        mainSP.setDividerLocation(150);
+
+        mainSP.setTopComponent(topScreenSP);
+        mainSP.setBottomComponent(bottomScreenSPVert);
+
+        topScreenSP.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+        topScreenSP.setDividerLocation(425);
+        topScreenSP.setLeftComponent(colorWheelDEBUG); //REPLACE WITH COLOUR WHEEL
+        topScreenSP.setRightComponent(toolBarDEBUG); //REPLACE WITH TOOL BAR
+
+        bottomScreenSPVert.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+        bottomScreenSPVert.setDividerLocation(260);
+        bottomScreenSPVert.setLeftComponent(childLayerDEBUG); //REPLACE WITH CHILDLAYER
+        bottomScreenSPVert.setRightComponent(bottomScreenSPHor);
+
+        bottomScreenSPHor.setOrientation(JSplitPane.VERTICAL_SPLIT);
+        bottomScreenSPHor.setDividerLocation(200);
+        bottomScreenSPHor.setTopComponent(drawScreenDEBUG); //REPLACE WITH DRAW SCREEN
+        bottomScreenSPHor.setBottomComponent(timeLineDEBUG); //REPLACE WITH TIMELINE
+
+
+        //region OLD FRAME SETTUP
         Container content = frame.getContentPane();
 
         ToolContainer toolContainer = new ToolContainer();
@@ -42,6 +225,7 @@ public class Main {
 
         //add the bitmap layer to the main window
         content.add(parentLayer, BorderLayout.CENTER);
+        //endregion
 
 
         SaveTool saver = new SaveTool(currentSaveDirectory);
