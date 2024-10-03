@@ -43,23 +43,27 @@ public class Bitmap {
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
                 temp  = image.getRGB(x,y);
-                alpha = temp & 0xFF000000 >>> 24;
-                red = temp   & 0x00FF0000 >>> 16;;
-                green = temp & 0x0000FF00 >>> 8;;
+                alpha = (temp & 0xFF000000) >>> 24;
+                red = (temp   & 0x00FF0000) >> 16;;
+                green = (temp & 0x0000FF00) >> 8;;
                 blue = temp  & 0x000000FF;
+
+                if((red > 0 || green > 0 || blue > 0) || alpha > 0){
+                    System.out.println("has added non transparent pixel");
+                }
 
                 Color color = new Color(red,green,blue,alpha);
                 Pixel pixel = new Pixel(new RGBColor(color));  //fixme do stuff to make sure alpha gets passed in
                 addPixel(x,y,pixel);
             }
         }
+
     }
 
     public void setSize(int width, int height) {
         for (int x = 0; x < width; x++) {
             bitmap.add(new ArrayList<>());
             for (int y = 0; y < height; y++) {
-                Random random = new Random();
                 bitmap.get(x).add(new Pixel(0, 0, 0, 0));
             }
         }

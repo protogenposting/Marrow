@@ -169,6 +169,8 @@ public class Toolbox extends JPanel {
                     for (BitmapLayer bitmapLayer : bitmapLayers) {
                         parentLayer.addChild(bitmapLayer);
                     }
+                    parentLayer.revalidate();
+                    parentLayer.repaint();
 
                     System.out.println("load successful");
                 }

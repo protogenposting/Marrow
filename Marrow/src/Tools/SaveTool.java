@@ -3,6 +3,7 @@ package Tools;
 import Bitmaps.Bitmap;
 import Layers.BitmapLayer;
 import Layers.ChildLayer;
+import Layers.LayerWindow.LayerWindow;
 import Layers.ParentLayer;
 
 import javax.imageio.ImageIO;
