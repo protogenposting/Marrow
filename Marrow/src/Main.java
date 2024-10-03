@@ -1,4 +1,3 @@
-import Bitmaps.Bitmap;
 import Bitmaps.Pixel;
 import Layers.*;
 import Layers.LayerWindow.LayerWindow;
@@ -17,6 +16,24 @@ import java.io.*;
 public class Main {
     //the main frame we will be drawing on
     static JFrame frame = new JFrame("Marrow");
+
+    static JSplitPane mainSP = new JSplitPane();
+    static JSplitPane topScreenSP = new JSplitPane();
+    static JSplitPane bottomScreenSPVert = new JSplitPane();
+    static JSplitPane bottomScreenSPHor = new JSplitPane();
+
+    //region SPLIT PANE DEBUGGING
+    static JPanel colorWheelDEBUG = new JPanel();
+    static JPanel drawScreenDEBUG = new JPanel();
+    static JPanel toolBarDEBUG = new JPanel();
+    static JPanel timeLineDEBUG = new JPanel();
+    static JPanel childLayerDEBUG = new JPanel();
+    static JButton colourButton = new JButton("Color wheel");
+    static JButton toolButton = new JButton("Tool Bar");
+    static JButton drawButton = new JButton("Draw Screen");
+    static JButton timeButton = new JButton("Time Line");
+    static JButton childButton = new JButton("Child Layer");
+    //endregion
 
     public static String currentSaveDirectory = "MarrowSaves/Test Project"; // change later on to be able to find the directory user saved it at
 
@@ -104,8 +121,9 @@ public class Main {
      * @param hasRepeated checks for if it has repeated at least once
      * @param childLayerName the name being saved to the file for each childLayer that exists
      */
-    public static void saveChildrenInChildLayer(ArrayList<ChildLayer> childLayers, String dashCount, FileWriter writer,
-                                                boolean hasRepeated, String childLayerName){
+    public static void saveChildrenInChildLayer(ArrayList<ChildLayer> childLayers, String dashCount,
+                                                FileWriter writer, boolean hasRepeated,
+                                                String childLayerName){
         boolean thereIsChild;
 		
         for (int i = 0; i < childLayers.size(); i++) {
@@ -151,6 +169,48 @@ public class Main {
      * Sets up the main frame that the user draws on
      */
     static void frameSetup(){
+
+
+        frame.getContentPane().add(mainSP);
+
+        //region SPLIT PANE DEBUG
+        colorWheelDEBUG.add(colourButton);
+        drawScreenDEBUG.add(drawButton);
+        toolBarDEBUG.add(toolButton);
+        timeLineDEBUG.add(timeButton);
+        childLayerDEBUG.add(childButton);
+
+        colorWheelDEBUG.setVisible(true);
+        drawScreenDEBUG.setVisible(true);
+        toolBarDEBUG.setVisible(true);
+        timeLineDEBUG.setVisible(true);
+        childLayerDEBUG.setVisible(true);
+
+        //endregion
+
+        mainSP.setOrientation(JSplitPane.VERTICAL_SPLIT);
+        mainSP.setDividerLocation(150);
+
+        mainSP.setTopComponent(topScreenSP);
+        mainSP.setBottomComponent(bottomScreenSPVert);
+
+        topScreenSP.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+        topScreenSP.setDividerLocation(425);
+        topScreenSP.setLeftComponent(colorWheelDEBUG); //REPLACE WITH COLOUR WHEEL
+        topScreenSP.setRightComponent(toolBarDEBUG); //REPLACE WITH TOOL BAR
+
+        bottomScreenSPVert.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+        bottomScreenSPVert.setDividerLocation(260);
+        bottomScreenSPVert.setLeftComponent(childLayerDEBUG); //REPLACE WITH CHILDLAYER
+        bottomScreenSPVert.setRightComponent(bottomScreenSPHor);
+
+        bottomScreenSPHor.setOrientation(JSplitPane.VERTICAL_SPLIT);
+        bottomScreenSPHor.setDividerLocation(200);
+        bottomScreenSPHor.setTopComponent(drawScreenDEBUG); //REPLACE WITH DRAW SCREEN
+        bottomScreenSPHor.setBottomComponent(timeLineDEBUG); //REPLACE WITH TIMELINE
+
+
+        //region OLD FRAME SETTUP
         Container content = frame.getContentPane();
 
         ToolContainer toolContainer = new ToolContainer();
@@ -167,6 +227,7 @@ public class Main {
 
         //add the bitmap layer to the main window
         content.add(parentLayer, BorderLayout.CENTER);
+        //endregion
 
         /*
         end result should be:
