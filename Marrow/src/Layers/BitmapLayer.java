@@ -33,7 +33,7 @@ public class BitmapLayer extends ChildLayer {
 
         this.name = name;
 
-        bitmap.setSize(1366,768);
+        bitmap.setSize(800,400);
         //listener for mouse being pressed.
         addMouseListener(new MouseAdapter() {
             @Override

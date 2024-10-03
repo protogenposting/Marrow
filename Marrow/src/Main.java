@@ -1,9 +1,12 @@
 import Bitmaps.Pixel;
+import Bitmaps.RGBColor;
 import Layers.*;
 import Layers.LayerWindow.LayerWindow;
 import Tools.*;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -170,13 +173,10 @@ public class Main {
      */
     static void frameSetup(){
 
-
-        frame.getContentPane().add(mainSP);
-
         //region SPLIT PANE DEBUG
         colorWheelDEBUG.add(colourButton);
         drawScreenDEBUG.add(drawButton);
-        toolBarDEBUG.add(toolButton);
+      //  toolBarDEBUG.add();
         timeLineDEBUG.add(timeButton);
         childLayerDEBUG.add(childButton);
 
@@ -186,47 +186,22 @@ public class Main {
         timeLineDEBUG.setVisible(true);
         childLayerDEBUG.setVisible(true);
 
-        //endregion
+        colourButton.addActionListener(e -> {
+            System.out.println("colourButton pressed");
+        });
+        drawButton.addActionListener(e -> {
+            System.out.println("drawButton pressed");
+        });
+        toolButton.addActionListener(e -> {
+            System.out.println("toolButton pressed");
+        });
+        timeButton.addActionListener(e -> {
+            System.out.println("timeButton pressed");
+        });
+        childButton.addActionListener(e -> {
+            System.out.println("childButton pressed");
+        });
 
-        mainSP.setOrientation(JSplitPane.VERTICAL_SPLIT);
-        mainSP.setDividerLocation(150);
-
-        mainSP.setTopComponent(topScreenSP);
-        mainSP.setBottomComponent(bottomScreenSPVert);
-
-        topScreenSP.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-        topScreenSP.setDividerLocation(425);
-        topScreenSP.setLeftComponent(colorWheelDEBUG); //REPLACE WITH COLOUR WHEEL
-        topScreenSP.setRightComponent(toolBarDEBUG); //REPLACE WITH TOOL BAR
-
-        bottomScreenSPVert.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-        bottomScreenSPVert.setDividerLocation(260);
-        bottomScreenSPVert.setLeftComponent(childLayerDEBUG); //REPLACE WITH CHILDLAYER
-        bottomScreenSPVert.setRightComponent(bottomScreenSPHor);
-
-        bottomScreenSPHor.setOrientation(JSplitPane.VERTICAL_SPLIT);
-        bottomScreenSPHor.setDividerLocation(200);
-        bottomScreenSPHor.setTopComponent(drawScreenDEBUG); //REPLACE WITH DRAW SCREEN
-        bottomScreenSPHor.setBottomComponent(timeLineDEBUG); //REPLACE WITH TIMELINE
-
-
-        //region OLD FRAME SETTUP
-        Container content = frame.getContentPane();
-
-        ToolContainer toolContainer = new ToolContainer();
-
-        System.out.println(toolContainer.currentTool.toString());
-
-        ArrayList<Layer> layers = new ArrayList<>();
-
-        //set layout
-        content.setLayout(new BorderLayout());
-
-        //create draw area
-        ParentLayer parentLayer = new ParentLayer(frame, toolContainer);
-
-        //add the bitmap layer to the main window
-        content.add(parentLayer, BorderLayout.CENTER);
         //endregion
 
         /*
@@ -245,10 +220,45 @@ public class Main {
          */
         //endregion //
 
-        parentLayer.setSize(1366,768);
+        frame.getContentPane().add(mainSP);
 
-        //controls, these will be used for buttons later
-        JPanel controls = new JPanel();
+        ToolContainer toolContainer = new ToolContainer();
+
+        ParentLayer parentLayer = new ParentLayer(toolContainer);
+
+
+        parentLayer.setSize(800,400);
+
+        parentLayer.setVisible(true);
+
+        System.out.println(toolContainer.currentTool.toString());
+
+        Toolbox tools = new Toolbox(toolContainer);
+
+        LayerWindow layerOrganization = new LayerWindow(parentLayer,toolContainer);
+
+        Timeline timeline = new Timeline("Marrow Timeline");
+
+        JColorChooser colorChooser = new JColorChooser();
+
+        colorChooser.getSelectionModel().addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                Color currentColor = colorChooser.getColor();
+                toolContainer.currentColor = new RGBColor(
+                        currentColor.getRed(),
+                        currentColor.getGreen(),
+                        currentColor.getBlue(),
+                        255);
+                toolContainer.currentTool.currentColor = toolContainer.currentColor;
+            }
+        });
+
+        JFrame colorFrame = new JFrame();
+
+        colorFrame.setSize(500,384);
+        colorFrame.add(colorChooser);
+        colorFrame.setVisible(true);
 
         frame.setSize(1366,768);
 
@@ -295,9 +305,55 @@ public class Main {
             public void keyReleased(KeyEvent e) {}
         });
 
-        Toolbox tools = new Toolbox(toolContainer);
-        LayerWindow layerOrganization = new LayerWindow("Marrow Layers",parentLayer,toolContainer);
-        Timeline timeline = new Timeline("Marrow Timeline");
+        //region Split Pane Settup
+        mainSP.setOrientation(JSplitPane.VERTICAL_SPLIT);
+        mainSP.setDividerLocation(75);
+        mainSP.setTopComponent(tools); //TOOL BAR HERE
+        mainSP.setBottomComponent(bottomScreenSPVert);
+
+        bottomScreenSPVert.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+        bottomScreenSPVert.setDividerLocation(260);
+        bottomScreenSPVert.setLeftComponent(layerOrganization); //CHILD LAYER HERE
+        bottomScreenSPVert.setRightComponent(bottomScreenSPHor);
+
+        bottomScreenSPHor.setOrientation(JSplitPane.VERTICAL_SPLIT);
+        bottomScreenSPHor.setDividerLocation(450);
+        bottomScreenSPHor.setTopComponent(parentLayer); // DRAW SCREEN HERE
+        bottomScreenSPHor.setBottomComponent(timeline); // TIMELINE HERE
+
+        //endregion
+
+        frame.setJMenuBar(createMenuBar());
+        //frame.setLocationByPlatform(true);
+
     }
 
+    static JMenuBar createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.add(createFileMenu());
+        menuBar.add(createEditMenu());
+        return menuBar;
+    }
+
+    static JMenu createFileMenu() {
+        JMenu fileMenu = new JMenu("File");
+        JMenuItem newItem = new JMenuItem("New");
+        fileMenu.add(newItem);
+        JMenuItem openItem = new JMenuItem("Open");
+        fileMenu.add(openItem);
+        JMenuItem saveItem = new JMenuItem("Save");
+        fileMenu.add(saveItem);
+        return fileMenu;
+    }
+
+    static JMenu createEditMenu() {
+        JMenu editMenu = new JMenu("Edit");
+        JMenuItem cutItem = new JMenuItem("Cut");
+        editMenu.add(cutItem);
+        JMenuItem copyItem = new JMenuItem("Copy");
+        editMenu.add(copyItem);
+        JMenuItem pasteItem = new JMenuItem("Paste");
+        editMenu.add(pasteItem);
+        return editMenu;
+    }
 }

@@ -9,21 +9,21 @@ import java.awt.*;
 
 public class Toolbox extends JPanel {
 
-    JFrame frame = new JFrame();
-    JPanel buttonPanel = new JPanel(); //adds all buttons to this
+
     ToolContainer toolContainer;
 
 
     JLabel promptCloser = new JLabel("Set brush size(Pixels)");
-    JTextField timePrompt = new JTextField("          1");
+    JTextField setBrushSize = new JTextField("          1");
     JButton activateChange = new JButton("Submit");
 
     /**
      * initializes the toolbox window
      */
     public Toolbox(ToolContainer toolContainer) {
-        frame.setTitle("Marrow Toolbox");
-        frame.setSize(800,150);
+
+        this.setSize(800,150);
+        this.setPreferredSize(new Dimension(800,150));
 
         this.toolContainer = toolContainer;
 
@@ -44,57 +44,38 @@ public class Toolbox extends JPanel {
         eraser.toolButton.addActionListener(e -> {setTool(eraser);});
         shape.toolButton.addActionListener(e -> {setTool(shape);});
 
-        buttonPanel.add(paintBrush.toolButton);
-        buttonPanel.add(bucket.toolButton);
-        buttonPanel.add(line.toolButton);
-        buttonPanel.add(shape.toolButton);
-        buttonPanel.add(eraser.toolButton);
+        this.add(paintBrush.toolButton);
+        this.add(bucket.toolButton);
+        this.add(line.toolButton);
+        this.add(shape.toolButton);
+        this.add(eraser.toolButton);
 
         //endregion
 
-        JColorChooser colorChooser = new JColorChooser();
 
-        colorChooser.getSelectionModel().addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                Color currentColor = colorChooser.getColor();
-                toolContainer.currentColor = new RGBColor(
-                        currentColor.getRed(),
-                        currentColor.getGreen(),
-                        currentColor.getBlue(),
-                        255);
-                toolContainer.currentTool.currentColor = toolContainer.currentColor;
-            }
-        });
 
-        JFrame colorFrame = new JFrame();
+        //frame.setJMenuBar(createMenuBar());
+        //frame.setLocationByPlatform(true);
 
-        colorFrame.setSize(500,384);
-        colorFrame.add(colorChooser);
-        colorFrame.setVisible(true);
-
-        frame.setJMenuBar(createMenuBar());
-        frame.setLocationByPlatform(true);
-
-        frame.setResizable(true);
-        frame.setVisible(true);
+        //panel.setResizable(true);
+        this.setVisible(true);
 
         //region ANTHONY'S UNFINISHED CODE
 
-        buttonPanel.add(promptCloser);
+        this.add(promptCloser);
         promptCloser.setSize(200,120);
         promptCloser.setVisible(true);
 
-        buttonPanel.add(timePrompt);
-        timePrompt.setSize(200,120);
-        timePrompt.setVisible(true);
+        this.add(setBrushSize);
+        setBrushSize.setSize(200,120);
+        setBrushSize.setVisible(true);
 
-        buttonPanel.add(activateChange);
+        this.add(activateChange);
         activateChange.setSize(200,120);
         activateChange.setVisible(true);
         activateChange.addActionListener(e -> {
             try{
-                int newDrawSize = Integer.parseInt(timePrompt.getText());
+                int newDrawSize = Integer.parseInt(setBrushSize.getText());
                 if (toolContainer.currentTool == paintBrush.tool) {
                     paintBrush.tool.drawSize = newDrawSize;
                     System.out.println("Paint Brush draw size is now " + paintBrush.tool.drawSize);
@@ -107,8 +88,6 @@ public class Toolbox extends JPanel {
             }
         });
         //endregion
-
-        frame.add(buttonPanel);
 
     }
 

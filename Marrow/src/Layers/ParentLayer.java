@@ -1,35 +1,23 @@
 package Layers;
 
-import Bitmaps.*;
 import Tools.ToolContainer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.ColorModel;
-import java.awt.image.ImageObserver;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.LinkedList;
 
 /**
  * The layer on top of the layer hierarchy. Contains all other layers and draws them on a canvas.
  * Responsible for drawing everything.
  */
 public class ParentLayer extends Layer {
-    JFrame frame;
+
     Graphics2D graphics;
     Image image;
     ToolContainer toolContainer;
     public ChildLayer currentLayer;
 
-    public ParentLayer(JFrame frame, ToolContainer toolContainer)
+    public ParentLayer(ToolContainer toolContainer)
     {
-        this.frame = frame;
         this.toolContainer = toolContainer;
     }
 
@@ -49,7 +37,7 @@ public class ParentLayer extends Layer {
         onAddChild.accept(layer);
         layer.setOpaque(false);
         layer.parent = this;
-        layer.setSize(1366,768);
+        layer.setSize(800,400);
     }
 
     protected void paintComponent(Graphics g) {
@@ -119,9 +107,9 @@ public class ParentLayer extends Layer {
 
             child.isCurrentLayer = currentLayer == child;
 
-            frame.getContentPane().remove(child);
+            this.remove(child);
         }
         layer.isCurrentLayer = true;
-        frame.getContentPane().add(layer);
+        this.add(layer);
     }
 }

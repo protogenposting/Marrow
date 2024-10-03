@@ -12,15 +12,13 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class LayerWindow extends JFrame {
+public class LayerWindow extends JPanel {
     Layer parentLayer;
 
-    public LayerWindow(String name, ParentLayer parentLayer, ToolContainer toolContainer)
+    public LayerWindow(ParentLayer parentLayer, ToolContainer toolContainer)
     {
-        this.setTitle(name);
         this.setVisible(true);
         this.setSize(256,768);
-        this.setResizable(true);
         this.parentLayer = parentLayer;
         this.setLayout(new FlowLayout());
 
@@ -63,6 +61,6 @@ public class LayerWindow extends JFrame {
             panel.add(layerButton);
         };
 
-        this.getContentPane().add(scrollPane);
+        this.add(scrollPane);
     }
 }

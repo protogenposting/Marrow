@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 /**
  * This is the abstract layer class. Never use it unless extending or using a layer list
  */
-public class Layer extends JComponent {
+public class Layer extends JPanel {
     public ArrayList<ChildLayer> children = new ArrayList<>();
 
     public double x = 0;
