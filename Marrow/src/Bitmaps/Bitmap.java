@@ -1,9 +1,12 @@
 package Bitmaps;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
+import java.io.File;
+import java.io.IOException;
 import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -20,12 +23,32 @@ public class Bitmap {
 
     }
 
+    public static void main(String[] args) throws IOException {
+        File pixelPath = new File("MarrowSaves/Test Project/Big Gay Layer -351372007.png");
+        BufferedImage image = ImageIO.read(pixelPath);
+        int black = image.getRGB(0,0);
+        int transparent = image.getRGB(1,0);
+        System.out.println();
+    }
     public Bitmap(BufferedImage image)
     {
+
+        int temp;
+        int alpha;
+        int red;
+        int green;
+        int blue;
+
         setSize(image.getWidth(), image.getHeight());
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
-                Color color = new Color(image.getRGB(x,y));
+                temp  = image.getRGB(x,y);
+                alpha = temp & 0xFF000000 >>> 24;
+                red = temp   & 0x00FF0000 >>> 16;;
+                green = temp & 0x0000FF00 >>> 8;;
+                blue = temp  & 0x000000FF;
+
+                Color color = new Color(red,green,blue,alpha);
                 Pixel pixel = new Pixel(new RGBColor(color));  //fixme do stuff to make sure alpha gets passed in
                 addPixel(x,y,pixel);
             }

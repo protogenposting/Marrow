@@ -43,7 +43,10 @@ public class Main {
         //add the bitmap layer to the main window
         content.add(parentLayer, BorderLayout.CENTER);
 
-        SaveTool saver = new SaveTool(currentSaveDirectory);
+        LayerWindow layerOrganization = new LayerWindow("Marrow Layers",parentLayer,toolContainer);
+        SaveTool saver = new SaveTool(currentSaveDirectory, layerOrganization);
+        Timeline timeline = new Timeline("Marrow Timeline",parentLayer);
+        Toolbox tools = new Toolbox(toolContainer,saver,parentLayer);
 
         /*
         end result should be:
@@ -100,9 +103,7 @@ public class Main {
             public void keyReleased(KeyEvent e) {}
         });
 
-        LayerWindow layerOrganization = new LayerWindow("Marrow Layers",parentLayer,toolContainer);
-        Timeline timeline = new Timeline("Marrow Timeline",parentLayer);
-        Toolbox tools = new Toolbox(toolContainer,saver,parentLayer);
+
 
         frame.addWindowListener(new WindowAdapter() {
             @Override
