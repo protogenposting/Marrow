@@ -1,3 +1,5 @@
+package Main;
+
 import Bitmaps.Pixel;
 import Bitmaps.RGBColor;
 import Layers.*;
@@ -18,7 +20,7 @@ import java.io.*;
 
 public class Main {
     //the main frame we will be drawing on
-    static JFrame frame = new JFrame("Marrow");
+    public static JFrame frame = new JFrame("Marrow");
 
     static JSplitPane mainSP = new JSplitPane();
     static JSplitPane topScreenSP = new JSplitPane();
