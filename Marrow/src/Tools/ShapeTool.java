@@ -4,7 +4,7 @@ import Bitmaps.Bitmap;
 import Bitmaps.Pixel;
 import Bitmaps.RGBColor;
 
-public class ShapeTool extends DragTool {
+public class ShapeTool extends Tool {
 
     public RGBColor currentColor = new RGBColor(0,0,0,255);
 
@@ -21,7 +21,6 @@ public class ShapeTool extends DragTool {
     {
         xStart = x;
         yStart = y;
-        drawCircle(x, y, bitmap, drawSize);
     }
 
     /**
@@ -87,7 +86,6 @@ public class ShapeTool extends DragTool {
         xProgress = xProgress * progressDirection;
         for(int i = 0; i < width; i++){
             bitmap.addPixel(x + xProgress, y, new Pixel(currentColor));
-            drawCircle(x + xProgress, y, bitmap, drawSize);
             xProgress += progressDirection * signX;
         }
     }
@@ -105,7 +103,7 @@ public class ShapeTool extends DragTool {
         int signY = yProgress;
         yProgress = yProgress * progressDirection;
         for(int i = 0; i < height; i++){
-            drawCircle(x, y + yProgress, bitmap, drawSize);
+            bitmap.addPixel(x, y + yProgress, new Pixel(currentColor));
             yProgress += progressDirection * signY;
         }
     }

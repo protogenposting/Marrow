@@ -1,31 +1,21 @@
 package Tools;
 
-import Bitmaps.Bitmap;
 import Bitmaps.RGBColor;
-import Layers.BitmapLayer;
-import Layers.ParentLayer;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class Toolbox extends JPanel {
 
 
     ToolContainer toolContainer;
 
+
     JLabel promptCloser = new JLabel("Set brush size(Pixels)");
     JTextField setBrushSize = new JTextField("          1");
     JButton activateChange = new JButton("Submit");
-
-    SaveTool saver;
-
-    ParentLayer parentLayer;
 
     /**
      * initializes the toolbox window
@@ -36,10 +26,6 @@ public class Toolbox extends JPanel {
         this.setPreferredSize(new Dimension(800,150));
 
         this.toolContainer = toolContainer;
-
-        this.saver = saver;
-
-        this.parentLayer = parentLayer;
 
         //region add events to the tool buttons and add buttons to button panel
 
@@ -134,42 +120,12 @@ public class Toolbox extends JPanel {
      */
     private JMenu createFileMenu() {
         JMenu fileMenu = new JMenu("File");
-
         JMenuItem newItem = new JMenuItem("New");
-
         fileMenu.add(newItem);
-
         JMenuItem openItem = new JMenuItem("Open");
-
-        openItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    ArrayList<BitmapLayer> bitmapLayers = saver.loadLayers(toolContainer);
-
-                    for (BitmapLayer bitmapLayer : bitmapLayers) {
-                        parentLayer.addChild(bitmapLayer);
-                    }
-                    parentLayer.revalidate();
-                    parentLayer.repaint();
-
-                    System.out.println("load successful");
-                }
-                catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
-
         fileMenu.add(openItem);
-
         JMenuItem saveItem = new JMenuItem("Save");
-        JMenuItem loadItem = new JMenuItem("Load");
-
-        saveItem.addActionListener(e -> saver.saveLayers(parentLayer));
-
         fileMenu.add(saveItem);
-
         return fileMenu;
     }
 

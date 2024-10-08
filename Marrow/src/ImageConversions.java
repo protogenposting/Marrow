@@ -1,5 +1,3 @@
-package Tools;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -33,7 +31,7 @@ public class ImageConversions {
     }
     public static void SaveImage(Image image,String location)
     {
-        BufferedImage newImage = (BufferedImage) image;
+        BufferedImage newImage = toBufferedImage(image);
 
         File outputfile = new File(location);
 
