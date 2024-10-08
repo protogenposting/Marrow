@@ -173,36 +173,8 @@ public class Main {
      */
     static void frameSetup(){
 
-        //region SPLIT PANE DEBUG
-        colorWheelDEBUG.add(colourButton);
-        drawScreenDEBUG.add(drawButton);
-      //  toolBarDEBUG.add();
-        timeLineDEBUG.add(timeButton);
-        childLayerDEBUG.add(childButton);
 
-        colorWheelDEBUG.setVisible(true);
-        drawScreenDEBUG.setVisible(true);
-        toolBarDEBUG.setVisible(true);
-        timeLineDEBUG.setVisible(true);
-        childLayerDEBUG.setVisible(true);
 
-        colourButton.addActionListener(e -> {
-            System.out.println("colourButton pressed");
-        });
-        drawButton.addActionListener(e -> {
-            System.out.println("drawButton pressed");
-        });
-        toolButton.addActionListener(e -> {
-            System.out.println("toolButton pressed");
-        });
-        timeButton.addActionListener(e -> {
-            System.out.println("timeButton pressed");
-        });
-        childButton.addActionListener(e -> {
-            System.out.println("childButton pressed");
-        });
-
-        //endregion
 
         /*
         end result should be:
