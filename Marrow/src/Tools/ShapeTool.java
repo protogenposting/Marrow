@@ -4,7 +4,7 @@ import Bitmaps.Bitmap;
 import Bitmaps.Pixel;
 import Bitmaps.RGBColor;
 
-public class ShapeTool extends Tool {
+public class ShapeTool extends DragTool {
 
     public RGBColor currentColor = new RGBColor(0,0,0,255);
 
@@ -19,6 +19,7 @@ public class ShapeTool extends Tool {
      */
     public void onPress(int x, int y, Bitmap bitmap)
     {
+        super.onPress(x, y, bitmap);
         xStart = x;
         yStart = y;
     }
@@ -74,36 +75,40 @@ public class ShapeTool extends Tool {
 
     /**
      * Paints a line along the X axis
-     * @param x
-     * @param y
-     * @param xProgress
-     * @param progressDirection
-     * @param width
-     * @param bitmap
+     * @param x the starting x position of the line
+     * @param y the starting y position of the line
+     * @param xProgress the iterator for the next coordinates of the line
+     * @param progressDirection direction of the line drawing
+     * @param width the length of the line
+     * @param bitmap where the line is being drawn/set on
      */
     public void addXPixelsInALine(int x, int y, int xProgress, int progressDirection, int width, Bitmap bitmap){
         int signX = xProgress;
         xProgress = xProgress * progressDirection;
         for(int i = 0; i < width; i++){
-            bitmap.addPixel(x + xProgress, y, new Pixel(currentColor));
+
+            drawCircle(x + xProgress, y, bitmap, drawSize);
+
             xProgress += progressDirection * signX;
         }
     }
 
     /**
      * Paints a line along the Y axis
-     * @param x
-     * @param y
-     * @param yProgress
-     * @param progressDirection
-     * @param height
-     * @param bitmap
+     * @param x the starting x position of the line
+     * @param y the starting y position of the line
+     * @param yProgress the iterator for the next coordinates of the line
+     * @param progressDirection direction of the line drawing
+     * @param height the length of the line
+     * @param bitmap where the line is being drawn/set on
      */
     public void addYPixelsInALine(int x, int y, int yProgress, int progressDirection, int height, Bitmap bitmap){
         int signY = yProgress;
         yProgress = yProgress * progressDirection;
         for(int i = 0; i < height; i++){
-            bitmap.addPixel(x, y + yProgress, new Pixel(currentColor));
+
+            drawCircle(x, y + yProgress, bitmap, drawSize);
+
             yProgress += progressDirection * signY;
         }
     }
