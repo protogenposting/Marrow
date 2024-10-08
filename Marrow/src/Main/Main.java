@@ -246,7 +246,7 @@ public class Main {
             @Override
             public void windowClosing(WindowEvent e) {
 
-                saveLayers(parentLayer);
+
 
                 frame.dispose();
                 System.exit(0);
