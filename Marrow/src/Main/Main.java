@@ -245,7 +245,6 @@ public class Main {
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                
 
                 frame.dispose();
                 System.exit(0);
