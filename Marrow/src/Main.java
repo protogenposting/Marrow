@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 import java.io.*;
@@ -275,6 +276,16 @@ public class Main {
             }
             @Override
             public void keyReleased(KeyEvent e) {}
+        });
+
+        frame.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent componentEvent) {
+
+                int frameWidth = frame.getX();
+                int frameHeight = frame.getY();
+
+
+            }
         });
 
         //region Split Pane Settup
