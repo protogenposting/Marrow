@@ -323,8 +323,8 @@ public class Main {
                 parentLayer.revalidate();
                 parentLayer.repaint();
 
-                System.out.println((frameHeight-frameDefaultHeight+drawScreenDefaultHeight ) +
-                        " Height by " + (frameWidth-childLayerWidth) + " Width");
+                System.out.println((frameHeight - frameDefaultHeight + drawScreenDefaultHeight ) +
+                        " Height by " + (frameWidth - childLayerWidth) + " Width");
             }
         });
 
