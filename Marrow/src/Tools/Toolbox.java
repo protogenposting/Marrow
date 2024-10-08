@@ -9,9 +9,7 @@ import java.awt.*;
 
 public class Toolbox extends JPanel {
 
-
     ToolContainer toolContainer;
-
 
     JLabel promptCloser = new JLabel("Set brush size(Pixels)");
     JTextField setBrushSize = new JTextField("          1");
@@ -93,6 +91,10 @@ public class Toolbox extends JPanel {
 
     }
 
+    /**
+     * sets the toolButton's tool to a specific brush or tool
+     * @param toolButton the toolButton being set
+     */
     private void setTool(ToolButton toolButton){
         toolContainer.currentTool = toolButton.tool;
         toolContainer.currentTool.currentColor = toolContainer.currentColor;

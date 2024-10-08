@@ -75,12 +75,12 @@ public class ShapeTool extends DragTool {
 
     /**
      * Paints a line along the X axis
-     * @param x
-     * @param y
-     * @param xProgress
-     * @param progressDirection
-     * @param width
-     * @param bitmap
+     * @param x the starting x position of the line
+     * @param y the starting y position of the line
+     * @param xProgress the iterator for the next coordinates of the line
+     * @param progressDirection direction of the line drawing
+     * @param width the length of the line
+     * @param bitmap where the line is being drawn/set on
      */
     public void addXPixelsInALine(int x, int y, int xProgress, int progressDirection, int width, Bitmap bitmap){
         int signX = xProgress;
@@ -95,12 +95,12 @@ public class ShapeTool extends DragTool {
 
     /**
      * Paints a line along the Y axis
-     * @param x
-     * @param y
-     * @param yProgress
-     * @param progressDirection
-     * @param height
-     * @param bitmap
+     * @param x the starting x position of the line
+     * @param y the starting y position of the line
+     * @param yProgress the iterator for the next coordinates of the line
+     * @param progressDirection direction of the line drawing
+     * @param height the length of the line
+     * @param bitmap where the line is being drawn/set on
      */
     public void addYPixelsInALine(int x, int y, int yProgress, int progressDirection, int height, Bitmap bitmap){
         int signY = yProgress;
