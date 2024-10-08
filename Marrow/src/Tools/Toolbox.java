@@ -70,6 +70,8 @@ public class Toolbox extends JPanel {
         setBrushSize.setSize(200,120);
         setBrushSize.setVisible(true);
 
+        setBrushSize.setText("Enter a Number");
+
         this.add(activateChange);
         activateChange.setSize(200,120);
         activateChange.setVisible(true);
