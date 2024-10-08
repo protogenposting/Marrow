@@ -286,17 +286,19 @@ public class Main {
                 int frameDefaultHeight = 768;
                 int drawScreenDefaultHeight = 450;
 
-                parentLayer.setSize((frameWidth-childLayerWidth),
-                        (frameHeight-frameDefaultHeight+drawScreenDefaultHeight));
+                parentLayer.setSize((frameWidth - childLayerWidth),
+                        (frameHeight - frameDefaultHeight + drawScreenDefaultHeight));
 
                 ArrayList<ChildLayer> childrenArray = parentLayer.getChildren();
 
                 for (int children = 0; children < childrenArray.size(); children++){
                     BitmapLayer layer = (BitmapLayer) childrenArray.get(children);
-                    layer.setSize((frameWidth-childLayerWidth),
-                            (frameHeight-frameDefaultHeight+drawScreenDefaultHeight));
-                    layer.bitmap.setSize((frameWidth-childLayerWidth),
-                            (frameHeight-frameDefaultHeight+drawScreenDefaultHeight));
+
+                    layer.setSize((frameWidth - childLayerWidth),
+                            (frameHeight - frameDefaultHeight + drawScreenDefaultHeight));
+
+                    layer.bitmap.setSize((frameWidth - childLayerWidth),
+                            (frameHeight - frameDefaultHeight + drawScreenDefaultHeight));
                 }
 
                 parentLayer.revalidate();
