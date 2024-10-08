@@ -245,11 +245,9 @@ public class Main {
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                
 
                 frame.dispose();
                 System.exit(0);
-
             }
         });
 
@@ -281,11 +279,31 @@ public class Main {
 
         frame.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent componentEvent) {
-
                 int frameWidth = frame.getX();
                 int frameHeight = frame.getY();
 
+                int childLayerWidth = 260;
+                int frameDefaultHeight = 768;
+                int drawScreenDefaultHeight = 450;
 
+                parentLayer.setSize((frameWidth-childLayerWidth),
+                        (frameHeight-frameDefaultHeight+drawScreenDefaultHeight));
+
+                ArrayList<ChildLayer> childrenArray = parentLayer.getChildren();
+
+                for (int children = 0; children < childrenArray.size(); children++){
+                    BitmapLayer layer = (BitmapLayer) childrenArray.get(children);
+                    layer.setSize((frameWidth-childLayerWidth),
+                            (frameHeight-frameDefaultHeight+drawScreenDefaultHeight));
+                    layer.bitmap.setSize((frameWidth-childLayerWidth),
+                            (frameHeight-frameDefaultHeight+drawScreenDefaultHeight));
+                }
+
+                parentLayer.revalidate();
+                parentLayer.repaint();
+
+                System.out.println((frameHeight-frameDefaultHeight+drawScreenDefaultHeight ) +
+                        " Height by " + (frameWidth-childLayerWidth) + " Width");
             }
         });
 
