@@ -291,6 +291,25 @@ public class Main {
 
                 ArrayList<ChildLayer> childrenArray = parentLayer.getChildren();
 
+
+                /*
+
+                    for(child; child<array; child++){
+
+                    layer = (Bitmap) array.getChild
+
+                    newSize = (Dimension) (frameHeight - (toolBox.getY + timeline.getY)),
+                                            (frameWidth- childLayer.getX)
+                    
+
+                    layer.setSize(newSize)
+                    layer.Bitmap.setSize(newSize)
+
+                    }
+
+                 */
+
+
                 for (int children = 0; children < childrenArray.size(); children++){
                     BitmapLayer layer = (BitmapLayer) childrenArray.get(children);
                     layer.setSize((frameWidth-childLayerWidth),
