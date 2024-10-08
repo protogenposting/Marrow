@@ -15,8 +15,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-import java.io.*;
-
 public class Main {
     //the main frame we will be drawing on
     static JFrame frame = new JFrame("Marrow");
@@ -44,7 +42,6 @@ public class Main {
     public static void main(String[] args) {
         frameSetup();
     }
-
     /**
      * saves the parentLayer and its children into a custom text file named "save.marrow"
      * @param parentLayer the layer and its children being saved
@@ -177,6 +174,9 @@ public class Main {
 
 
 
+
+        SaveTool saver = new SaveTool(currentSaveDirectory);
+
         /*
         end result should be:
         ParentLayer
@@ -240,17 +240,6 @@ public class Main {
         frame.setLocationRelativeTo(null); //places window at the center of the screen
 
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // this allows it to save the stuff when user exits
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-
-                saveLayers(parentLayer);
-
-                frame.dispose();
-                System.exit(0);
-
-            }
-        });
 
         frame.addKeyListener(new KeyListener() {
             @Override
@@ -259,7 +248,7 @@ public class Main {
             @Override
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode()==KeyEvent.VK_S){
-                    //saveLayers(parentLayer);
+                    saver.saveLayers(parentLayer);
                     BitmapLayer layer = (BitmapLayer) parentLayer.getChildren().get(1);
                     ArrayList<ArrayList<Pixel>> bitmap = layer.bitmap.bitmap;
                     for(int x = 0; x < bitmap.size(); x++)
@@ -308,6 +297,7 @@ public class Main {
 
         frame.setJMenuBar(createMenuBar());
         //frame.setLocationByPlatform(true);
+
 
     }
 

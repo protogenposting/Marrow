@@ -7,7 +7,7 @@ import Layers.BitmapLayer;
 
 import javax.swing.*;
 
-public class LineTool extends Tool {
+public class LineTool extends DragTool {
 
     public LineTool(){}
 
@@ -26,6 +26,7 @@ public class LineTool extends Tool {
     {
         xStart = x;
         yStart = y;
+        drawCircle(x, y, bitmap, drawSize);
     }
 
     /**
@@ -44,11 +45,9 @@ public class LineTool extends Tool {
         bitmap.addPixel(x2,y2,new Pixel(currentColor));
 
         int width = Math.abs(x1-x2);
-
         int height = Math.abs(y1-y2);
 
         int signX = (int)Math.signum(x2-x1);
-
         int signY = (int)Math.signum(y2-y1);
 
         double theta = Math.atan(((double)y2-y1)/(x2-x1));
@@ -61,7 +60,14 @@ public class LineTool extends Tool {
             {
                 double tan = Math.tan(theta)*xProgress;
                 int yResult = (int)Math.round(tan);
-                bitmap.addPixel(xProgress + x1,yResult + y1,new Pixel(currentColor));
+
+                if(drawSize == 1){
+                    bitmap.addPixel(xProgress + x1,yResult + y1, new Pixel(currentColor));
+                }
+                else {
+                    drawCircle(xProgress + x1, yResult + y1, bitmap, drawSize);
+                }
+
                 xProgress += signX;
             }
         }
@@ -72,7 +78,14 @@ public class LineTool extends Tool {
             for(int i = 0; i < height; i++)
             {
                 int xResult = (int)Math.round(yProgress/Math.tan(theta));
-                bitmap.addPixel(xResult + x1,yProgress + y1,new Pixel(currentColor));
+
+                if(drawSize == 1){
+                    bitmap.addPixel(xResult + x1,yProgress + y1, new Pixel(currentColor));
+                }
+                else {
+                    drawCircle(xResult + x1, yProgress + y1, bitmap, drawSize);
+                }
+
                 yProgress += signY;
             }
         }
