@@ -96,7 +96,7 @@ public class Main {
      * @throws IOException for the case a file does not exist
      */
     private static FileWriter getSaveFileWriter() throws IOException {
-        //NOTE: IF IT DOESN'T WORK OR IS UNABLE TO FIND A FILE, CHECK FOR TYPO
+        //NOTE: IF IT DOESN'T WORK OR IS UNABLE TO FIND A FILE, CHECK FOR TYPOS
 
         File path = new File(currentSaveDirectory);
         boolean pathExists = path.mkdirs();
@@ -261,16 +261,14 @@ public class Main {
                     //saveLayers(parentLayer);
                     BitmapLayer layer = (BitmapLayer) parentLayer.getChildren().get(1);
                     ArrayList<ArrayList<Pixel>> bitmap = layer.bitmap.bitmap;
-                    for(int x = 0; x < bitmap.size(); x++)
-                    {
-                        for(int y = 0; y < bitmap.get(x).size(); y++)
-                        {
-                            if(bitmap.get(x).get(y).alpha!=0) {
-                                System.out.println(bitmap.get(x).get(y).alpha);
+                    for (ArrayList<Pixel> x : bitmap) {
+
+                        for (Pixel y : x) {
+                            if (y.alpha != 0) {
+                                System.out.println(y.alpha);
                             }
                         }
                     }
-                    bitmap = bitmap;
                 }
             }
             @Override
@@ -279,18 +277,22 @@ public class Main {
 
         frame.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent componentEvent) {
-                int frameWidth = frame.getX();
-                int frameHeight = frame.getY();
+                int frameWidth = frame.getWidth();
+                int frameHeight = frame.getHeight();
+                // note: don't use getX and getY. those return the origin (as in, the position of the frame
+                // that barely changes whenever you resize it). these two methods are much better suited
 
                 int childLayerWidth = 260;
                 int frameDefaultHeight = 768;
                 int drawScreenDefaultHeight = 450;
 
-                parentLayer.setSize((frameWidth - childLayerWidth),
-                        (frameHeight - frameDefaultHeight + drawScreenDefaultHeight));
+                // added these variables since the equivalent of these were being assigned everywhere
+                int newWidth = frameWidth - childLayerWidth;
+                int newHeight = frameHeight - frameDefaultHeight + drawScreenDefaultHeight;
+
+                parentLayer.setSize(newWidth, newHeight);
 
                 ArrayList<ChildLayer> childrenArray = parentLayer.getChildren();
-
 
                 /*
 
@@ -309,22 +311,20 @@ public class Main {
 
                  */
 
+                for (ChildLayer childLayer : childrenArray) {
 
-                for (int children = 0; children < childrenArray.size(); children++){
-                    BitmapLayer layer = (BitmapLayer) childrenArray.get(children);
+                    System.out.println("setting size");
+                    BitmapLayer layer = (BitmapLayer) childLayer;
 
-                    layer.setSize((frameWidth - childLayerWidth),
-                            (frameHeight - frameDefaultHeight + drawScreenDefaultHeight));
+                    layer.setSize(newWidth, newHeight);
 
-                    layer.bitmap.setSize((frameWidth - childLayerWidth),
-                            (frameHeight - frameDefaultHeight + drawScreenDefaultHeight));
+                    layer.bitmap.setSize(newWidth, newHeight);
                 }
 
                 parentLayer.revalidate();
                 parentLayer.repaint();
 
-                System.out.println((frameHeight - frameDefaultHeight + drawScreenDefaultHeight ) +
-                        " Height by " + (frameWidth - childLayerWidth) + " Width");
+                System.out.println((newHeight) + " Height by " + (newWidth) + " Width");
             }
         });
 
