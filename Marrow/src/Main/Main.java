@@ -1,11 +1,13 @@
 package Main;
 
+import Bitmaps.Bitmap;
 import Bitmaps.Pixel;
 import Bitmaps.RGBColor;
 import Layers.*;
 import Layers.LayerWindow.LayerWindow;
 import Tools.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -15,9 +17,12 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import java.io.*;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 public class Main {
     //the main frame we will be drawing on
@@ -173,6 +178,72 @@ public class Main {
     }
     //endregion
 
+    //region LOAD FUNCTIONS
+    public ArrayList<BitmapLayer> loadLayers(ToolContainer toolContainer) throws IOException {
+        File saveFile = new File(currentSaveDirectory + "/save.marrow");
+        Scanner fileReader = new Scanner(saveFile);
+
+        LinkedList<String> layerNames = new LinkedList<>();
+        ArrayList<BitmapLayer> bitmapLayers = new ArrayList<>();
+
+        while(fileReader.hasNextLine()){
+            String layerName = fileReader.nextLine();
+
+            if( layerName.isEmpty() ) { continue; }
+
+            if( layerName.charAt(0) == '-') {
+                layerName = removeDashes(layerName);
+            }
+
+            layerNames.add(layerName);
+        }
+
+        for (int i = 0; i < layerNames.size(); i++) {
+            if(i < 2){
+                continue;
+            }
+
+            String layerName = layerNames.get(i);
+
+            String filePath = currentSaveDirectory + "/" + layerName + ".png";
+            File layer = new File(filePath);
+
+            if (layer.createNewFile()) {
+                layer.delete();
+                continue; //if the layer doesn't exist, can't load it
+            }
+
+            BufferedImage image = ImageIO.read(layer);
+            Bitmap imageToBitmap = new Bitmap(image);
+
+            BitmapLayer bitmapLayer = new BitmapLayer(toolContainer, layerName, imageToBitmap);
+            bitmapLayers.add(bitmapLayer);
+        }
+
+        return bitmapLayers;
+    }
+
+    /**
+     * removes the dashes at the back of a layer name
+     * @param layerName the name having its dashes removed
+     * @return the layer name with the removed dashes
+     */
+    private String removeDashes(String layerName){
+        StringBuilder returningName = new StringBuilder();
+        boolean firstDashesPassed = false;
+
+        for (int i = 0; i < layerName.length(); i++) {
+
+            if(!(layerName.charAt(i) == '-') || firstDashesPassed){
+                returningName.append(layerName.charAt(i));
+                firstDashesPassed = true; //don't need to care about dashes in the middle of a name
+            }
+
+        }
+
+        return returningName.toString();
+    }
+    //endregion
      /**
      * Sets up the main frame that the user draws on
      */
@@ -259,7 +330,7 @@ public class Main {
             public void componentResized(ComponentEvent componentEvent) {
                 int frameWidth = frame.getWidth();
                 int frameHeight = frame.getHeight();
-                // note: don't use getX and getY. those return the origin (as in, the position of the frame
+                // note: don't use getX and getY. those return the origin (as in, the center position of the frame
                 // that barely changes whenever you resize it). these two methods are much better suited
 
                 int childLayerWidth = 260;
@@ -308,7 +379,7 @@ public class Main {
             }
         });
 
-        //region Split Pane Settup
+        //region Split Pane Setup
         mainSP.setOrientation(JSplitPane.VERTICAL_SPLIT);
         mainSP.setDividerLocation(75);
         mainSP.setTopComponent(tools); //TOOL BAR HERE
