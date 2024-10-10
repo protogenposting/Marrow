@@ -5,6 +5,10 @@ import Tools.ToolContainer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.geom.AffineTransform;
 
 /**
  * The layer on top of the layer hierarchy. Contains all other layers and draws them on a canvas.
@@ -20,6 +24,40 @@ public class ParentLayer extends Layer {
     public ParentLayer(ToolContainer toolContainer)
     {
         this.toolContainer = toolContainer;
+        addMouseListener(new MouseAdapter(){
+            @Override
+            public void mousePressed(MouseEvent e) {
+                System.out.println("Parent layer clicked");
+                if(currentLayer != null) {
+                    if(currentLayer instanceof BitmapLayer) {
+                        BitmapLayer bitmapLayer =  (BitmapLayer) currentLayer;
+                        bitmapLayer.mousePressed(e);
+                    }
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if(currentLayer != null) {
+                    if(currentLayer instanceof BitmapLayer) {
+                        BitmapLayer bitmapLayer =  (BitmapLayer) currentLayer;
+                        bitmapLayer.mouseReleased(e);
+                    }
+                }
+            }
+        } );
+
+        addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseDragged(MouseEvent e) {
+                if (currentLayer != null) {
+                    if (currentLayer instanceof BitmapLayer) {
+                        BitmapLayer bitmapLayer = (BitmapLayer) currentLayer;
+                        bitmapLayer.mouseDragged(e);
+                    }
+                }
+            }
+
+        });
     }
 
     /**
@@ -67,7 +105,10 @@ public class ParentLayer extends Layer {
             {
                 //draw the bitmap layer's image :3
                 BitmapLayer bitmapChild = (BitmapLayer)child;
-                graphics.drawImage(bitmapChild.drawnImage,0,0,this);
+                AffineTransform testTransform = new AffineTransform();
+                double rotation = System.nanoTime()/10000000;
+                testTransform.rotate(Math.toRadians(rotation));
+                graphics.drawImage(bitmapChild.drawnImage,testTransform,this);
                 //System.out.println(child.isCurrentLayer);
             }
         }
