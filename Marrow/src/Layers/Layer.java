@@ -1,5 +1,7 @@
 package Layers;
 
+import Animation.Transform2D;
+
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -11,8 +13,7 @@ import java.util.function.Consumer;
 public class Layer extends JPanel {
     public ArrayList<ChildLayer> children = new ArrayList<>();
 
-    public double x = 0;
-    public double y = 0;
+    public Transform2D transform = new Transform2D();
 
     public Consumer<ChildLayer> onAddChild = (a) -> {};
 
