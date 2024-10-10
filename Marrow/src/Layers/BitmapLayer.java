@@ -43,7 +43,6 @@ public class BitmapLayer extends ChildLayer {
             drawnImage = bitmap.toImage();
         }
 
-
         //listener for mouse being pressed.
         addMouseListener(new MouseAdapter() {
             @Override
