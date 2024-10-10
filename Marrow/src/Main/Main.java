@@ -379,7 +379,7 @@ public class Main {
             }
         });
 
-        //region Split Pane Setup
+        //region Split Pane Settup
         mainSP.setOrientation(JSplitPane.VERTICAL_SPLIT);
         mainSP.setDividerLocation(75);
         mainSP.setTopComponent(tools); //TOOL BAR HERE
