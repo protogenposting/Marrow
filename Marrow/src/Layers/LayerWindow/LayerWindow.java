@@ -1,8 +1,10 @@
 package Layers.LayerWindow;
 
 import Layers.BitmapLayer;
+import Layers.ChildLayer;
 import Layers.Layer;
 import Layers.ParentLayer;
+import Main.ImageConversions;
 import Tools.ToolContainer;
 
 import javax.swing.*;
@@ -14,15 +16,21 @@ import java.util.Random;
 
 public class LayerWindow extends JPanel {
     Layer parentLayer;
+    static int childNum;
+    boolean parentLayerSelected = true;
 
     public LayerWindow(ParentLayer parentLayer, ToolContainer toolContainer)
     {
-        this.setVisible(true);
-        this.setSize(256,768);
-        this.parentLayer = parentLayer;
-        this.setLayout(new FlowLayout());
 
-        JPanel panel = new JPanel();
+        JPanel mainPanel = this;
+        JPanel innerPanel = new JPanel();
+
+        mainPanel.setVisible(true);
+        mainPanel.setSize(256,768);
+        this.parentLayer = parentLayer;
+        mainPanel.setLayout(new FlowLayout());
+
+
 
         //region buttons!
 
@@ -31,9 +39,23 @@ public class LayerWindow extends JPanel {
         layerAdding.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                parentLayer.addChild(new BitmapLayer(toolContainer,"Big Gay Layer " + new Random().nextInt()));
+                childNum = parentLayer.currentLayer.children.size() + 1;
+
+                if (parentLayer.currentLayer != (Layer)parentLayer){
+                    parentLayerSelected = false;
+                } else{
+                    parentLayerSelected = true;
+                }
+
+                if (parentLayerSelected) {
+                    parentLayer.addChild(new BitmapLayer(toolContainer, "Big Gay Layer " + new Random().nextInt()));
+                }else {
+                    parentLayer.addChild(new BitmapLayer(toolContainer, "Smol Gay Layer " + parentLayer.currentLayer + childNum));
+                }
+
                 revalidate();
                 repaint();
+
             }
         });
 
@@ -41,11 +63,11 @@ public class LayerWindow extends JPanel {
 
         //endregion
 
-        panel.setLayout(new BoxLayout(panel,BoxLayout.PAGE_AXIS));
+        innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.PAGE_AXIS));
 
         JScrollPane scrollPane = new JScrollPane();
 
-        scrollPane.setViewportView(panel);
+        scrollPane.setViewportView(innerPanel);
 
         scrollPane.setPreferredSize(new Dimension(200,300));
 
@@ -58,9 +80,10 @@ public class LayerWindow extends JPanel {
 
             layerButton.parentLayer = parentLayer;
 
-            panel.add(layerButton);
+            innerPanel.add(layerButton);
         };
 
-        this.add(scrollPane);
+        mainPanel.add(scrollPane);
     }
+
 }
