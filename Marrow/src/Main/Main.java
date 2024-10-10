@@ -302,6 +302,38 @@ public class Main {
             }
         });
 
+        parentLayer.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mousePressed(MouseEvent e) {
+                System.out.println("Parent layer clicked");
+                if(parentLayer.currentLayer != null) {
+                    if(parentLayer.currentLayer instanceof BitmapLayer bitmapLayer) {
+                        bitmapLayer.mousePressed(e);
+                    }
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if(parentLayer.currentLayer != null) {
+                    if(parentLayer.currentLayer instanceof BitmapLayer bitmapLayer) {
+                        bitmapLayer.mouseReleased(e);
+                    }
+                }
+            }
+        } );
+
+        parentLayer.addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseDragged(MouseEvent e) {
+                if (parentLayer.currentLayer != null) {
+                    if (parentLayer.currentLayer instanceof BitmapLayer bitmapLayer) {
+                        bitmapLayer.mouseDragged(e);
+                    }
+                }
+            }
+
+        });
+
         frame.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}
