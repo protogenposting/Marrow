@@ -1,5 +1,6 @@
 package Main;
 
+import Animation.Timeline;
 import Bitmaps.Pixel;
 import Bitmaps.RGBColor;
 import Layers.*;
@@ -27,18 +28,6 @@ public class Main {
     static JSplitPane topScreenSP = new JSplitPane();
     static JSplitPane bottomScreenSPVert = new JSplitPane();
     static JSplitPane bottomScreenSPHor = new JSplitPane();
-
-    //region SPLIT PANE DEBUGGING
-    static JPanel colorWheelDEBUG = new JPanel();
-    static JPanel drawScreenDEBUG = new JPanel();
-    static JPanel toolBarDEBUG = new JPanel();
-    static JPanel timeLineDEBUG = new JPanel();
-    static JPanel childLayerDEBUG = new JPanel();
-    static JButton colourButton = new JButton("Color wheel");
-    static JButton toolButton = new JButton("Tool Bar");
-    static JButton drawButton = new JButton("Draw Screen");
-    static JButton timeButton = new JButton("Time Line");
-    static JButton childButton = new JButton("Child Layer");
     //endregion
 
     public static String currentSaveDirectory = "MarrowSaves"; // change later on to be able to find the directory user saved it at
@@ -192,7 +181,7 @@ public class Main {
 
         LayerWindow layerOrganization = new LayerWindow(parentLayer,toolContainer);
 
-        Timeline timeline = new Timeline("Marrow Timeline");
+        Timeline timeline = new Timeline();
 
         JColorChooser colorChooser = new JColorChooser();
 
