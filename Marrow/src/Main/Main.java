@@ -41,12 +41,13 @@ public class Main {
     static JButton childButton = new JButton("Child Layer");
     //endregion
 
-    public static String currentSaveDirectory = "MarrowSaves/Test Project"; // change later on to be able to find the directory user saved it at
+    public static String currentSaveDirectory = "MarrowSaves"; // change later on to be able to find the directory user saved it at
 
     public static void main(String[] args) {
         frameSetup();
     }
 
+    //region SAVE FUNCTIONS
     /**
      * saves the parentLayer and its children into a custom text file named "save.marrow"
      * @param parentLayer the layer and its children being saved
@@ -170,40 +171,19 @@ public class Main {
             }
         }
     }
+    //endregion
 
      /**
      * Sets up the main frame that the user draws on
      */
     static void frameSetup(){
 
-
-
-
-        /*
-        end result should be:
-        ParentLayer
-        -CL1
-        -CL2
-        --CL2~1
-        ---CL2~1~1
-        ---CL2~1~2
-        ---CL2~1~3
-        ---CL2~1~4
-        ----CL2~1~4~1
-        -CL3
-        --CL3~1
-         */
-        //endregion //
-
         frame.getContentPane().add(mainSP);
 
         ToolContainer toolContainer = new ToolContainer();
-
         ParentLayer parentLayer = new ParentLayer(toolContainer);
 
-
         parentLayer.setSize(800,400);
-
         parentLayer.setVisible(true);
 
         System.out.println(toolContainer.currentTool.toString());
@@ -346,25 +326,28 @@ public class Main {
 
         //endregion
 
-        frame.setJMenuBar(createMenuBar());
+        frame.setJMenuBar(createMenuBar(parentLayer));
         //frame.setLocationByPlatform(true);
 
     }
 
-    static JMenuBar createMenuBar() {
+    static JMenuBar createMenuBar(ParentLayer parentLayer) {
         JMenuBar menuBar = new JMenuBar();
-        menuBar.add(createFileMenu());
+        menuBar.add(createFileMenu(parentLayer));
         menuBar.add(createEditMenu());
         return menuBar;
     }
 
-    static JMenu createFileMenu() {
+    static JMenu createFileMenu(ParentLayer parentLayer) {
         JMenu fileMenu = new JMenu("File");
         JMenuItem newItem = new JMenuItem("New");
         fileMenu.add(newItem);
         JMenuItem openItem = new JMenuItem("Open");
         fileMenu.add(openItem);
         JMenuItem saveItem = new JMenuItem("Save");
+        saveItem.addActionListener(e -> {
+            saveLayers(parentLayer);
+        });
         fileMenu.add(saveItem);
         return fileMenu;
     }
