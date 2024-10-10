@@ -33,10 +33,11 @@ public class BitmapLayer extends ChildLayer {
 
         this.name = name;
 
-        bitmap.setSize(800,400);
+        bitmap.setSize(800, 400);
+    }
         //listener for mouse being pressed.
-        addMouseListener(new MouseAdapter() {
-            @Override
+//addMouseListener(new MouseAdapter() {
+           // @Override
             public void mousePressed(MouseEvent e) {
                 //save the old coords
                 oldX = e.getX();
@@ -49,7 +50,7 @@ public class BitmapLayer extends ChildLayer {
                 drawnImage = bitmap.toImage();
                 parent.repaint();
             }
-            @Override
+           // @Override
             public void mouseReleased(MouseEvent e) {
                 currentX = e.getX();
                 currentY = e.getY();
@@ -60,10 +61,10 @@ public class BitmapLayer extends ChildLayer {
                 drawnImage = bitmap.toImage();
                 parent.repaint();
             }
-        });
+      //  });
         //listened for mouse movement
-        addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
+       // addMouseMotionListener(new MouseMotionAdapter() {
+        //    @Override
             public void mouseDragged(MouseEvent e) {
                 currentX = e.getX();
                 currentY = e.getY();
@@ -77,6 +78,6 @@ public class BitmapLayer extends ChildLayer {
                 drawnImage = bitmap.toImage();
                 parent.repaint();
             }
-        });
-    }
+       // });
+
 }

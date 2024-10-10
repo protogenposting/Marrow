@@ -308,6 +308,42 @@ public class Main {
             }
         });
 
+        parentLayer.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mousePressed(MouseEvent e) {
+                System.out.println("Parent layer clicked");
+                if(parentLayer.currentLayer != null) {
+                    if(parentLayer.currentLayer instanceof BitmapLayer) {
+                        BitmapLayer bitmapLayer =  (BitmapLayer)parentLayer.currentLayer;
+                        bitmapLayer.mousePressed(e);
+                    }
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if(parentLayer.currentLayer != null) {
+                    if(parentLayer.currentLayer instanceof BitmapLayer) {
+                       BitmapLayer bitmapLayer =  (BitmapLayer)parentLayer.currentLayer;
+                       bitmapLayer.mouseReleased(e);
+                    }
+                }
+            }
+        } );
+
+        parentLayer.addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseDragged(MouseEvent e) {
+                if (parentLayer.currentLayer != null) {
+                    if (parentLayer.currentLayer instanceof BitmapLayer) {
+                        BitmapLayer bitmapLayer = (BitmapLayer) parentLayer.currentLayer;
+                        bitmapLayer.mouseDragged(e);
+                    }
+                }
+            }
+
+        });
+
+
         //region Split Pane Settup
         mainSP.setOrientation(JSplitPane.VERTICAL_SPLIT);
         mainSP.setDividerLocation(75);
