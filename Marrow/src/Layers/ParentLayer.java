@@ -74,6 +74,10 @@ public class ParentLayer extends Layer {
             setChildTo(layer);
         }
         children.add(layer);
+        if(layer instanceof BitmapLayer)
+        {
+            //((BitmapLayer) layer).bitmap.setSize(getWidth(),getHeight());
+        }
         //run the function that runs on child add (used for the layer organizer)
         onAddChild.accept(layer);
         layer.setOpaque(false);
@@ -108,9 +112,6 @@ public class ParentLayer extends Layer {
                 //draw the bitmap layer's image :3
                 BitmapLayer bitmapChild = (BitmapLayer)child;
                 AffineTransform testTransform = new AffineTransform();
-                
-                //double rotation = System.nanoTime()/10000000;
-                //testTransform.rotate(Math.toRadians(rotation));
 
                 graphics.drawImage(bitmapChild.drawnImage,testTransform,this);
                 //System.out.println(child.isCurrentLayer);
