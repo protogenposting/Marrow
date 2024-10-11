@@ -1,5 +1,6 @@
 package Layers;
 
+import Animation.AnimationDataStorage;
 import Main.Main;
 import Tools.ToolContainer;
 
@@ -19,20 +20,20 @@ public class ParentLayer extends Layer {
     Graphics2D graphics;
     Image image;
     ToolContainer toolContainer;
+    AnimationDataStorage animDataStorage = new AnimationDataStorage();
     public ChildLayer currentLayer;
-    public int keyFrameID;
 
-    public ParentLayer(ToolContainer toolContainer, int keyFrameID)
+
+    public ParentLayer(ToolContainer toolContainer, AnimationDataStorage animDataStorage)
     {
-        this.keyFrameID = keyFrameID;
+        this.animDataStorage = animDataStorage;
         this.toolContainer = toolContainer;
         addMouseListener(new MouseAdapter(){
             @Override
             public void mousePressed(MouseEvent e) {
                 System.out.println("Parent layer clicked");
                 if(currentLayer != null) {
-                    if(currentLayer instanceof BitmapLayer) {
-                        BitmapLayer bitmapLayer =  (BitmapLayer) currentLayer;
+                    if(currentLayer instanceof BitmapLayer bitmapLayer) {
                         bitmapLayer.mousePressed(e);
                     }
                 }
@@ -41,8 +42,7 @@ public class ParentLayer extends Layer {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if(currentLayer != null) {
-                    if(currentLayer instanceof BitmapLayer) {
-                        BitmapLayer bitmapLayer =  (BitmapLayer) currentLayer;
+                    if(currentLayer instanceof BitmapLayer bitmapLayer) {
                         bitmapLayer.mouseReleased(e);
                     }
                 }
@@ -52,8 +52,7 @@ public class ParentLayer extends Layer {
         addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent e) {
                 if (currentLayer != null) {
-                    if (currentLayer instanceof BitmapLayer) {
-                        BitmapLayer bitmapLayer = (BitmapLayer) currentLayer;
+                    if (currentLayer instanceof BitmapLayer bitmapLayer) {
                         bitmapLayer.mouseDragged(e);
                     }
                 }

@@ -3,8 +3,11 @@ package Animation;
 import javax.swing.*;
 
 public class Timeline extends JPanel {
-    public Timeline()
+
+    AnimationDataStorage animDataStorage = new AnimationDataStorage();
+
+    public Timeline(AnimationDataStorage animDataStorage)
     {
-        
+        this.animDataStorage = animDataStorage;
     }
 }
