@@ -241,7 +241,7 @@ public class Main {
         frame.getContentPane().add(mainSP);
 
         ToolContainer toolContainer = new ToolContainer();
-        ParentLayer parentLayer = new ParentLayer(toolContainer);
+        ParentLayer parentLayer = new ParentLayer(toolContainer, 1);
 
         parentLayer.setSize(800,400);
         parentLayer.setVisible(true);
@@ -330,7 +330,7 @@ public class Main {
             @Override
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode()==KeyEvent.VK_S){
-                    //saveLayers(parentLayer);
+                    saveLayers(parentLayer);
                     BitmapLayer layer = (BitmapLayer) parentLayer.getChildren().get(1);
                     ArrayList<ArrayList<Pixel>> bitmap = layer.bitmap.bitmap;
                     for (ArrayList<Pixel> x : bitmap) {
