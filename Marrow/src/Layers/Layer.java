@@ -22,8 +22,6 @@ public class Layer extends JPanel {
         return children;
     }
 
-    public int keyFrameID;
-
     public void addChild(ChildLayer layer)
     {
         children.add(layer);
