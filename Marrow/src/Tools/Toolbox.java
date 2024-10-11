@@ -15,6 +15,8 @@ public class Toolbox extends JPanel {
     JTextField setBrushSize = new JTextField("          1");
     JButton activateChange = new JButton("Submit");
 
+    final int drawSizeCap = 1000;
+
     /**
      * initializes the toolbox window
      */
@@ -73,9 +75,14 @@ public class Toolbox extends JPanel {
         this.add(activateChange);
         activateChange.setSize(200,120);
         activateChange.setVisible(true);
+
         activateChange.addActionListener(e -> {
             try{
                 int newDrawSize = Integer.parseInt(setBrushSize.getText());
+                if(newDrawSize > drawSizeCap)
+                {
+                    newDrawSize = drawSizeCap;
+                }
                 if (toolContainer.currentTool == paintBrush.tool) {
                     paintBrush.tool.drawSize = newDrawSize;
                     System.out.println("Paint Brush draw size is now " + paintBrush.tool.drawSize);

@@ -113,7 +113,7 @@ public class ParentLayer extends Layer {
                 BitmapLayer bitmapChild = (BitmapLayer)child;
                 AffineTransform currentTransform = new AffineTransform();
 
-                currentTransform.scale(0.1,0.1);
+                //currentTransform.scale(1,0.1);
 
                 graphics.drawImage(bitmapChild.drawnImage,currentTransform,this);
                 //System.out.println(child.isCurrentLayer);
