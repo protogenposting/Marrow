@@ -72,6 +72,10 @@ public class ParentLayer extends Layer {
             setChildTo(layer);
         }
         children.add(layer);
+        if(layer instanceof BitmapLayer)
+        {
+            //((BitmapLayer) layer).bitmap.setSize(getWidth(),getHeight());
+        }
         //run the function that runs on child add (used for the layer organizer)
         onAddChild.accept(layer);
         layer.setOpaque(false);

@@ -348,7 +348,7 @@ public class Main {
             @Override
             public void keyReleased(KeyEvent e) {}
         });
-
+        /*
         frame.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent componentEvent) {
                 int frameWidth = frame.getWidth();
@@ -368,7 +368,6 @@ public class Main {
 
                 ArrayList<ChildLayer> childrenArray = parentLayer.getChildren();
 
-                /*
 
                     for(child; child<array; child++){
 
@@ -383,7 +382,6 @@ public class Main {
 
                     }
 
-                 */
 
                 for (ChildLayer childLayer : childrenArray) {
 
@@ -401,6 +399,7 @@ public class Main {
                 System.out.println((newHeight) + " Height by " + (newWidth) + " Width");
             }
         });
+        */
         //region Split Pane Settup
         mainSP.setOrientation(JSplitPane.VERTICAL_SPLIT);
         mainSP.setDividerLocation(75);
