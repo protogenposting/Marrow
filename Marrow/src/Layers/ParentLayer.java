@@ -109,9 +109,11 @@ public class ParentLayer extends Layer {
             {
                 //draw the bitmap layer's image :3
                 BitmapLayer bitmapChild = (BitmapLayer)child;
-                AffineTransform testTransform = new AffineTransform();
+                AffineTransform currentTransform = new AffineTransform();
 
-                graphics.drawImage(bitmapChild.drawnImage,testTransform,this);
+                currentTransform.scale(0.1,0.1);
+
+                graphics.drawImage(bitmapChild.drawnImage,currentTransform,this);
                 //System.out.println(child.isCurrentLayer);
             }
         }
