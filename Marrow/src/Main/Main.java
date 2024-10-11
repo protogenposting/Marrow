@@ -179,7 +179,7 @@ public class Main {
     //endregion
 
     //region LOAD FUNCTIONS
-    public ArrayList<BitmapLayer> loadLayers(ToolContainer toolContainer) throws IOException {
+    public static ArrayList<BitmapLayer> loadLayers(ToolContainer toolContainer) throws IOException {
         File saveFile = new File(currentSaveDirectory + "/save.marrow");
         Scanner fileReader = new Scanner(saveFile);
 
@@ -228,7 +228,7 @@ public class Main {
      * @param layerName the name having its dashes removed
      * @return the layer name with the removed dashes
      */
-    private String removeDashes(String layerName){
+    private static String removeDashes(String layerName){
         StringBuilder returningName = new StringBuilder();
         boolean firstDashesPassed = false;
 
@@ -429,25 +429,43 @@ public class Main {
 
         //endregion
 
-        frame.setJMenuBar(createMenuBar(parentLayer));
+        frame.setJMenuBar(createMenuBar(parentLayer, toolContainer));
         //frame.setLocationByPlatform(true);
 
     }
 
-    static JMenuBar createMenuBar(ParentLayer parentLayer) {
+    static JMenuBar createMenuBar(ParentLayer parentLayer, ToolContainer toolContainer) {
         JMenuBar menuBar = new JMenuBar();
-        menuBar.add(createFileMenu(parentLayer));
+        menuBar.add(createFileMenu(parentLayer, toolContainer));
         menuBar.add(createEditMenu());
         return menuBar;
     }
 
-    static JMenu createFileMenu(ParentLayer parentLayer) {
+    static JMenu createFileMenu(ParentLayer parentLayer, ToolContainer toolContainer) {
         JMenu fileMenu = new JMenu("File");
         JMenuItem newItem = new JMenuItem("New");
         fileMenu.add(newItem);
         JMenuItem openItem = new JMenuItem("Open");
         fileMenu.add(openItem);
         JMenuItem saveItem = new JMenuItem("Save");
+
+        openItem.addActionListener(e -> {
+            try {
+                ArrayList<BitmapLayer> bitmapLayers = loadLayers(toolContainer);
+
+                for (BitmapLayer bitmapLayer : bitmapLayers) {
+                    parentLayer.addChild(bitmapLayer);
+                }
+                parentLayer.revalidate();
+                parentLayer.repaint();
+
+                System.out.println("load successful");
+            }
+            catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
         saveItem.addActionListener(e -> {
             saveLayers(parentLayer);
         });
