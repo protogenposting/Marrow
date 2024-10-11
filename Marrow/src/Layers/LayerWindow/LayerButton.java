@@ -15,8 +15,6 @@ public class LayerButton extends JButton
 
     public ParentLayer parentLayer;
 
-    //public
-
     public LayerButton(String name)
     {
         setText(name);
