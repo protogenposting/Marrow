@@ -24,22 +24,8 @@ public class LayerWindow extends JPanel {
 
         JPanel panel = new JPanel();
 
-        //region buttons!
-
-        JButton layerAdding = new JButton("Add Layer");
-
-        layerAdding.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                parentLayer.addChild(new BitmapLayer(toolContainer,"Big Gay Layer " + new Random().nextInt()));
-                revalidate();
-                repaint();
-            }
-        });
-
+        JButton layerAdding = getjButton(parentLayer, toolContainer);
         add(layerAdding);
-
-        //endregion
 
         panel.setLayout(new BoxLayout(panel,BoxLayout.PAGE_AXIS));
 
@@ -62,5 +48,19 @@ public class LayerWindow extends JPanel {
         };
 
         this.add(scrollPane);
+    }
+
+    private JButton getjButton(ParentLayer parentLayer, ToolContainer toolContainer) {
+        JButton layerAdding = new JButton("Add Layer");
+
+        layerAdding.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                parentLayer.addChild(new BitmapLayer(toolContainer,"Big Gay Layer " + new Random().nextInt()));
+                revalidate();
+                repaint();
+            }
+        });
+        return layerAdding;
     }
 }

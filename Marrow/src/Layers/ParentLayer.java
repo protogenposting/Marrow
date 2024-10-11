@@ -20,9 +20,11 @@ public class ParentLayer extends Layer {
     Image image;
     ToolContainer toolContainer;
     public ChildLayer currentLayer;
+    public int keyFrameID;
 
-    public ParentLayer(ToolContainer toolContainer)
+    public ParentLayer(ToolContainer toolContainer, int keyFrameID)
     {
+        this.keyFrameID = keyFrameID;
         this.toolContainer = toolContainer;
         addMouseListener(new MouseAdapter(){
             @Override

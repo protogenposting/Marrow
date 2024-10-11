@@ -30,16 +30,11 @@ public class Bitmap {
         setSize(image.getWidth(), image.getHeight());
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
-                Color color = new Color(image.getRGB(x, y));
                 temp = image.getRGB(x, y);
                 alpha = (temp & 0xFF000000) >>> 24;
                 red = (temp   & 0x00FF0000) >> 16;
                 green = (temp & 0x0000FF00) >> 8;
                 blue = temp & 0x000000FF;
-
-                if((red > 0 || green > 0 || blue > 0) || alpha > 0){
-                    System.out.println("has added non transparent pixel");
-                }
 
                 pixel = new Pixel(new RGBColor(red, green, blue, alpha));
                 addPixel(x, y, pixel);

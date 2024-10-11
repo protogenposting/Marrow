@@ -27,4 +27,6 @@ public class Layer extends JPanel {
         children.add(layer);
         onAddChild.accept(layer);
     }
+
+
 }
