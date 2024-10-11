@@ -48,6 +48,7 @@ public class Bitmap {
      * @param height height of the bitmap
      */
     public void setSize(int width, int height){
+        bitmap = new ArrayList<>();
         for (int x = 0; x < width; x++) {
             bitmap.add(new ArrayList<>());
             for (int y = 0; y < height; y++) {
