@@ -42,7 +42,8 @@ public class BitmapLayer extends ChildLayer {
         if(!this.bitmap.bitmap.isEmpty()){
             drawnImage = bitmap.toImage();
         }
-		
+
+        //this.bitmap.setSize(800,400);
     }
 
         //listener for mouse being pressed.
