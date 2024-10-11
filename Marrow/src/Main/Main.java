@@ -1,5 +1,7 @@
 package Main;
 
+import Animation.Timeline;
+import Bitmaps.Bitmap;
 import Bitmaps.Bitmap;
 import Animation.Timeline;
 import Bitmaps.Pixel;
@@ -399,7 +401,6 @@ public class Main {
                 System.out.println((newHeight) + " Height by " + (newWidth) + " Width");
             }
         });
-
         //region Split Pane Settup
         mainSP.setOrientation(JSplitPane.VERTICAL_SPLIT);
         mainSP.setDividerLocation(75);
