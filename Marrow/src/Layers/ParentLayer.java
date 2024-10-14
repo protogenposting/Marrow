@@ -73,15 +73,15 @@ public class ParentLayer extends Layer {
             setChildTo(layer);
         }
         children.add(layer);
-        if(layer instanceof BitmapLayer)
-        {
-            //((BitmapLayer) layer).bitmap.setSize(getWidth(),getHeight());
-        }
         //run the function that runs on child add (used for the layer organizer)
         onAddChild.accept(layer);
         layer.setOpaque(false);
         layer.parent = this;
-        layer.setSize(800,400);
+        layer.setSize(getWidth(),getHeight());
+        if(layer instanceof BitmapLayer)
+        {
+            ((BitmapLayer) layer).bitmap.setSize(getWidth(),getHeight());
+        }
     }
 
     protected void paintComponent(Graphics g) {
@@ -110,9 +110,21 @@ public class ParentLayer extends Layer {
             {
                 //draw the bitmap layer's image :3
                 BitmapLayer bitmapChild = (BitmapLayer)child;
-                AffineTransform testTransform = new AffineTransform();
+                AffineTransform currentTransform = new AffineTransform();
 
-                graphics.drawImage(bitmapChild.drawnImage,testTransform,this);
+                //currentTransform.scale(1,0.1);
+
+                if(bitmapChild == currentLayer) {
+                    graphics.drawRect(
+                            (int) bitmapChild.transform.x,
+                            (int) bitmapChild.transform.y,
+                            (int) (bitmapChild.transform.x + bitmapChild.getWidth() * bitmapChild.transform.scaleX),
+                            (int) (bitmapChild.transform.y + bitmapChild.getHeight() * bitmapChild.transform.scaleY)
+                    );
+                }
+
+
+                graphics.drawImage(bitmapChild.drawnImage, currentTransform, this);
                 //System.out.println(child.isCurrentLayer);
             }
         }
@@ -128,6 +140,7 @@ public class ParentLayer extends Layer {
         graphics.setPaint(Color.WHITE);
         //draw white on the entire draw area
         graphics.fillRect(0,0, getSize().width, getSize().height);
+
         graphics.setPaint(Color.black);
         repaint();
     }
