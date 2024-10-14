@@ -112,8 +112,7 @@ public class ParentLayer extends Layer {
                 BitmapLayer bitmapChild = (BitmapLayer)child;
                 AffineTransform currentTransform = new AffineTransform();
 
-                //currentTransform.scale(1,0.1);
-
+                //selection rectangle
                 if(bitmapChild == currentLayer) {
                     graphics.drawRect(
                             (int) bitmapChild.transform.x,
@@ -123,9 +122,16 @@ public class ParentLayer extends Layer {
                     );
                 }
 
+                // this section deals with actually animating!
+                if(animDataStorage.isInAnimateMode && animDataStorage.isPlaying)
+                {
+                    int currentFrame = animDataStorage.currentFrame;
 
+                    
+                }
+
+                //draw the image with the transform
                 graphics.drawImage(bitmapChild.drawnImage, currentTransform, this);
-                //System.out.println(child.isCurrentLayer);
             }
         }
 

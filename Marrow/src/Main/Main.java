@@ -257,6 +257,8 @@ public class Main {
 
         LayerWindow layerOrganization = new LayerWindow(parentLayer,toolContainer);
 
+        animDataStorage.setSize(240);
+
         Timeline timeline = new Timeline(animDataStorage);
 
         JColorChooser colorChooser = new JColorChooser();

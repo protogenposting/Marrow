@@ -9,10 +9,21 @@ public class Keyframe {
     public Layer targetLayer;
     public Transform2D transformModifier = new Transform2D();
 
-    Transform2D.KeyframableValue value = Transform2D.KeyframableValue.x;
+    public int frame = 0;
+
+    public boolean isActive = false;
+
+    Transform2D.KeyframeChannel channel = Transform2D.KeyframeChannel.x;
 
     public EaseType easing = EaseType.SINE;
 
+    /**
+     * allows you to get the value between 2 other values in percentage.
+     * @param a value 1
+     * @param b value 2
+     * @param percentage the amount between the 2 values
+     * @return the value between the 2
+     */
     public double valueBetweenPoints(double a, double b,double percentage)
     {
         double smaller;
