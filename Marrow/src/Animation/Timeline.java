@@ -4,13 +4,32 @@ import javax.swing.*;
 
 public class Timeline extends JPanel {
 
-    AnimationDataStorage animDataStorage = new AnimationDataStorage();
+    AnimationDataStorage animDataStorage;
     JButton playButton = new JButton("Play");
-    JButton animModeButton = new JButton("Animate");
+    JButton animModeButton = new JButton("Start Animating");
+
+    JSlider frameSlider = setUpSlider();
+    JLabel currentFrameLabel = new JLabel("Current Frame:");
+    JLabel maxFrameCountLabel = new JLabel("Max Frame Count:");
+    JLabel fpsLabel = new JLabel("Frames per Second:");
+
+    JTextField maxFrameCount = setUpMaxFrameCount();
+    JTextField framesPerSecond = setUpFramesPerSecond();
+    JTextField currentFrameTextField = setUpCurrentFrame();
 
     public Timeline(AnimationDataStorage animDataStorage)
     {
         this.animDataStorage = animDataStorage;
+
+        //yes the components are added in this specific order for a reason
+
+        this.add(fpsLabel);
+        this.add(framesPerSecond);
+
+        this.add(maxFrameCountLabel);
+        this.add(maxFrameCount);
+
+        //region button setup
         playButton.addActionListener(e -> playOrPause());
         animModeButton.addActionListener(e -> animateOnOrOff());
 
@@ -19,6 +38,117 @@ public class Timeline extends JPanel {
 
         this.add(playButton);
         this.add(animModeButton);
+        //endregion
+
+        this.add(frameSlider);
+        this.add(currentFrameLabel);
+        this.add(currentFrameTextField);
+    }
+
+    private JTextField setUpCurrentFrame(){
+        JTextField textField = new JTextField("0", 6);
+        textField.setVisible(true);
+
+        textField.addActionListener(e -> {
+            try{
+                animDataStorage.currentFrame = Integer.parseInt(textField.getText());
+                frameSlider.setValue(Integer.parseInt(textField.getText()));
+
+            } catch (NumberFormatException ex) {
+                textField.setText("ERROR");
+            }
+        });
+
+        return textField;
+    }
+
+    private JTextField setUpFramesPerSecond(){
+        JTextField textField = new JTextField("24", 4);
+        textField.setVisible(true);
+
+        textField.addActionListener(e -> {
+
+            int fps;
+
+            try{
+                fps = Integer.parseInt(textField.getText());
+                animDataStorage.framesPerSecond = fps;
+            }
+            catch (NumberFormatException ex) {
+                textField.setText("N/A");
+            }
+        });
+
+        return textField;
+    }
+
+    private JTextField setUpMaxFrameCount(){
+        JTextField textField = new JTextField("120", 6);
+        textField.setVisible(true);
+
+        textField.addActionListener(e -> {
+            int maxFrameCount;
+
+            try{
+                maxFrameCount = Integer.parseInt(textField.getText());
+                frameSlider.setMaximum(maxFrameCount);
+
+                setTickSpacingFromTextField(frameSlider);
+            }
+            catch (NumberFormatException ex) {
+                textField.setText("ERROR: ENTER A NUMBER");
+            }
+        });
+
+        return textField;
+    }
+
+    private JSlider setUpSlider(){
+        JSlider slider = new JSlider(0, 120, 0);
+
+        slider.setVisible(true);
+        slider.setPaintTrack(true);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+
+        int majorTickSpacing = setTickSpacing(slider.getMaximum(), 5);
+        int minorTickSpacing = setTickSpacing(slider.getMaximum(), 20);
+
+        slider.setMajorTickSpacing( majorTickSpacing );
+        slider.setMinorTickSpacing( minorTickSpacing );
+
+        slider.addChangeListener(e -> {
+
+            animDataStorage.currentFrame = slider.getValue();
+
+            String frameValue = String.valueOf(slider.getValue());
+            currentFrameTextField.setText(frameValue);
+        });
+
+        return slider;
+    }
+
+    private void setTickSpacingFromTextField(JSlider slider){
+        int majorTickSpacing = setTickSpacing(slider.getMaximum(), 5);
+        int minorTickSpacing = setTickSpacing(slider.getMaximum(), 20);
+
+        slider.setMajorTickSpacing( majorTickSpacing );
+        slider.setMinorTickSpacing( minorTickSpacing );
+    }
+
+    private int setTickSpacing(int maxSlideValue, int divider){
+        if (maxSlideValue > 200){
+            return maxSlideValue / (divider * 2);
+        }
+        else if (maxSlideValue > 20) {
+            return maxSlideValue / divider;
+        }
+        else if(maxSlideValue > 10){
+            return 2;
+        }
+        else {
+            return 1;
+        }
     }
 
     private void playOrPause(){
