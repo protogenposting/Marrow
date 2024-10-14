@@ -1,5 +1,6 @@
 package Main;
 
+import Animation.AnimationDataStorage;
 import Animation.Timeline;
 import Bitmaps.Bitmap;
 import Bitmaps.Bitmap;
@@ -28,7 +29,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Main {
-    //the main frame we will be drawing on
+    //region the main frame we will be drawing on
     public static JFrame frame = new JFrame("Marrow");
 
     static JSplitPane mainSP = new JSplitPane();
@@ -36,6 +37,8 @@ public class Main {
     static JSplitPane bottomScreenSPVert = new JSplitPane();
     static JSplitPane bottomScreenSPHor = new JSplitPane();
     //endregion
+
+    public static AnimationDataStorage animDataStorage = new AnimationDataStorage();
 
     public static String currentSaveDirectory = "MarrowSaves"; // change later on to be able to find the directory user saved it at
 
@@ -243,7 +246,7 @@ public class Main {
         frame.getContentPane().add(mainSP);
 
         ToolContainer toolContainer = new ToolContainer();
-        ParentLayer parentLayer = new ParentLayer(toolContainer, 1);
+        ParentLayer parentLayer = new ParentLayer(toolContainer, animDataStorage);
 
         parentLayer.setSize(800,400);
         parentLayer.setVisible(true);
@@ -254,7 +257,7 @@ public class Main {
 
         LayerWindow layerOrganization = new LayerWindow(parentLayer,toolContainer);
 
-        Timeline timeline = new Timeline();
+        Timeline timeline = new Timeline(animDataStorage);
 
         JColorChooser colorChooser = new JColorChooser();
 
