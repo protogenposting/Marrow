@@ -9,23 +9,10 @@ public class Keyframe {
     public Layer targetLayer;
     public Transform2D transformModifier = new Transform2D();
 
+    Transform2D.KeyframableValue value = Transform2D.KeyframableValue.x;
+
     public EaseType easing = EaseType.SINE;
 
-    public Transform2D getInBetweenTransform(double percentage)
-    {
-        percentage = Math.clamp(percentage,0,1);
-        switch(easing)
-        {
-            case EaseType.SINE:
-                percentage = Math.sin((percentage/2)*Math.PI);
-            default:
-                break;
-        }
-
-        Transform2D layerTransform = targetLayer.transform;
-
-        return layerTransform;
-    }
     public double valueBetweenPoints(double a, double b,double percentage)
     {
         double smaller;
