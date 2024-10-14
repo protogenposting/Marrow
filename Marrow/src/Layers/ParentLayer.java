@@ -12,6 +12,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The layer on top of the layer hierarchy. Contains all other layers and draws them on a canvas.
@@ -129,12 +131,48 @@ public class ParentLayer extends Layer {
                 {
                     int currentFrame = animDataStorage.currentFrame;
 
-                    int channel = 0;
+                    ArrayList<Keyframe> keyframes = animDataStorage.keyframes;
 
-                    for (int keyframe = 0; keyframe < animDataStorage.keyframes.size(); keyframe++)
+                    ArrayList<Boolean> channels = animDataStorage.channels;
+
+                    int[] lastKeyframes = new int[channels.size()];
+
+                    Arrays.fill(lastKeyframes,-1);
+
+                    int[] nextKeyframes = new int[channels.size()];
+
+                    Arrays.fill(nextKeyframes,-1);
+
+                    //get next and last keyframes
+                    for (int keyframe = 0; keyframe < keyframes.size(); keyframe++)
                     {
+                        Keyframe currentKeyframe = keyframes.get(i);
 
+                        if(!currentKeyframe.isActive)
+                        {
+                            continue;
+                        }
+                        for (int channel = 0; channel < channels.size(); channel++) {
+                            if (i >= currentFrame)
+                            {
+                                lastKeyframes[channel] = i;
+                            }
+                            if (i < currentFrame && nextKeyframes[channel] == -1)
+                            {
+                                nextKeyframes[channel] = i;
+                            }
+                        }
                     }
+
+                    for (int channel = 0; channel < channels.size(); channel++) {
+                        switch (channel)
+                        {
+                            case Transform2D.TransformChannel.x.ordinal():
+                                bitmapChild.bitmap.shift();
+                                bitmapChild.drawnImage = bitmapChild.bitmap.toImage();
+                        }
+                    }
+
                 }
 
                 //draw the image with the transform

@@ -1,7 +1,6 @@
 package Main;
 
-import Animation.AnimationDataStorage;
-import Animation.Timeline;
+import Animation.*;
 import Bitmaps.Bitmap;
 import Bitmaps.Bitmap;
 import Animation.Timeline;

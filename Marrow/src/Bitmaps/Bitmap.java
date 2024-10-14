@@ -57,6 +57,15 @@ public class Bitmap {
         }
     }
 
+    public void shift(int x, int y)
+    {
+        for (int xPointer = 0; xPointer < bitmap.size(); xPointer++) {
+            for (int yPointer = 0; yPointer < bitmap.get(xPointer).size(); yPointer++) {
+                //make this work I'm fucking done for today
+            }
+        }
+    }
+
     /**
      * adds / sets a pixel at the specified coordinate
      * @param x the x coordinate

@@ -2,8 +2,6 @@ package Animation;
 
 import Layers.Layer;
 
-import javax.xml.crypto.dsig.TransformService;
-
 /**
  * Keyframes are used to save the state of a certain layer's properties
  */
@@ -12,13 +10,21 @@ public class Keyframe {
 
     public Transform2D transformModifier = new Transform2D();
 
-    public int frame = 0;
-
     public boolean isActive = false;
 
     public int channel = 0;
 
-    public EaseType easing = EaseType.SINE;
+    public EaseType easing = EaseType.NONE;
+
+    public Keyframe()
+    {
+
+    }
+
+    public Keyframe(Transform2D transformModifier)
+    {
+        this.transformModifier = transformModifier;
+    }
 
     /**
      * allows you to get the value between 2 other values in percentage.
