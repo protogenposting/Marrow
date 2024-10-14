@@ -9,4 +9,13 @@ public class Transform2D {
     public double rotationCenterX = 0;
     public double rotationCenterY = 0;
     public double shear = 0;
+
+    public static enum KeyframableValue{
+        x,
+        y,
+        scaleX,
+        scaleY,
+        rotation,
+        shear,
+    }
 }
