@@ -1,6 +1,7 @@
 package Layers.LayerWindow;
 
 import Layers.BitmapLayer;
+import Layers.ChildLayer;
 import Layers.Layer;
 import Layers.ParentLayer;
 import Tools.ToolContainer;
@@ -14,38 +15,42 @@ import java.util.Random;
 
 public class LayerWindow extends JPanel {
     Layer parentLayer;
+    static JPanel innerPanel = new JPanel();
 
-    public LayerWindow(ParentLayer parentLayer, ToolContainer toolContainer)
-    {
+    public LayerWindow(ParentLayer parentLayer, ToolContainer toolContainer) {
+
         this.setVisible(true);
         this.setSize(256,768);
         this.parentLayer = parentLayer;
         this.setLayout(new FlowLayout());
 
-        JPanel panel = new JPanel();
+        JPanel innerPanel = new JPanel();
 
         JButton layerAdding = getjButton(parentLayer, toolContainer);
         add(layerAdding);
 
-        panel.setLayout(new BoxLayout(panel,BoxLayout.PAGE_AXIS));
+        innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.PAGE_AXIS));
 
         JScrollPane scrollPane = new JScrollPane();
 
-        scrollPane.setViewportView(panel);
+        scrollPane.setViewportView(innerPanel);
 
         scrollPane.setPreferredSize(new Dimension(200,300));
 
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        parentLayer.onAddChild = (a) -> {
-            LayerButton layerButton = new LayerButton(a.name);
+        //region PARENT LAYER REFERENCE LAYER
+        JButton parentLayerButton = new JButton("Parent Layer");
 
-            layerButton.layer = a;
+        parentLayerButton.addActionListener(e -> {
+            parentLayer.currentLayer = null;
+        });
 
-            layerButton.parentLayer = parentLayer;
+        innerPanel.add(parentLayerButton);
 
-            panel.add(layerButton);
-        };
+        //end region
+
+
 
         this.add(scrollPane);
     }
@@ -56,11 +61,34 @@ public class LayerWindow extends JPanel {
         layerAdding.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                parentLayer.addChild(new BitmapLayer(toolContainer,"Big Gay Layer " + new Random().nextInt()));
+                if (parentLayer.currentLayer != null) {
+                    parentLayer.currentLayer.addChild(new BitmapLayer(toolContainer,  parentLayer.currentLayer.name + "'s Layer " +
+                                        parentLayer.currentLayer.getChildren().size() + "                              ."
+                                        + new Random().nextInt()));
+
+
+                }else{
+                    parentLayer.addChild(new BitmapLayer(toolContainer,  "Layer " +
+                            parentLayer.getChildren().size() + "                              ."
+                            + new Random().nextInt()));
+                }
+
+                ChildLayer newChild = parentLayer.getChildren().get(parentLayer.getChildren().size() - 1);
+
+                LayerButton layerButton = new LayerButton(newChild.name);
+
+                layerButton.layer = newChild;
+
+                layerButton.parentLayer = parentLayer;
+
+                innerPanel.add(layerButton);
+
                 revalidate();
                 repaint();
             }
         });
         return layerAdding;
     }
+
+
 }

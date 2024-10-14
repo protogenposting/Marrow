@@ -35,7 +35,7 @@ public class ParentLayer extends Layer {
                         BitmapLayer bitmapLayer =  (BitmapLayer) currentLayer;
                         bitmapLayer.mousePressed(e);
                     }
-                }
+                }else{System.out.println("Add Layer to Paint");}
             }
 
             @Override
@@ -45,7 +45,7 @@ public class ParentLayer extends Layer {
                         BitmapLayer bitmapLayer =  (BitmapLayer) currentLayer;
                         bitmapLayer.mouseReleased(e);
                     }
-                }
+                }else{System.out.println("Add Layer to Paint");}
             }
         } );
 
@@ -56,7 +56,7 @@ public class ParentLayer extends Layer {
                         BitmapLayer bitmapLayer = (BitmapLayer) currentLayer;
                         bitmapLayer.mouseDragged(e);
                     }
-                }
+                }else{System.out.println("Add Layer to Paint");}
             }
 
         });
@@ -78,11 +78,6 @@ public class ParentLayer extends Layer {
         onAddChild.accept(layer);
         layer.setOpaque(false);
         layer.parent = this;
-        layer.setSize(getWidth(),getHeight());
-        if(layer instanceof BitmapLayer)
-        {
-            ((BitmapLayer) layer).bitmap.setSize(getWidth(),getHeight());
-        }
     }
 
     protected void paintComponent(Graphics g) {
@@ -171,5 +166,10 @@ public class ParentLayer extends Layer {
         }
         layer.isCurrentLayer = true;
         this.add(layer);
+        layer.setSize(getWidth(),getHeight());
+        if(layer instanceof BitmapLayer)
+        {
+            ((BitmapLayer) layer).bitmap.setSize(getWidth(),getHeight());
+        }
     }
 }
