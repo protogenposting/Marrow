@@ -1,6 +1,8 @@
 package Layers;
 
 import Animation.AnimationDataStorage;
+import Animation.Keyframe;
+import Animation.Transform2D;
 import Main.Main;
 import Tools.ToolContainer;
 
@@ -127,7 +129,12 @@ public class ParentLayer extends Layer {
                 {
                     int currentFrame = animDataStorage.currentFrame;
 
-                    
+                    int channel = 0;
+
+                    for (int keyframe = 0; keyframe < animDataStorage.keyframes.size(); keyframe++)
+                    {
+
+                    }
                 }
 
                 //draw the image with the transform

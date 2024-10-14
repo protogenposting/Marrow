@@ -9,16 +9,4 @@ public class Transform2D {
     public double rotationCenterX = 0;
     public double rotationCenterY = 0;
     public double shear = 0;
-
-    /**
-     * this will let us select a value for a keyframe to affect
-     */
-    public static enum KeyframeChannel {
-        x,
-        y,
-        scaleX,
-        scaleY,
-        rotation,
-        shear,
-    }
 }

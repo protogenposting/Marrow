@@ -11,6 +11,7 @@ public class AnimationDataStorage {
     public boolean isPlaying = false;
     public int fps = 24;
     public ArrayList<Keyframe> keyframes;
+    public ArrayList<String> channels = new ArrayList<>();
 
     /**
      * set size lets you set the length of your animation in frames.

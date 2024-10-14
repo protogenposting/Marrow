@@ -7,13 +7,14 @@ import Layers.Layer;
  */
 public class Keyframe {
     public Layer targetLayer;
+
     public Transform2D transformModifier = new Transform2D();
 
     public int frame = 0;
 
     public boolean isActive = false;
 
-    Transform2D.KeyframeChannel channel = Transform2D.KeyframeChannel.x;
+    public int channel = 0;
 
     public EaseType easing = EaseType.SINE;
 
