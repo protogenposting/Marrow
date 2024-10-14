@@ -8,6 +8,7 @@ import java.util.ArrayList;
  */
 public class AnimationDataStorage {
     public int currentFrame = 0;
+    public int framesPerSecond = 24;
     public boolean isInAnimateMode = false;
     public boolean isPlaying = false;
     public int fps = 24;
