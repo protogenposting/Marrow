@@ -8,6 +8,7 @@ import Main.Main;
 import Tools.ToolContainer;
 
 import javax.swing.*;
+import javax.xml.crypto.dsig.Transform;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -169,7 +170,17 @@ public class ParentLayer extends Layer {
                         }
                     }
 
+                    int channelID = 0;
                     for (TransformChannels channel : TransformChannels.values()) {
+                        if(!channels.get(channelID))
+                        {
+                            continue;
+                        }
+
+                        Keyframe last = keyframes.get(lastKeyframes[channelID]);
+
+                        Keyframe next = keyframes.get(nextKeyframes[channelID]);
+
                         switch (channel)
                         {
                             case TransformChannels.x:
@@ -177,6 +188,7 @@ public class ParentLayer extends Layer {
                             case TransformChannels.y:
                                 currentTransform.setToTranslation(10,10);
                         }
+                        channelID++;
                     }
 
                 }
