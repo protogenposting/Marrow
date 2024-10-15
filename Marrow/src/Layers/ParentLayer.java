@@ -109,85 +109,6 @@ public class ParentLayer extends Layer {
             childrenPainting(everyChildLayer);
         });
 
-                //selection rectangle
-                if(bitmapChild == currentLayer) {
-                    graphics.drawRect(
-                            (int) bitmapChild.transform.x,
-                            (int) bitmapChild.transform.y,
-                            (int) (bitmapChild.transform.x + bitmapChild.getWidth() * bitmapChild.transform.scaleX),
-                            (int) (bitmapChild.transform.y + bitmapChild.getHeight() * bitmapChild.transform.scaleY)
-                    );
-                }
-
-                // this section deals with actually animating!
-                if(animDataStorage.isInAnimateMode && animDataStorage.isPlaying)
-                {
-                    int currentFrame = animDataStorage.currentFrame;
-
-                    ArrayList<Keyframe> keyframes = animDataStorage.keyframes;
-
-                    ArrayList<Boolean> channels = animDataStorage.channels;
-
-                    int[] lastKeyframes = new int[channels.size()];
-
-                    Arrays.fill(lastKeyframes,-1);
-
-                    int[] nextKeyframes = new int[channels.size()];
-
-                    Arrays.fill(nextKeyframes,-1);
-
-                    //get next and last keyframes
-                    for (int keyframe = 0; keyframe < keyframes.size(); keyframe++)
-                    {
-                        Keyframe currentKeyframe = keyframes.get(i);
-
-                        if(!currentKeyframe.isActive)
-                        {
-                            continue;
-                        }
-                        for (int channel = 0; channel < channels.size(); channel++) {
-                            if(!channels.get(channel))
-                            {
-                                continue;
-                            }
-                            if (i >= currentFrame)
-                            {
-                                lastKeyframes[channel] = i;
-                            }
-                            if (i < currentFrame && nextKeyframes[channel] == -1)
-                            {
-                                nextKeyframes[channel] = i;
-                            }
-                        }
-                    }
-
-                    int channelID = 0;
-                    for (TransformChannels channel : TransformChannels.values()) {
-                        if(!channels.get(channelID))
-                        {
-                            continue;
-                        }
-
-                        Keyframe last = keyframes.get(lastKeyframes[channelID]);
-
-                        Keyframe next = keyframes.get(nextKeyframes[channelID]);
-
-                        switch (channel)
-                        {
-                            case TransformChannels.x:
-                                currentTransform.setToTranslation(10,10);
-                            case TransformChannels.y:
-                                currentTransform.setToTranslation(10,10);
-                        }
-                        channelID++;
-                    }
-
-                }
-
-
-
-                //draw the image with the transform
-                graphics.drawImage(bitmapChild.drawnImage,currentTransform, this);
 
         graphicsImported.drawImage(image,0,0,null);
     }
@@ -206,15 +127,16 @@ public class ParentLayer extends Layer {
         }
     }
 
-    private void childrenPainting(ChildLayer child){
-        if(child.getClass().equals(BitmapLayer.class)) {
+    private void childrenPainting(ChildLayer child) {
+        if (child.getClass().equals(BitmapLayer.class)) {
             //draw the bitmap layer's image :3
-            BitmapLayer bitmapChild = (BitmapLayer)child;
+            BitmapLayer bitmapChild = (BitmapLayer) child;
             AffineTransform currentTransform = new AffineTransform();
 
             //currentTransform.scale(1,0.1);
 
-            if(bitmapChild == currentLayer) {
+            //selection rectangle
+            if (bitmapChild == currentLayer) {
                 graphics.drawRect(
                         (int) bitmapChild.transform.x,
                         (int) bitmapChild.transform.y,
@@ -223,17 +145,74 @@ public class ParentLayer extends Layer {
                 );
             }
 
+            // this section deals with actually animating!
+            if (animDataStorage.isInAnimateMode && animDataStorage.isPlaying) {
+                int currentFrame = animDataStorage.currentFrame;
 
+                ArrayList<Keyframe> keyframes = animDataStorage.keyframes;
+
+                ArrayList<Boolean> channels = animDataStorage.channels;
+
+                int[] lastKeyframes = new int[channels.size()];
+
+                Arrays.fill(lastKeyframes, -1);
+
+                int[] nextKeyframes = new int[channels.size()];
+
+                Arrays.fill(nextKeyframes, -1);
+
+                //get next and last keyframes
+                for (int keyframe = 0; keyframe < keyframes.size(); keyframe++) {
+                    Keyframe currentKeyframe = keyframes.get(keyframe);
+
+                    if (!currentKeyframe.isActive) {
+                        continue;
+                    }
+                    for (int channel = 0; channel < channels.size(); channel++) {
+                        if (!channels.get(channel)) {
+                            continue;
+                        }
+                        if (keyframe >= currentFrame) {
+                            lastKeyframes[channel] = keyframe;
+                        }
+                        if (keyframe < currentFrame && nextKeyframes[channel] == -1) {
+                            nextKeyframes[channel] = keyframe;
+                        }
+                    }
+                }
+
+                int channelID = 0;
+                for (TransformChannels channel : TransformChannels.values()) {
+                    if (!channels.get(channelID)) {
+                        continue;
+                    }
+
+                    Keyframe last = keyframes.get(lastKeyframes[channelID]);
+
+                    Keyframe next = keyframes.get(nextKeyframes[channelID]);
+
+                    switch (channel) {
+                        case TransformChannels.x:
+                            currentTransform.setToTranslation(10, 10);
+                        case TransformChannels.y:
+                            currentTransform.setToTranslation(10, 10);
+                    }
+                    channelID++;
+                }
+
+            }
+
+
+            //draw the image with the transform
             graphics.drawImage(bitmapChild.drawnImage, currentTransform, this);
-            //System.out.println(child.isCurrentLayer);
+
         }
     }
 
     /**
      * clears the entire window with white
      */
-    public void clear()
-    {
+    public void clear() {
         graphics.setPaint(Color.WHITE);
         //draw white on the entire draw area
         graphics.fillRect(0,0, getSize().width, getSize().height);
@@ -246,8 +225,7 @@ public class ParentLayer extends Layer {
      * use this to get the image of the layer, which is basically all the layers combined
      * @return returns the image
      */
-    public Image getImage()
-    {
+    public Image getImage() {
         return image;
     }
 
@@ -257,8 +235,7 @@ public class ParentLayer extends Layer {
      */
     public void setChildTo(ChildLayer layer) {
         currentLayer = layer;
-        for(int i = 0; i < children.size(); i++)
-        {
+        for(int i = 0; i < children.size(); i++) {
             ChildLayer child = children.get(i);
 
             child.isCurrentLayer = currentLayer == child;
@@ -268,8 +245,7 @@ public class ParentLayer extends Layer {
         layer.isCurrentLayer = true;
         this.add(layer);
         layer.setSize(getWidth(),getHeight());
-        if(layer instanceof BitmapLayer)
-        {
+        if(layer instanceof BitmapLayer) {
             ((BitmapLayer) layer).bitmap.setSize(getWidth(),getHeight());
         }
     }
