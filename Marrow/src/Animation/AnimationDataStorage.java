@@ -1,6 +1,14 @@
 package Animation;
 
+import Layers.ParentLayer;
+
 import java.util.ArrayList;
+
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Animation Data Storage lets us transfer data between anything that uses animation.<br>
@@ -11,14 +19,29 @@ public class AnimationDataStorage {
     public int framesPerSecond = 24;
     public boolean isInAnimateMode = false;
     public boolean isPlaying = false;
-    public int fps = 24;
-    public ArrayList<Keyframe> keyframes;
-    public ArrayList<Boolean> channels = new ArrayList<>();
+    public ParentLayer parentLayer;
+    Timer timer = new Timer();
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public AnimationDataStorage() {
-        for (int i = 0; i < TransformChannels.values().length; i++) {
-            channels.add(false);
-        }
+        Runnable yourRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if(isPlaying)
+                {
+                    currentFrame ++;
+                    parentLayer.repaint();
+                    System.out.println("aa");
+                    if(currentFrame >= 24)
+                    {
+                        currentFrame = 0;
+                    }
+                }
+            }
+        };
+        int initialDelay = 0;
+        int delay = 1000/framesPerSecond;
+        scheduler.scheduleWithFixedDelay(yourRunnable, initialDelay, delay, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -27,9 +50,9 @@ public class AnimationDataStorage {
      * @param size the length in frames.
      */
     public void setSize(int size) {
-        keyframes = new ArrayList<>();
+        /*keyframes = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             keyframes.add(new Keyframe());
-        }
+        }*/
     }
 }

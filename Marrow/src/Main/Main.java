@@ -35,9 +35,6 @@ public class Main {
     static JSplitPane topScreenSP = new JSplitPane();
     static JSplitPane bottomScreenSPVert = new JSplitPane();
     static JSplitPane bottomScreenSPHor = new JSplitPane();
-    //endregion
-
-    public static AnimationDataStorage animDataStorage = new AnimationDataStorage();
 
     public static String currentSaveDirectory = "MarrowSaves"; // change later on to be able to find the directory user saved it at
 
@@ -245,7 +242,12 @@ public class Main {
         frame.getContentPane().add(mainSP);
 
         ToolContainer toolContainer = new ToolContainer();
+
+        AnimationDataStorage animDataStorage = new AnimationDataStorage();
+
         ParentLayer parentLayer = new ParentLayer(toolContainer, animDataStorage);
+
+        animDataStorage.parentLayer = parentLayer;
 
         parentLayer.setSize(800,400);
         parentLayer.setVisible(true);
