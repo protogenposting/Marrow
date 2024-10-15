@@ -15,7 +15,7 @@ public class Layer extends JPanel {
 
     public Transform2D transform = new Transform2D();
 
-    public Consumer<ChildLayer> onAddChild = (a) -> {};
+    public Consumer<ChildLayer> onAddChild = (newChild) -> {};
 
     public ArrayList<ChildLayer> getChildren()
     {

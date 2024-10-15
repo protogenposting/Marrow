@@ -9,6 +9,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
+import java.util.function.Consumer;
 
 /**
  * The layer on top of the layer hierarchy. Contains all other layers and draws them on a canvas.
@@ -80,7 +82,7 @@ public class ParentLayer extends Layer {
         layer.parent = this;
     }
 
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics graphicsImported) {
         //if the image is null then make some graphics and stuff
         if(image==null)
         {
@@ -98,34 +100,49 @@ public class ParentLayer extends Layer {
         //clear the image again
         clear();
         //RENDERING
-        for(int i = 0; i < children.size(); i++)
-        {
-            ChildLayer child = children.get(i);
 
-            if(child.getClass().equals(BitmapLayer.class))
-            {
-                //draw the bitmap layer's image :3
-                BitmapLayer bitmapChild = (BitmapLayer)child;
-                AffineTransform currentTransform = new AffineTransform();
+        loopThroughChildren(children,(everyChildLayer) -> {
+            childrenPainting(everyChildLayer);
+        });
 
-                //currentTransform.scale(1,0.1);
+        graphicsImported.drawImage(image,0,0,null);
+    }
 
-                if(bitmapChild == currentLayer) {
-                    graphics.drawRect(
-                            (int) bitmapChild.transform.x,
-                            (int) bitmapChild.transform.y,
-                            (int) (bitmapChild.transform.x + bitmapChild.getWidth() * bitmapChild.transform.scaleX),
-                            (int) (bitmapChild.transform.y + bitmapChild.getHeight() * bitmapChild.transform.scaleY)
-                    );
-                }
+    private void loopThroughChildren(ArrayList<ChildLayer> childrenArray, Consumer <ChildLayer> importedFunction){
+        ChildLayer child;
+        for(int chuldNum = 0; chuldNum < childrenArray.size(); chuldNum++) {
+            child = children.get(chuldNum);
 
-
-                graphics.drawImage(bitmapChild.drawnImage, currentTransform, this);
-                //System.out.println(child.isCurrentLayer);
+            if (!child.getChildren().isEmpty()){
+                loopThroughChildren(child.getChildren(), importedFunction);
             }
-        }
 
-        g.drawImage(image,0,0,null);
+            importedFunction.accept(child);
+
+        }
+    }
+
+    private void childrenPainting(ChildLayer child){
+        if(child.getClass().equals(BitmapLayer.class)) {
+            //draw the bitmap layer's image :3
+            BitmapLayer bitmapChild = (BitmapLayer)child;
+            AffineTransform currentTransform = new AffineTransform();
+
+            //currentTransform.scale(1,0.1);
+
+            if(bitmapChild == currentLayer) {
+                graphics.drawRect(
+                        (int) bitmapChild.transform.x,
+                        (int) bitmapChild.transform.y,
+                        (int) (bitmapChild.transform.x + bitmapChild.getWidth() * bitmapChild.transform.scaleX),
+                        (int) (bitmapChild.transform.y + bitmapChild.getHeight() * bitmapChild.transform.scaleY)
+                );
+            }
+
+
+            graphics.drawImage(bitmapChild.drawnImage, currentTransform, this);
+            //System.out.println(child.isCurrentLayer);
+        }
     }
 
     /**
