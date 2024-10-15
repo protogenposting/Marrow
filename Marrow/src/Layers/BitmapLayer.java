@@ -1,6 +1,7 @@
 package Layers;
 
 import Animation.Keyframe;
+import Animation.TransformChannels;
 import Bitmaps.Bitmap;
 import Bitmaps.RGBColor;
 import Tools.Tool;
@@ -11,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 /**
  * This is where the user draws images as well as rendering images
@@ -24,34 +26,42 @@ public class BitmapLayer extends ChildLayer {
 
     public Bitmap bitmap;
 
-    public RGBColor currentColor = new RGBColor(0,0,0,255);
+    public RGBColor currentColor = new RGBColor(0, 0, 0, 255);
 
     public BufferedImage drawnImage;
 
-    public BitmapLayer(ToolContainer toolContainer,String name) {
+    public BitmapLayer(ToolContainer toolContainer, String name) {
         this(toolContainer, name, new Bitmap());
 
         //TEST CODE FOR KEYFRAMES
 
-        Keyframe frame1 = new Keyframe();
+        Keyframe frame1 = new Keyframe(true);
 
         frame1.value = 0;
 
-        Keyframe frame2 = new Keyframe();
+        Keyframe frame2 = new Keyframe(true);
 
-        frame2.value = 1;
+        frame2.value = 100;
 
-        Keyframe frame3 = new Keyframe();
+        Keyframe frame3 = new Keyframe(true);
 
         frame3.value = 0;
 
-        keyframes.set(0,frame1);
+        setSize(24);
 
-        keyframes.set(12,frame2);
+        keyframes.set(0, frame1);
 
-        keyframes.set(24,frame3);
+        keyframes.set(12, frame2);
 
-        bitmap.setSize(800,400);
+        keyframes.set(23, frame3);
+
+        for (int i = 0; i < TransformChannels.values().length; i++) {
+            channels.add(false);
+        }
+
+        channels.set(0,true);
+
+        bitmap.setSize(800, 400);
     }
 
     public BitmapLayer(ToolContainer toolContainer, String name, Bitmap bitmap) {
@@ -61,56 +71,55 @@ public class BitmapLayer extends ChildLayer {
         this.name = name;
 
         this.bitmap = bitmap;
-        if(!this.bitmap.bitmap.isEmpty()){
+        if (!this.bitmap.bitmap.isEmpty()) {
             drawnImage = bitmap.toImage();
         }
 
         //this.bitmap.setSize(800,400);
     }
 
-        //listener for mouse being pressed.
-//addMouseListener(new MouseAdapter() {
-           // @Override
-            public void mousePressed(MouseEvent e) {
-                //save the old coords
-                oldX = e.getX();
-                oldY = e.getY();
-                if(isCurrentLayer) {
-                    Tool currentTool = toolContainer.currentTool;
-                    currentTool.onPress(oldX, oldY, bitmap);
-                }
-                System.out.println(toolContainer.currentTool.toString());
-                drawnImage = bitmap.toImage();
-                parent.repaint();
-            }
-           // @Override
-            public void mouseReleased(MouseEvent e) {
-                currentX = e.getX();
-                currentY = e.getY();
-                if(isCurrentLayer) {
-                    Tool currentTool = toolContainer.currentTool;
-                    currentTool.onRelease(oldX, oldY, currentX, currentY, bitmap);
-                }
-                drawnImage = bitmap.toImage();
-                parent.repaint();
-            }
-      //  });
-        //listened for mouse movement
-       // addMouseMotionListener(new MouseMotionAdapter() {
-        //    @Override
-            public void mouseDragged(MouseEvent e) {
-                currentX = e.getX();
-                currentY = e.getY();
-                //draw some lines
-                if(isCurrentLayer) {
-                    Tool currentTool = toolContainer.currentTool;
-                    currentTool.onDrag(oldX,oldY,currentX,currentY,bitmap);
-                }
-                oldX = currentX;
-                oldY = currentY;
-                drawnImage = bitmap.toImage();
-                parent.repaint();
-            }
-       // });
+    public void mousePressed(MouseEvent e) {
+        //save the old coords
+        oldX = e.getX();
+        oldY = e.getY();
+        if (isCurrentLayer) {
+            Tool currentTool = toolContainer.currentTool;
+            currentTool.onPress(oldX, oldY, bitmap);
+        }
+        System.out.println(toolContainer.currentTool.toString());
+        drawnImage = bitmap.toImage();
+        parent.repaint();
+    }
 
+    public void mouseReleased(MouseEvent e) {
+        currentX = e.getX();
+        currentY = e.getY();
+        if (isCurrentLayer) {
+            Tool currentTool = toolContainer.currentTool;
+            currentTool.onRelease(oldX, oldY, currentX, currentY, bitmap);
+        }
+        drawnImage = bitmap.toImage();
+        parent.repaint();
+    }
+
+    public void mouseDragged(MouseEvent e) {
+        currentX = e.getX();
+        currentY = e.getY();
+        //draw some lines
+        if (isCurrentLayer) {
+            Tool currentTool = toolContainer.currentTool;
+            currentTool.onDrag(oldX, oldY, currentX, currentY, bitmap);
+        }
+        oldX = currentX;
+        oldY = currentY;
+        drawnImage = bitmap.toImage();
+        parent.repaint();
+    }
+
+    public void setSize(int size) {
+        keyframes = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            keyframes.add(new Keyframe());
+        }
+    }
 }

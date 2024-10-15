@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Animation Data Storage lets us transfer data between anything that uses animation.<br>
@@ -18,18 +21,27 @@ public class AnimationDataStorage {
     public boolean isPlaying = false;
     public ParentLayer parentLayer;
     Timer timer = new Timer();
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public AnimationDataStorage() {
-        timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if(isPlaying)
+        Runnable yourRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if(isPlaying)
+                {
+                    currentFrame ++;
+                    parentLayer.repaint();
+                    System.out.println("aa");
+                    if(currentFrame >= 24)
                     {
-                        currentFrame ++;
+                        currentFrame = 0;
                     }
                 }
-            },
-            1000/framesPerSecond);
+            }
+        };
+        int initialDelay = 0;
+        int delay = 1000/framesPerSecond;
+        scheduler.scheduleWithFixedDelay(yourRunnable, initialDelay, delay, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -38,9 +50,9 @@ public class AnimationDataStorage {
      * @param size the length in frames.
      */
     public void setSize(int size) {
-        keyframes = new ArrayList<>();9
+        /*keyframes = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             keyframes.add(new Keyframe());
-        }
+        }*/
     }
 }

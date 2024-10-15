@@ -23,7 +23,7 @@ public class Layer extends JPanel {
         return children;
     }
 
-    public ArrayList<Keyframe> keyframes;
+    public ArrayList<Keyframe> keyframes = new ArrayList<>();
 
     public ArrayList<Boolean> channels = new ArrayList<>();
 

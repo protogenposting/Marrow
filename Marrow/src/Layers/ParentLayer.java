@@ -34,37 +34,6 @@ public class ParentLayer extends Layer {
     {
         this.animDataStorage = animDataStorage;
         this.toolContainer = toolContainer;
-        addMouseListener(new MouseAdapter(){
-            @Override
-            public void mousePressed(MouseEvent e) {
-                System.out.println("Parent layer clicked");
-                if(currentLayer != null) {
-                    if(currentLayer instanceof BitmapLayer bitmapLayer) {
-                        bitmapLayer.mousePressed(e);
-                    }
-                }
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                if(currentLayer != null) {
-                    if(currentLayer instanceof BitmapLayer bitmapLayer) {
-                        bitmapLayer.mouseReleased(e);
-                    }
-                }
-            }
-        } );
-
-        addMouseMotionListener(new MouseMotionAdapter() {
-            public void mouseDragged(MouseEvent e) {
-                if (currentLayer != null) {
-                    if (currentLayer instanceof BitmapLayer bitmapLayer) {
-                        bitmapLayer.mouseDragged(e);
-                    }
-                }
-            }
-
-        });
     }
 
     /**
@@ -133,9 +102,9 @@ public class ParentLayer extends Layer {
                 {
                     int currentFrame = animDataStorage.currentFrame;
 
-                    ArrayList<Keyframe> keyframes = animDataStorage.keyframes;
+                    ArrayList<Keyframe> keyframes = bitmapChild.keyframes;
 
-                    ArrayList<Boolean> channels = animDataStorage.channels;
+                    ArrayList<Boolean> channels = bitmapChild.channels;
 
                     int[] lastKeyframes = new int[channels.size()];
 
@@ -148,7 +117,7 @@ public class ParentLayer extends Layer {
                     //get next and last keyframes
                     for (int keyframe = 0; keyframe < keyframes.size(); keyframe++)
                     {
-                        Keyframe currentKeyframe = keyframes.get(i);
+                        Keyframe currentKeyframe = keyframes.get(keyframe);
 
                         if(!currentKeyframe.isActive)
                         {
@@ -159,13 +128,13 @@ public class ParentLayer extends Layer {
                             {
                                 continue;
                             }
-                            if (i >= currentFrame)
+                            if (keyframe <= currentFrame)
                             {
-                                lastKeyframes[channel] = i;
+                                lastKeyframes[channel] = keyframe;
                             }
-                            if (i < currentFrame && nextKeyframes[channel] == -1)
+                            if (keyframe > currentFrame && nextKeyframes[channel] == -1)
                             {
-                                nextKeyframes[channel] = i;
+                                nextKeyframes[channel] = keyframe;
                             }
                         }
                     }
@@ -177,13 +146,18 @@ public class ParentLayer extends Layer {
                             continue;
                         }
 
+                        if(lastKeyframes[channelID] == -1 || nextKeyframes[channelID] == -1)
+                        {
+                            continue;
+                        }
+
                         Keyframe last = keyframes.get(lastKeyframes[channelID]);
 
                         Keyframe next = keyframes.get(nextKeyframes[channelID]);
 
                         int distance = nextKeyframes[channelID] - lastKeyframes[channelID];
 
-
+                        System.out.println(last.toString());
 
                         double value = Keyframe.valueBetweenPoints(last.value,next.value, (double) (currentFrame - lastKeyframes[channelID]) / distance);
 
@@ -191,8 +165,10 @@ public class ParentLayer extends Layer {
                         {
                             case TransformChannels.x:
                                 currentTransform.setToTranslation(value,currentTransform.getTranslateY());
+                                break;
                             case TransformChannels.y:
-                                currentTransform.setToTranslation(currentTransform.getTranslateY(),value);
+                                currentTransform.setToTranslation(currentTransform.getTranslateX(),value);
+                                break;
                         }
                         channelID++;
                     }

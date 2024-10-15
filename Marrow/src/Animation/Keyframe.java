@@ -19,6 +19,11 @@ public class Keyframe {
 
     }
 
+    public Keyframe(boolean isActive)
+    {
+        this.isActive = isActive;
+    }
+
     /**
      * allows you to get the value between 2 other values in percentage.
      * @param a value 1
