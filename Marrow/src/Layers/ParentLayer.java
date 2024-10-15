@@ -163,7 +163,7 @@ public class ParentLayer extends Layer {
                             }
                         }
                     }
-
+                    /*
                     for (int channel = 0; channel < channels.size(); channel++) {
                         switch (channel)
                         {
@@ -172,6 +172,7 @@ public class ParentLayer extends Layer {
                                 bitmapChild.drawnImage = bitmapChild.bitmap.toImage();
                         }
                     }
+                     */
 
                 }
 

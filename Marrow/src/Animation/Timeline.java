@@ -4,6 +4,7 @@ import javax.swing.*;
 
 public class Timeline extends JPanel {
 
+    Object[] options = {"Yes", "No"};
     AnimationDataStorage animDataStorage;
     JButton playButton = new JButton("Play");
     JButton animModeButton = new JButton("Start Animating");
@@ -13,12 +14,15 @@ public class Timeline extends JPanel {
     JLabel maxFrameCountLabel = new JLabel("Max Frame Count:");
     JLabel fpsLabel = new JLabel("Frames per Second:");
 
-    JTextField maxFrameCount = setUpMaxFrameCount();
-    JTextField framesPerSecond = setUpFramesPerSecond();
-    JTextField currentFrameTextField = setUpCurrentFrame();
+    JTextField maxFrameCount = setUpMaxFrameCount(new JTextField("120", 6));
+    JTextField framesPerSecond = setUpFramesPerSecond(new JTextField("24", 4));
+    JTextField currentFrameTextField = setUpCurrentFrame(new JTextField("0", 6));
 
     public Timeline(AnimationDataStorage animDataStorage)
     {
+        playButton.addActionListener(e -> playOrPause());
+        animModeButton.addActionListener(e -> animateOnOrOff());
+
         this.animDataStorage = animDataStorage;
 
         //yes the components are added in this specific order for a reason
@@ -29,24 +33,16 @@ public class Timeline extends JPanel {
         this.add(maxFrameCountLabel);
         this.add(maxFrameCount);
 
-        //region button setup
-        playButton.addActionListener(e -> playOrPause());
-        animModeButton.addActionListener(e -> animateOnOrOff());
-
-        playButton.setVisible(true);
-        animModeButton.setVisible(true);
-
         this.add(playButton);
         this.add(animModeButton);
-        //endregion
 
         this.add(frameSlider);
         this.add(currentFrameLabel);
         this.add(currentFrameTextField);
     }
+    //region text field methods
 
-    private JTextField setUpCurrentFrame(){
-        JTextField textField = new JTextField("0", 6);
+    private JTextField setUpCurrentFrame(JTextField textField){
         textField.setVisible(true);
 
         textField.addActionListener(e -> {
@@ -62,8 +58,7 @@ public class Timeline extends JPanel {
         return textField;
     }
 
-    private JTextField setUpFramesPerSecond(){
-        JTextField textField = new JTextField("24", 4);
+    private JTextField setUpFramesPerSecond(JTextField textField){
         textField.setVisible(true);
 
         textField.addActionListener(e -> {
@@ -82,18 +77,25 @@ public class Timeline extends JPanel {
         return textField;
     }
 
-    private JTextField setUpMaxFrameCount(){
-        JTextField textField = new JTextField("120", 6);
+    private JTextField setUpMaxFrameCount(JTextField textField){
         textField.setVisible(true);
 
         textField.addActionListener(e -> {
             int maxFrameCount;
+            boolean canSetMaxFrame = true;
 
             try{
                 maxFrameCount = Integer.parseInt(textField.getText());
-                frameSlider.setMaximum(maxFrameCount);
 
-                setTickSpacingFromTextField(frameSlider);
+                // makes sure that the user doesn't accidentally delete any frames when they want to lower maxFrameCount
+                if(maxFrameCount < frameSlider.getMaximum()){
+                    canSetMaxFrame = maxFramePopUp();
+                }
+
+                if(canSetMaxFrame) {
+                    frameSlider.setMaximum(maxFrameCount);
+                    //setTickSpacingFromTextField();
+                }
             }
             catch (NumberFormatException ex) {
                 textField.setText("ERROR: ENTER A NUMBER");
@@ -103,19 +105,46 @@ public class Timeline extends JPanel {
         return textField;
     }
 
+    private boolean maxFramePopUp(){
+        int choice = JOptionPane.showOptionDialog(
+                null, // Parent component (null means center on screen)
+                "Are you really sure? If you proceed, some frames will be permanently deleted!", // Message to display
+                "Decrease Max Frame Count", // Dialog title
+                JOptionPane.YES_NO_OPTION, // Option type (Yes, No)
+                JOptionPane.QUESTION_MESSAGE, // Message type (question icon)
+                null, // Custom icon (null means no custom icon)
+                options, // Custom options array
+                options[1] // Initial selection (default is "Cancel")
+        );
+        if (choice == JOptionPane.YES_OPTION){
+            return true;
+        }
+        else if (choice == JOptionPane.NO_OPTION){
+            JOptionPane.showMessageDialog(null, "Not proceeding.");
+            return false;
+        }
+        return false;
+    }
+
+    //endregion
+
+    //region slider methods
     private JSlider setUpSlider(){
         JSlider slider = new JSlider(0, 120, 0);
 
         slider.setVisible(true);
+
+        /*
         slider.setPaintTrack(true);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
 
-        int majorTickSpacing = setTickSpacing(slider.getMaximum(), 5);
-        int minorTickSpacing = setTickSpacing(slider.getMaximum(), 20);
+        int majorTickSpacing = setTickSpacing(slider.getMaximum(), 1);
+        int minorTickSpacing = setTickSpacing(slider.getMaximum(), 5);
 
         slider.setMajorTickSpacing( majorTickSpacing );
         slider.setMinorTickSpacing( minorTickSpacing );
+         */
 
         slider.addChangeListener(e -> {
 
@@ -127,29 +156,31 @@ public class Timeline extends JPanel {
 
         return slider;
     }
+    /*
+    private void setTickSpacingFromTextField(){
+        int majorTickSpacing = setTickSpacing(frameSlider.getMaximum(), 1);
+        int minorTickSpacing = setTickSpacing(frameSlider.getMaximum(), 5);
 
-    private void setTickSpacingFromTextField(JSlider slider){
-        int majorTickSpacing = setTickSpacing(slider.getMaximum(), 5);
-        int minorTickSpacing = setTickSpacing(slider.getMaximum(), 20);
+        frameSlider.setMajorTickSpacing( majorTickSpacing );
+        frameSlider.setMinorTickSpacing( minorTickSpacing );
 
-        slider.setMajorTickSpacing( majorTickSpacing );
-        slider.setMinorTickSpacing( minorTickSpacing );
+        System.out.println(frameSlider.getMajorTickSpacing());
+        System.out.println(frameSlider.getMinorTickSpacing());
+        frameSlider.updateUI();
+        frameSlider.repaint();
+        frameSlider.revalidate();
     }
 
     private int setTickSpacing(int maxSlideValue, int divider){
-        if (maxSlideValue > 200){
-            return maxSlideValue / (divider * 2);
+        if(maxSlideValue >= 50){
+            return maxSlideValue / (2 * divider);
         }
-        else if (maxSlideValue > 20) {
-            return maxSlideValue / divider;
-        }
-        else if(maxSlideValue > 10){
-            return 2;
-        }
-        else {
-            return 1;
+        else{
+            return maxSlideValue / (maxSlideValue / 10 * divider);
         }
     }
+    */
+    //endregion
 
     private void playOrPause(){
         animDataStorage.isPlaying = !(animDataStorage.isPlaying);
