@@ -1,5 +1,7 @@
 package Animation;
 
+import Layers.ParentLayer;
+
 import java.util.ArrayList;
 
 import java.util.Timer;
@@ -14,6 +16,7 @@ public class AnimationDataStorage {
     public int framesPerSecond = 24;
     public boolean isInAnimateMode = false;
     public boolean isPlaying = false;
+    public ParentLayer parentLayer;
     Timer timer = new Timer();
 
     public AnimationDataStorage() {
@@ -35,7 +38,7 @@ public class AnimationDataStorage {
      * @param size the length in frames.
      */
     public void setSize(int size) {
-        keyframes = new ArrayList<>();
+        keyframes = new ArrayList<>();9
         for (int i = 0; i < size; i++) {
             keyframes.add(new Keyframe());
         }
