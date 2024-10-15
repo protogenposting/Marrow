@@ -97,99 +97,90 @@ public class ParentLayer extends Layer {
     }
 
     private void childrenPainting(ChildLayer child) {
-        if(child.getClass().equals(BitmapLayer.class))
-            {
-                //draw the bitmap layer's image :3
-                BitmapLayer bitmapChild = (BitmapLayer)child;
-                AffineTransform currentTransform = new AffineTransform();
+        if(child.getClass().equals(BitmapLayer.class)) {
+            //draw the bitmap layer's image :3
+            BitmapLayer bitmapChild = (BitmapLayer) child;
+            AffineTransform currentTransform = new AffineTransform();
 
-                //selection rectangle
-                if(bitmapChild == currentLayer) {
-                    graphics.drawRect(
-                            (int) bitmapChild.transform.x,
-                            (int) bitmapChild.transform.y,
-                            (int) (bitmapChild.transform.x + bitmapChild.getWidth() * bitmapChild.transform.scaleX),
-                            (int) (bitmapChild.transform.y + bitmapChild.getHeight() * bitmapChild.transform.scaleY)
-                    );
-                }
+            //selection rectangle
+            if (bitmapChild == currentLayer) {
+                graphics.drawRect(
+                        (int) bitmapChild.transform.x,
+                        (int) bitmapChild.transform.y,
+                        (int) (bitmapChild.transform.x + bitmapChild.getWidth() * bitmapChild.transform.scaleX),
+                        (int) (bitmapChild.transform.y + bitmapChild.getHeight() * bitmapChild.transform.scaleY)
+                );
+            }
 
-                // this section deals with actually animating!
-                if(animDataStorage.isInAnimateMode && animDataStorage.isPlaying)
-                {
-                    int currentFrame = animDataStorage.currentFrame;
+            // this section deals with actually animating!
+            if (animDataStorage.isInAnimateMode && animDataStorage.isPlaying) {
+                int currentFrame = animDataStorage.currentFrame;
 
-                    ArrayList<Keyframe> keyframes = bitmapChild.keyframes;
+                ArrayList<Keyframe> keyframes = bitmapChild.keyframes;
 
-                    ArrayList<Boolean> channels = bitmapChild.channels;
+                ArrayList<Boolean> channels = bitmapChild.channels;
 
-                    int[] lastKeyframes = new int[channels.size()];
+                int[] lastKeyframes = new int[channels.size()];
 
-                    Arrays.fill(lastKeyframes,-1);
+                Arrays.fill(lastKeyframes, -1);
 
-                    int[] nextKeyframes = new int[channels.size()];
+                int[] nextKeyframes = new int[channels.size()];
 
-                    Arrays.fill(nextKeyframes,-1);
+                Arrays.fill(nextKeyframes, -1);
 
-                    //get next and last keyframes
-                    for (int keyframe = 0; keyframe < keyframes.size(); keyframe++)
-                    {
-                        Keyframe currentKeyframe = keyframes.get(keyframe);
+                //get next and last keyframes
+                for (int keyframe = 0; keyframe < keyframes.size(); keyframe++) {
+                    Keyframe currentKeyframe = keyframes.get(keyframe);
 
-                        if(!currentKeyframe.isActive)
-                        {
+                    if (!currentKeyframe.isActive) {
+                        continue;
+                    }
+                    for (int channel = 0; channel < channels.size(); channel++) {
+                        if (!channels.get(channel)) {
                             continue;
                         }
-                        for (int channel = 0; channel < channels.size(); channel++) {
-                            if(!channels.get(channel))
-                            {
-                                continue;
-                            }
-                            if (keyframe <= currentFrame)
-                            {
-                                lastKeyframes[channel] = keyframe;
-                            }
-                            if (keyframe > currentFrame && nextKeyframes[channel] == -1)
-                            {
-                                nextKeyframes[channel] = keyframe;
-                            }
+                        if (keyframe <= currentFrame) {
+                            lastKeyframes[channel] = keyframe;
+                        }
+                        if (keyframe > currentFrame && nextKeyframes[channel] == -1) {
+                            nextKeyframes[channel] = keyframe;
                         }
                     }
+                }
 
-                    int channelID = 0;
-                    for (TransformChannels channel : TransformChannels.values()) {
-                        if(!channels.get(channelID))
-                        {
-                            continue;
-                        }
-
-                        if(lastKeyframes[channelID] == -1 || nextKeyframes[channelID] == -1)
-                        {
-                            continue;
-                        }
-
-                        Keyframe last = keyframes.get(lastKeyframes[channelID]);
-
-                        Keyframe next = keyframes.get(nextKeyframes[channelID]);
-
-                        int distance = nextKeyframes[channelID] - lastKeyframes[channelID];
-
-                        System.out.println(last.toString());
-
-                        double value = Keyframe.valueBetweenPoints(last.value,next.value, (double) (currentFrame - lastKeyframes[channelID]) / distance);
-
-                        switch (channel)
-                        {
-                            case TransformChannels.x:
-                                currentTransform.setToTranslation(value,currentTransform.getTranslateY());
-                                break;
-                            case TransformChannels.y:
-                                currentTransform.setToTranslation(currentTransform.getTranslateX(),value);
-                                break;
-                        }
-                        channelID++;
+                int channelID = 0;
+                for (TransformChannels channel : TransformChannels.values()) {
+                    if (!channels.get(channelID)) {
+                        continue;
                     }
 
+                    if (lastKeyframes[channelID] == -1 || nextKeyframes[channelID] == -1) {
+                        continue;
+                    }
+
+                    Keyframe last = keyframes.get(lastKeyframes[channelID]);
+
+                    Keyframe next = keyframes.get(nextKeyframes[channelID]);
+
+                    int distance = nextKeyframes[channelID] - lastKeyframes[channelID];
+
+                    System.out.println(last.toString());
+
+                    double value = Keyframe.valueBetweenPoints(last.value, next.value, (double) (currentFrame - lastKeyframes[channelID]) / distance);
+
+                    switch (channel) {
+                        case TransformChannels.x:
+                            currentTransform.setToTranslation(value, currentTransform.getTranslateY());
+                            break;
+                        case TransformChannels.y:
+                            currentTransform.setToTranslation(currentTransform.getTranslateX(), value);
+                            break;
+                    }
+                    channelID++;
                 }
+
+            }
+        }
     }
 
     /**
