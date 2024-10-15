@@ -258,8 +258,6 @@ public class Main {
 
         animDataStorage.setSize(240);
 
-        Timeline timeline = new Timeline(animDataStorage);
-
         JColorChooser colorChooser = new JColorChooser();
 
         colorChooser.getSelectionModel().addChangeListener(new ChangeListener() {
@@ -297,6 +295,7 @@ public class Main {
             }
         });
 
+        //region parentLayer mouse listeners
         parentLayer.addMouseListener(new MouseAdapter(){
             @Override
             public void mousePressed(MouseEvent e) {
@@ -329,6 +328,8 @@ public class Main {
 
         });
 
+        //endregion
+
         frame.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}
@@ -352,6 +353,9 @@ public class Main {
             @Override
             public void keyReleased(KeyEvent e) {}
         });
+
+        Timeline timeline = new Timeline(animDataStorage, parentLayer);
+
         /*
         frame.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent componentEvent) {

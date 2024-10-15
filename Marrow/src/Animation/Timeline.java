@@ -1,6 +1,9 @@
 package Animation;
 
+import Layers.ParentLayer;
+
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class Timeline extends JPanel {
 
@@ -18,12 +21,16 @@ public class Timeline extends JPanel {
     JTextField framesPerSecond = setUpFramesPerSecond(new JTextField("24", 4));
     JTextField currentFrameTextField = setUpCurrentFrame(new JTextField("0", 6));
 
-    public Timeline(AnimationDataStorage animDataStorage)
+    ArrayList<Keyframe> keyframes;
+    ParentLayer parentLayer;
+
+    public Timeline(AnimationDataStorage animDataStorage, ParentLayer parentLayer)
     {
         playButton.addActionListener(e -> playOrPause());
         animModeButton.addActionListener(e -> animateOnOrOff());
 
         this.animDataStorage = animDataStorage;
+        this.parentLayer = parentLayer;
 
         //yes the components are added in this specific order for a reason
 
@@ -205,6 +212,5 @@ public class Timeline extends JPanel {
             animModeButton.setText("Start Animating");
         }
     }
-
 
 }
