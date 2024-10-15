@@ -27,14 +27,4 @@ public class Transform2D {
         this.shear = shear;
         this.opacity = opacity;
     }
-
-    public enum TransformChannel{
-        x,
-        y,
-        scaleX,
-        scaleY,
-        rotation,
-        shear,
-        opacity,
-    }
 }

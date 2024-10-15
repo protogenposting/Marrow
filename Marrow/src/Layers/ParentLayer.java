@@ -3,6 +3,7 @@ package Layers;
 import Animation.AnimationDataStorage;
 import Animation.Keyframe;
 import Animation.Transform2D;
+import Animation.TransformChannels;
 import Main.Main;
 import Tools.ToolContainer;
 
@@ -153,6 +154,10 @@ public class ParentLayer extends Layer {
                             continue;
                         }
                         for (int channel = 0; channel < channels.size(); channel++) {
+                            if(!channels.get(channel))
+                            {
+                                continue;
+                            }
                             if (i >= currentFrame)
                             {
                                 lastKeyframes[channel] = i;
@@ -164,19 +169,22 @@ public class ParentLayer extends Layer {
                         }
                     }
 
-                    for (int channel = 0; channel < channels.size(); channel++) {
+                    for (TransformChannels channel : TransformChannels.values()) {
                         switch (channel)
                         {
-                            case Transform2D.TransformChannel.x.ordinal():
-                                bitmapChild.bitmap.shift();
-                                bitmapChild.drawnImage = bitmapChild.bitmap.toImage();
+                            case TransformChannels.x:
+                                currentTransform.setToTranslation(10,10);
+                            case TransformChannels.y:
+                                currentTransform.setToTranslation(10,10);
                         }
                     }
 
                 }
 
+
+
                 //draw the image with the transform
-                graphics.drawImage(bitmapChild.drawnImage, currentTransform, this);
+                graphics.drawImage(bitmapChild.drawnImage,currentTransform, this);
             }
         }
 
