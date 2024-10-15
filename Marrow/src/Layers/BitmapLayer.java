@@ -1,5 +1,6 @@
 package Layers;
 
+import Animation.Keyframe;
 import Bitmaps.Bitmap;
 import Bitmaps.RGBColor;
 import Tools.Tool;
@@ -29,6 +30,27 @@ public class BitmapLayer extends ChildLayer {
 
     public BitmapLayer(ToolContainer toolContainer,String name) {
         this(toolContainer, name, new Bitmap());
+
+        //TEST CODE FOR KEYFRAMES
+
+        Keyframe frame1 = new Keyframe();
+
+        frame1.value = 0;
+
+        Keyframe frame2 = new Keyframe();
+
+        frame2.value = 1;
+
+        Keyframe frame3 = new Keyframe();
+
+        frame3.value = 0;
+
+        keyframes.set(0,frame1);
+
+        keyframes.set(12,frame2);
+
+        keyframes.set(24,frame3);
+
         bitmap.setSize(800,400);
     }
 

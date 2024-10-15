@@ -1,6 +1,11 @@
 package Animation;
 
+import Layers.ParentLayer;
+
 import java.util.ArrayList;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Animation Data Storage lets us transfer data between anything that uses animation.<br>
@@ -11,14 +16,20 @@ public class AnimationDataStorage {
     public int framesPerSecond = 24;
     public boolean isInAnimateMode = false;
     public boolean isPlaying = false;
-    public int fps = 24;
-    public ArrayList<Keyframe> keyframes;
-    public ArrayList<Boolean> channels = new ArrayList<>();
+    public ParentLayer parentLayer;
+    Timer timer = new Timer();
 
     public AnimationDataStorage() {
-        for (int i = 0; i < TransformChannels.values().length; i++) {
-            channels.add(false);
-        }
+        timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if(isPlaying)
+                    {
+                        currentFrame ++;
+                    }
+                }
+            },
+            1000/framesPerSecond);
     }
 
     /**
@@ -27,7 +38,7 @@ public class AnimationDataStorage {
      * @param size the length in frames.
      */
     public void setSize(int size) {
-        keyframes = new ArrayList<>();
+        keyframes = new ArrayList<>();9
         for (int i = 0; i < size; i++) {
             keyframes.add(new Keyframe());
         }
