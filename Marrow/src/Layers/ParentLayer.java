@@ -3,10 +3,12 @@ package Layers;
 import Animation.AnimationDataStorage;
 import Animation.Keyframe;
 import Animation.Transform2D;
+import Animation.TransformChannels;
 import Main.Main;
 import Tools.ToolContainer;
 
 import javax.swing.*;
+import javax.xml.crypto.dsig.Transform;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -153,6 +155,10 @@ public class ParentLayer extends Layer {
                             continue;
                         }
                         for (int channel = 0; channel < channels.size(); channel++) {
+                            if(!channels.get(channel))
+                            {
+                                continue;
+                            }
                             if (i >= currentFrame)
                             {
                                 lastKeyframes[channel] = i;
@@ -163,21 +169,34 @@ public class ParentLayer extends Layer {
                             }
                         }
                     }
-                    /*
-                    for (int channel = 0; channel < channels.size(); channel++) {
+
+                    int channelID = 0;
+                    for (TransformChannels channel : TransformChannels.values()) {
+                        if(!channels.get(channelID))
+                        {
+                            continue;
+                        }
+
+                        Keyframe last = keyframes.get(lastKeyframes[channelID]);
+
+                        Keyframe next = keyframes.get(nextKeyframes[channelID]);
+
                         switch (channel)
                         {
-                            case Transform2D.TransformChannel.x.ordinal():
-                                bitmapChild.bitmap.shift();
-                                bitmapChild.drawnImage = bitmapChild.bitmap.toImage();
+                            case TransformChannels.x:
+                                currentTransform.setToTranslation(10,10);
+                            case TransformChannels.y:
+                                currentTransform.setToTranslation(10,10);
                         }
+                        channelID++;
                     }
-                     */
 
                 }
 
+
+
                 //draw the image with the transform
-                graphics.drawImage(bitmapChild.drawnImage, currentTransform, this);
+                graphics.drawImage(bitmapChild.drawnImage,currentTransform, this);
             }
         }
 

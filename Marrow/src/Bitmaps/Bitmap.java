@@ -57,13 +57,19 @@ public class Bitmap {
         }
     }
 
+    //no idea how to do this or if we even should. Try another method using an observer for now.
     public void shift(int x, int y)
     {
+        /*
         for (int xPointer = 0; xPointer < bitmap.size(); xPointer++) {
             for (int yPointer = 0; yPointer < bitmap.get(xPointer).size(); yPointer++) {
-                //make this work I'm fucking done for today
+                Pixel currentPixel = bitmap.get(xPointer).get(yPointer);
+                Pixel next = bitmap.get(xPointer + x).get(yPointer + y);
+
+                bitmap.get(xPointer).set(yPointer,next);
+                bitmap.get(xPointer + x).set(yPointer + y,currentPixel);
             }
-        }
+        }*/
     }
 
     /**

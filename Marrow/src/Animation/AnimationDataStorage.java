@@ -16,7 +16,7 @@ public class AnimationDataStorage {
     public ArrayList<Boolean> channels = new ArrayList<>();
 
     public AnimationDataStorage() {
-        for (int i = 0; i < Transform2D.TransformChannel.values().length; i++) {
+        for (int i = 0; i < TransformChannels.values().length; i++) {
             channels.add(false);
         }
     }
