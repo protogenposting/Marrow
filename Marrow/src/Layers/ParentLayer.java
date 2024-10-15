@@ -111,7 +111,7 @@ public class ParentLayer extends Layer {
     private void loopThroughChildren(ArrayList<ChildLayer> childrenArray, Consumer <ChildLayer> importedFunction){
         ChildLayer child;
         for(int chuldNum = 0; chuldNum < childrenArray.size(); chuldNum++) {
-            child = children.get(chuldNum);
+            child = childrenArray.get(chuldNum);
 
             if (!child.getChildren().isEmpty()){
                 loopThroughChildren(child.getChildren(), importedFunction);
