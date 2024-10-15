@@ -2,6 +2,9 @@ package Animation;
 
 import java.util.ArrayList;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * Animation Data Storage lets us transfer data between anything that uses animation.<br>
  * I want to krill myself this code is so ass
@@ -11,14 +14,19 @@ public class AnimationDataStorage {
     public int framesPerSecond = 24;
     public boolean isInAnimateMode = false;
     public boolean isPlaying = false;
-    public int fps = 24;
-    public ArrayList<Keyframe> keyframes;
-    public ArrayList<Boolean> channels = new ArrayList<>();
+    Timer timer = new Timer();
 
     public AnimationDataStorage() {
-        for (int i = 0; i < TransformChannels.values().length; i++) {
-            channels.add(false);
-        }
+        timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if(isPlaying)
+                    {
+                        currentFrame ++;
+                    }
+                }
+            },
+            1000/framesPerSecond);
     }
 
     /**

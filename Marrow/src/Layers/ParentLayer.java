@@ -181,12 +181,18 @@ public class ParentLayer extends Layer {
 
                         Keyframe next = keyframes.get(nextKeyframes[channelID]);
 
+                        int distance = nextKeyframes[channelID] - lastKeyframes[channelID];
+
+
+
+                        double value = Keyframe.valueBetweenPoints(last.value,next.value, (double) (currentFrame - lastKeyframes[channelID]) / distance);
+
                         switch (channel)
                         {
                             case TransformChannels.x:
-                                currentTransform.setToTranslation(10,10);
+                                currentTransform.setToTranslation(value,currentTransform.getTranslateY());
                             case TransformChannels.y:
-                                currentTransform.setToTranslation(10,10);
+                                currentTransform.setToTranslation(currentTransform.getTranslateY(),value);
                         }
                         channelID++;
                     }

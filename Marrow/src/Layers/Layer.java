@@ -1,5 +1,6 @@
 package Layers;
 
+import Animation.Keyframe;
 import Animation.Transform2D;
 
 import javax.swing.*;
@@ -21,6 +22,10 @@ public class Layer extends JPanel {
     {
         return children;
     }
+
+    public ArrayList<Keyframe> keyframes;
+
+    public ArrayList<Boolean> channels = new ArrayList<>();
 
     public void addChild(ChildLayer layer)
     {

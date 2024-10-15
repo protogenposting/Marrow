@@ -258,6 +258,26 @@ public class Main {
 
         animDataStorage.setSize(240);
 
+        //TEST CODE FOR KEYFRAMES
+
+        Keyframe frame1 = new Keyframe();
+
+        frame1.value = 0;
+
+        Keyframe frame2 = new Keyframe();
+
+        frame2.value = 1;
+
+        Keyframe frame3 = new Keyframe();
+
+        frame3.value = 0;
+
+        animDataStorage.keyframes.set(0,frame1);
+
+        animDataStorage.keyframes.set(12,frame2);
+
+        animDataStorage.keyframes.set(24,frame2);
+
         Timeline timeline = new Timeline(animDataStorage);
 
         JColorChooser colorChooser = new JColorChooser();
