@@ -31,7 +31,6 @@ public class AnimationDataStorage {
                 {
                     currentFrame ++;
                     parentLayer.repaint();
-                    System.out.println("aa");
                     if(currentFrame >= 24)
                     {
                         currentFrame = 0;
