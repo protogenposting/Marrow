@@ -262,6 +262,8 @@ public class Main {
 
         Timeline timeline = new Timeline(animDataStorage);
 
+        animDataStorage.timeline = timeline;
+
         JColorChooser colorChooser = new JColorChooser();
 
         colorChooser.getSelectionModel().addChangeListener(new ChangeListener() {
