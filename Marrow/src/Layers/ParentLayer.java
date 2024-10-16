@@ -157,8 +157,6 @@ public class ParentLayer extends Layer {
 
                         int distance = nextKeyframes[channelID] - lastKeyframes[channelID];
 
-                        System.out.println(last.toString());
-
                         double value = Keyframe.valueBetweenPoints(last.value,next.value, (double) (currentFrame - lastKeyframes[channelID]) / distance);
 
                         switch (channel)
