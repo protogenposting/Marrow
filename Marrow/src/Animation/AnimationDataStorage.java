@@ -20,6 +20,7 @@ public class AnimationDataStorage {
     public boolean isInAnimateMode = false;
     public boolean isPlaying = false;
     public ParentLayer parentLayer;
+    public Timeline timeline;
     Timer timer = new Timer();
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -30,8 +31,8 @@ public class AnimationDataStorage {
                 if(isPlaying)
                 {
                     currentFrame ++;
+                    timeline.currentFrameTextField.setText(String.valueOf(currentFrame));
                     parentLayer.repaint();
-                    System.out.println("aa");
                     if(currentFrame >= 24)
                     {
                         currentFrame = 0;

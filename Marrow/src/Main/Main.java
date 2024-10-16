@@ -260,6 +260,10 @@ public class Main {
 
         animDataStorage.setSize(240);
 
+        Timeline timeline = new Timeline(animDataStorage);
+
+        animDataStorage.timeline = timeline;
+
         JColorChooser colorChooser = new JColorChooser();
 
         colorChooser.getSelectionModel().addChangeListener(new ChangeListener() {

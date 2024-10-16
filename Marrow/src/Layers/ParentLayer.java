@@ -129,25 +129,7 @@ public class ParentLayer extends Layer {
                 Arrays.fill(nextKeyframes, -1);
 
                 //get next and last keyframes
-                for (int keyframe = 0; keyframe < keyframes.size(); keyframe++) {
-                    Keyframe currentKeyframe = keyframes.get(keyframe);
-
-                    if (!currentKeyframe.isActive) {
-                        continue;
-                    }
-                    for (int channel = 0; channel < channels.size(); channel++) {
-                        if (!channels.get(channel)) {
-                            continue;
-                        }
-                        if (keyframe <= currentFrame) {
-                            lastKeyframes[channel] = keyframe;
-                        }
-                        if (keyframe > currentFrame && nextKeyframes[channel] == -1) {
-                            nextKeyframes[channel] = keyframe;
-                        }
-                    }
-                }
-
+                
                 int channelID = 0;
                 for (TransformChannels channel : TransformChannels.values()) {
                     if (!channels.get(channelID)) {
