@@ -1,10 +1,15 @@
 package Animation;
 
+import Layers.ParentLayer;
+
 import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class Timeline extends JPanel {
 
     AnimationDataStorage animDataStorage;
+    ParentLayer parentLayer;
     JButton playButton = new JButton("Play");
     JButton animModeButton = new JButton("Start Animating");
 
@@ -17,8 +22,13 @@ public class Timeline extends JPanel {
     JTextField framesPerSecond = setUpFramesPerSecond();
     JTextField currentFrameTextField = setUpCurrentFrame();
 
-    public Timeline(AnimationDataStorage animDataStorage)
+    JPanel keyFramePanel = new JPanel();
+    JScrollPane keyFramePanels;
+
+    public Timeline(AnimationDataStorage animDataStorage, ParentLayer parentLayer)
     {
+        this.setLayout(new FlowLayout());
+        this.parentLayer = parentLayer;
         this.animDataStorage = animDataStorage;
 
         //yes the components are added in this specific order for a reason
@@ -43,6 +53,49 @@ public class Timeline extends JPanel {
         this.add(frameSlider);
         this.add(currentFrameLabel);
         this.add(currentFrameTextField);
+    }
+
+    public void addKeyframes(){
+
+        if(keyFramePanels == null){
+            setUpKeyFramePanels();
+            return;
+        }
+        keyFramePanels.add(new JButton("1"));
+
+    }
+
+    private void setUpKeyFramePanels(){
+
+        keyFramePanels = new JScrollPane();
+        keyFramePanels.setPreferredSize(new Dimension(600, 60));
+
+        keyFramePanels.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        keyFramePanel.setLayout(new BoxLayout(keyFramePanel, BoxLayout.X_AXIS));
+        ArrayList<Keyframe> keyframes;
+
+        try {
+            keyframes = parentLayer.currentLayer.keyframes;
+        }
+        catch (NullPointerException e){
+            return;
+        }
+
+
+        for (int i = 0; i < keyframes.size(); i++) {
+            if(!keyframes.get(i).isActive){
+                continue;
+            }
+            JButton keyframe = new JButton(String.valueOf(i));
+            keyFramePanel.add(keyframe);
+        }
+        keyFramePanel.setVisible(true);
+
+        keyFramePanels.add(keyFramePanel);
+        keyFramePanels.setVisible(true);
+        keyFramePanels.setViewportView(keyFramePanel);
+
+        this.add(keyFramePanels);
     }
 
     private JTextField setUpCurrentFrame(){

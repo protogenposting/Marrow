@@ -256,13 +256,13 @@ public class Main {
 
         Toolbox tools = new Toolbox(toolContainer);
 
-        LayerWindow layerOrganization = new LayerWindow(parentLayer,toolContainer);
-
         animDataStorage.setSize(240);
 
-        Timeline timeline = new Timeline(animDataStorage);
+        Timeline timeline = new Timeline(animDataStorage, parentLayer);
 
         animDataStorage.timeline = timeline;
+
+        LayerWindow layerOrganization = new LayerWindow(parentLayer,toolContainer, timeline);
 
         JColorChooser colorChooser = new JColorChooser();
 

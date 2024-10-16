@@ -1,5 +1,6 @@
 package Layers.LayerWindow;
 
+import Animation.Timeline;
 import Layers.BitmapLayer;
 import Layers.Layer;
 import Layers.ParentLayer;
@@ -14,9 +15,11 @@ import java.util.Random;
 
 public class LayerWindow extends JPanel {
     Layer parentLayer;
+    Timeline timeline;
 
-    public LayerWindow(ParentLayer parentLayer, ToolContainer toolContainer)
+    public LayerWindow(ParentLayer parentLayer, ToolContainer toolContainer, Timeline timeline)
     {
+        this.timeline = timeline;
         this.setVisible(true);
         this.setSize(256,768);
         this.parentLayer = parentLayer;
@@ -45,6 +48,8 @@ public class LayerWindow extends JPanel {
             layerButton.parentLayer = parentLayer;
 
             panel.add(layerButton);
+
+            timeline.addKeyframes();
         };
 
         this.add(scrollPane);
