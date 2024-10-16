@@ -31,8 +31,14 @@ public class Keyframe {
      * @param percentage the amount between the 2 values
      * @return the value between the 2
      */
-    public static double valueBetweenPoints(double a, double b,double percentage)
+    public static double valueBetweenPoints(double a, double b,double percentage,EaseType easing)
     {
+        switch(easing)
+        {
+            case EaseType.SINE:
+                percentage = Math.sin(((percentage/2))*Math.PI);
+                break;
+        }
         double smaller;
 
         if(a < b)
@@ -47,8 +53,8 @@ public class Keyframe {
             return a;
         }
 
-        double distance = Math.abs(a-b);
+        double distance = b-a;
 
-        return smaller + distance * percentage;
+        return a + distance * percentage;
     }
 }

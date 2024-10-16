@@ -128,13 +128,13 @@ public class ParentLayer extends Layer {
                             {
                                 continue;
                             }
-                            if (keyframe <= currentFrame)
-                            {
-                                lastKeyframes[channel] = keyframe;
-                            }
-                            if (keyframe > currentFrame && nextKeyframes[channel] == -1)
-                            {
-                                nextKeyframes[channel] = keyframe;
+                            if(currentKeyframe.channel == channel) {
+                                if (keyframe <= currentFrame) {
+                                    lastKeyframes[channel] = keyframe;
+                                }
+                                if (keyframe > currentFrame && nextKeyframes[channel] == -1) {
+                                    nextKeyframes[channel] = keyframe;
+                                }
                             }
                         }
                     }
@@ -157,7 +157,9 @@ public class ParentLayer extends Layer {
 
                         int distance = nextKeyframes[channelID] - lastKeyframes[channelID];
 
-                        double value = Keyframe.valueBetweenPoints(last.value,next.value, (double) (currentFrame - lastKeyframes[channelID]) / distance);
+                        double percent = (double) (currentFrame - lastKeyframes[channelID]) / distance;
+
+                        double value = Keyframe.valueBetweenPoints(last.value,next.value,percent,last.easing);
 
                         switch (channel)
                         {
@@ -172,8 +174,6 @@ public class ParentLayer extends Layer {
                     }
 
                 }
-
-
 
                 //draw the image with the transform
                 graphics.drawImage(bitmapChild.drawnImage,currentTransform, this);

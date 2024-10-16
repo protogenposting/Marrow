@@ -1,5 +1,6 @@
 package Layers;
 
+import Animation.EaseType;
 import Animation.Keyframe;
 import Animation.TransformChannels;
 import Bitmaps.Bitmap;
@@ -41,19 +42,21 @@ public class BitmapLayer extends ChildLayer {
 
         Keyframe frame2 = new Keyframe(true);
 
-        frame2.value = 100;
+        frame2.value = 400;
 
         Keyframe frame3 = new Keyframe(true);
 
         frame3.value = 0;
 
-        setSize(24);
+        setSize(128);
 
         keyframes.set(0, frame1);
 
-        keyframes.set(12, frame2);
+        frame2.easing = EaseType.SINE;
 
-        keyframes.set(23, frame3);
+        keyframes.set(64, frame2);
+
+        keyframes.set(127, frame3);
 
         for (int i = 0; i < TransformChannels.values().length; i++) {
             channels.add(false);

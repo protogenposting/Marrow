@@ -33,7 +33,7 @@ public class AnimationDataStorage {
                     currentFrame ++;
                     timeline.currentFrameTextField.setText(String.valueOf(currentFrame));
                     parentLayer.repaint();
-                    if(currentFrame >= 24)
+                    if(currentFrame >= 128)
                     {
                         currentFrame = 0;
                     }
