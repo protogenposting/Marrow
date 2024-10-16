@@ -38,6 +38,12 @@ public class Keyframe {
             case EaseType.SINE:
                 percentage = (Math.sin(Math.PI * percentage - Math.PI/2) + 1)/2;
                 break;
+            case EaseType.SINEIN:
+                percentage = Math.sin(Math.PI * percentage/2);
+                break;
+            case EaseType.SINEOUT:
+                percentage = Math.sin(Math.PI * (percentage + 3)/2) + 1;
+                break;
         }
         double smaller;
 
