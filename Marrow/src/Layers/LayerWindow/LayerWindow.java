@@ -1,6 +1,7 @@
 package Layers.LayerWindow;
 
 import Layers.BitmapLayer;
+import Layers.ChildLayer;
 import Layers.Layer;
 import Layers.ParentLayer;
 import Tools.ToolContainer;
@@ -14,37 +15,52 @@ import java.util.Random;
 
 public class LayerWindow extends JPanel {
     Layer parentLayer;
+    static JPanel innerPanel = new JPanel();
 
-    public LayerWindow(ParentLayer parentLayer, ToolContainer toolContainer)
-    {
+    public LayerWindow(ParentLayer parentLayer, ToolContainer toolContainer) {
+
         this.setVisible(true);
         this.setSize(256,768);
         this.parentLayer = parentLayer;
         this.setLayout(new FlowLayout());
 
-        JPanel panel = new JPanel();
 
         JButton layerAdding = getjButton(parentLayer, toolContainer);
         add(layerAdding);
 
-        panel.setLayout(new BoxLayout(panel,BoxLayout.PAGE_AXIS));
+        innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.PAGE_AXIS));
 
         JScrollPane scrollPane = new JScrollPane();
 
-        scrollPane.setViewportView(panel);
+        scrollPane.setViewportView(innerPanel);
 
         scrollPane.setPreferredSize(new Dimension(200,300));
 
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        parentLayer.onAddChild = (a) -> {
-            LayerButton layerButton = new LayerButton(a.name);
+        //region PARENT LAYER REFERENCE LAYER
+        JButton parentLayerButton = new JButton("Parent Layer");
 
-            layerButton.layer = a;
+        parentLayerButton.addActionListener(e -> {
+            parentLayer.currentLayer = null;
+        });
+
+        innerPanel.add(parentLayerButton);
+
+        //end region
+
+        parentLayer.onAddChild = (newChildLayer) -> {
+            LayerButton layerButton = new LayerButton(newChildLayer.name);
+
+            layerButton.layer = newChildLayer;
 
             layerButton.parentLayer = parentLayer;
 
-            panel.add(layerButton);
+            innerPanel.add(layerButton);
+
+            newChildLayer.onAddChild = (newChild) -> {
+                onAddChildrenFunc(parentLayer);
+            };
         };
 
         this.add(scrollPane);
@@ -56,11 +72,48 @@ public class LayerWindow extends JPanel {
         layerAdding.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                parentLayer.addChild(new BitmapLayer(toolContainer,"Big Gay Layer " + new Random().nextInt()));
+
+                String newChild;
+
+                if (parentLayer.currentLayer != null) {
+
+                    newChild =  parentLayer.currentLayer.name + "'s Layer " +
+                            parentLayer.currentLayer.getChildren().size();
+
+                    parentLayer.currentLayer.addChild(new BitmapLayer(toolContainer, newChild));
+
+
+                }else{
+
+                    newChild = "Layer " + parentLayer.getChildren().size();
+
+                    parentLayer.addChild(new BitmapLayer(toolContainer,  newChild));
+                }
+
+
                 revalidate();
                 repaint();
             }
         });
         return layerAdding;
     }
+
+    private void onAddChildrenFunc(ParentLayer parentLayer){
+        int index = parentLayer.currentLayer.getChildren().size() - 1;
+
+        ChildLayer newChild = parentLayer.currentLayer.getChildren().get(index);
+
+        LayerButton layerButton = new LayerButton(newChild.name);
+
+        layerButton.layer = newChild;
+
+        layerButton.parentLayer = parentLayer;
+
+        innerPanel.add(layerButton);
+
+        newChild.onAddChild = (newChildLayer) -> {
+            onAddChildrenFunc(parentLayer);
+        };
+    }
+
 }
