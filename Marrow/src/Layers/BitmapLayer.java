@@ -52,9 +52,11 @@ public class BitmapLayer extends ChildLayer {
 
         keyframes.set(0, frame1);
 
-        frame2.easing = EaseType.SINE;
+        frame1.easing = EaseType.SINE;
 
         keyframes.set(64, frame2);
+
+        frame2.easing = EaseType.SINE;
 
         keyframes.set(127, frame3);
 
