@@ -98,57 +98,39 @@ public class ParentLayer extends Layer {
                 }
 
                 // this section deals with actually animating!
-                if(animDataStorage.isInAnimateMode && animDataStorage.isPlaying)
-                {
-                    int currentFrame = animDataStorage.currentFrame;
-
-                    ArrayList<Keyframe> keyframes = bitmapChild.keyframes;
-
-                    ArrayList<Boolean> channels = bitmapChild.channels;
-
-                    int[] lastKeyframes = new int[channels.size()];
-
-                    Arrays.fill(lastKeyframes,-1);
-
-                    int[] nextKeyframes = new int[channels.size()];
-
-                    Arrays.fill(nextKeyframes,-1);
-
-                    //get next and last keyframes
-                    for (int keyframe = 0; keyframe < keyframes.size(); keyframe++)
-                    {
-                        Keyframe currentKeyframe = keyframes.get(keyframe);
-
-                        if(!currentKeyframe.isActive)
-                        {
-                            continue;
-                        }
-                        for (int channel = 0; channel < channels.size(); channel++) {
-                            if(!channels.get(channel))
-                            {
-                                continue;
-                            }
-                            if(currentKeyframe.channel == channel) {
-                                if (keyframe <= currentFrame) {
-                                    lastKeyframes[channel] = keyframe;
-                                }
-                                if (keyframe > currentFrame && nextKeyframes[channel] == -1) {
-                                    nextKeyframes[channel] = keyframe;
-                                }
-                            }
-                        }
-                    }
-
+                if(animDataStorage.isInAnimateMode && animDataStorage.isPlaying) {
                     int channelID = 0;
                     for (TransformChannels channel : TransformChannels.values()) {
-                        if(!channels.get(channelID))
-                        {
-                            channelID++;
-                            continue;
+                        int currentFrame = animDataStorage.currentFrame;
+
+                        ArrayList<Keyframe> keyframes = bitmapChild.keyframes.get(channelID);
+
+                        int[] lastKeyframes = new int[bitmapChild.keyframes.size()];
+
+                        Arrays.fill(lastKeyframes, -1);
+
+                        int[] nextKeyframes = new int[bitmapChild.keyframes.size()];
+
+                        Arrays.fill(nextKeyframes, -1);
+
+                        //get next and last keyframes
+                        for (int keyframe = 0; keyframe < keyframes.size(); keyframe++) {
+                            Keyframe currentKeyframe = keyframes.get(keyframe);
+
+                            if (!currentKeyframe.isActive) {
+                                continue;
+                            }
+
+                            if (keyframe <= currentFrame) {
+                                lastKeyframes[channelID] = keyframe;
+                            }
+
+                            if (keyframe > currentFrame && nextKeyframes[channelID] == -1) {
+                                nextKeyframes[channelID] = keyframe;
+                            }
                         }
 
-                        if(lastKeyframes[channelID] == -1 || nextKeyframes[channelID] == -1)
-                        {
+                        if (lastKeyframes[channelID] == -1 || nextKeyframes[channelID] == -1) {
                             channelID++;
                             continue;
                         }
@@ -161,20 +143,19 @@ public class ParentLayer extends Layer {
 
                         double percent = (double) (currentFrame - lastKeyframes[channelID]) / distance;
 
-                        double value = Keyframe.valueBetweenPoints(last.value,next.value,percent,last.easing);
+                        double value = Keyframe.valueBetweenPoints(last.value, next.value, percent, last.easing);
 
-                        switch (channel)
-                        {
+                        switch (channel) {
                             case TransformChannels.x:
-                                currentTransform.setToTranslation(value,currentTransform.getTranslateY());
+                                currentTransform.setToTranslation(value, currentTransform.getTranslateY());
                                 break;
                             case TransformChannels.y:
-                                currentTransform.setToTranslation(currentTransform.getTranslateX(),value);
+                                currentTransform.setToTranslation(currentTransform.getTranslateX(), value);
                                 break;
                             case TransformChannels.rotation:
                                 double width = bitmapChild.transform.rotationCenterX * bitmapChild.getWidth();
                                 double height = bitmapChild.transform.rotationCenterY * bitmapChild.getHeight();
-                                currentTransform.setToRotation(Math.toRadians(value),width,height);
+                                currentTransform.setToRotation(Math.toRadians(value), width, height);
                                 break;
                         }
                         channelID++;

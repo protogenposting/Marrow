@@ -10,8 +10,6 @@ public class Keyframe {
 
     public boolean isActive = false;
 
-    public int channel = 0;
-
     public EaseType easing = EaseType.NONE;
 
     public Keyframe()

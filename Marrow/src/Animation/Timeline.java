@@ -68,14 +68,14 @@ public class Timeline extends JPanel {
     private void setUpKeyFramePanels(){
 
         keyFramePanels = new JScrollPane();
-        keyFramePanels.setPreferredSize(new Dimension(600, 60));
+        keyFramePanels.setPreferredSize(new Dimension(200, 100));
 
-        keyFramePanels.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        keyFramePanel.setLayout(new BoxLayout(keyFramePanel, BoxLayout.X_AXIS));
+        keyFramePanels.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        keyFramePanel.setLayout(new BoxLayout(keyFramePanel, BoxLayout.Y_AXIS));
         ArrayList<Keyframe> keyframes;
 
         try {
-            keyframes = parentLayer.currentLayer.keyframes;
+            keyframes = parentLayer.currentLayer.keyframes.getFirst();
         }
         catch (NullPointerException e){
             return;
@@ -145,6 +145,7 @@ public class Timeline extends JPanel {
             try{
                 maxFrameCount = Integer.parseInt(textField.getText());
                 frameSlider.setMaximum(maxFrameCount);
+                animDataStorage.maxFrameCount = maxFrameCount;
 
                 setTickSpacingFromTextField(frameSlider);
             }

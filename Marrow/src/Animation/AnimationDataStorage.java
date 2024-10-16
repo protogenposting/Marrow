@@ -21,6 +21,7 @@ public class AnimationDataStorage {
     public boolean isPlaying = false;
     public ParentLayer parentLayer;
     public Timeline timeline;
+    public int maxFrameCount = 128;
     Timer timer = new Timer();
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -32,8 +33,9 @@ public class AnimationDataStorage {
                 {
                     currentFrame ++;
                     timeline.currentFrameTextField.setText(String.valueOf(currentFrame));
+                    timeline.frameSlider.setValue(currentFrame);
                     parentLayer.repaint();
-                    if(currentFrame >= 128)
+                    if(currentFrame >= maxFrameCount)
                     {
                         currentFrame = 0;
                     }

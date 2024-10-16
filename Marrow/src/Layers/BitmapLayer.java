@@ -50,25 +50,15 @@ public class BitmapLayer extends ChildLayer {
 
         setSize(128);
 
-        keyframes.set(0, frame1);
+        keyframes.get(0).set(0, frame1);
 
         frame1.easing = EaseType.SINEIN;
 
-        frame1.channel = 0;
-
-        keyframes.set(64, frame2);
+        keyframes.get(0).set(64, frame2);
 
         frame2.easing = EaseType.SINEOUT;
 
-        frame2.channel = 0;
-
-        keyframes.set(127, frame3);
-
-        frame3.channel = 0;
-
-        for (int i = 0; i < TransformChannels.values().length; i++) {
-            channels.add(true);
-        }
+        keyframes.get(0).set(127, frame3);
 
         bitmap.setSize(800, 400);
     }
@@ -127,8 +117,12 @@ public class BitmapLayer extends ChildLayer {
 
     public void setSize(int size) {
         keyframes = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            keyframes.add(new Keyframe());
+        for (TransformChannels channel : TransformChannels.values()) {
+            ArrayList<Keyframe> list2 = new ArrayList<>();
+            keyframes.add(list2);
+            for (int i = 0; i < size; i++) {
+                list2.add(new Keyframe());
+            }
         }
     }
 }
