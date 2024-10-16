@@ -5,5 +5,7 @@ package Animation;
  */
 public enum EaseType {
     NONE,
-    SINE
+    SINE,
+    SINEIN,
+    SINEOUT,
 }

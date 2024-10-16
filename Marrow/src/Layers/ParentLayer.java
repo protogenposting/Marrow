@@ -143,11 +143,13 @@ public class ParentLayer extends Layer {
                     for (TransformChannels channel : TransformChannels.values()) {
                         if(!channels.get(channelID))
                         {
+                            channelID++;
                             continue;
                         }
 
                         if(lastKeyframes[channelID] == -1 || nextKeyframes[channelID] == -1)
                         {
+                            channelID++;
                             continue;
                         }
 
@@ -169,10 +171,14 @@ public class ParentLayer extends Layer {
                             case TransformChannels.y:
                                 currentTransform.setToTranslation(currentTransform.getTranslateX(),value);
                                 break;
+                            case TransformChannels.rotation:
+                                double width = bitmapChild.transform.rotationCenterX * bitmapChild.getWidth();
+                                double height = bitmapChild.transform.rotationCenterY * bitmapChild.getHeight();
+                                currentTransform.setToRotation(Math.toRadians(value),width,height);
+                                break;
                         }
                         channelID++;
                     }
-
                 }
 
                 //draw the image with the transform

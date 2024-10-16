@@ -42,7 +42,7 @@ public class BitmapLayer extends ChildLayer {
 
         Keyframe frame2 = new Keyframe(true);
 
-        frame2.value = 400;
+        frame2.value = 100;
 
         Keyframe frame3 = new Keyframe(true);
 
@@ -52,19 +52,23 @@ public class BitmapLayer extends ChildLayer {
 
         keyframes.set(0, frame1);
 
-        frame1.easing = EaseType.SINE;
+        frame1.easing = EaseType.SINEIN;
+
+        frame1.channel = 0;
 
         keyframes.set(64, frame2);
 
-        frame2.easing = EaseType.SINE;
+        frame2.easing = EaseType.SINEOUT;
+
+        frame2.channel = 0;
 
         keyframes.set(127, frame3);
 
-        for (int i = 0; i < TransformChannels.values().length; i++) {
-            channels.add(false);
-        }
+        frame3.channel = 0;
 
-        channels.set(0,true);
+        for (int i = 0; i < TransformChannels.values().length; i++) {
+            channels.add(true);
+        }
 
         bitmap.setSize(800, 400);
     }
