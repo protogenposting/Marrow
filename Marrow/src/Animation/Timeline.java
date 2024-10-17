@@ -4,6 +4,7 @@ import Layers.ParentLayer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.security.Key;
 import java.util.ArrayList;
 
 public class Timeline extends JPanel {
@@ -26,6 +27,8 @@ public class Timeline extends JPanel {
     JScrollPane channelPanel;
     JPanel keyframes = new JPanel();
     JPanel keyframeValuePanel = new JPanel();
+
+    Object[] yesNoOptions = {"Yes", "No"};
 
     public Timeline(AnimationDataStorage animDataStorage, ParentLayer parentLayer)
     {
@@ -280,11 +283,25 @@ public class Timeline extends JPanel {
 
         textField.addActionListener(e -> {
             int maxFrameCount;
-
+            boolean canSetMaxFrame = true;
             try{
                 maxFrameCount = Integer.parseInt(textField.getText());
-                frameSlider.setMaximum(maxFrameCount); //sets the maximum limit of frame slider
-                animDataStorage.maxFrameCount = maxFrameCount;
+
+                // If new maxFrameCount is less than current maxFrameCount,
+                // warn user as it will delete the keyframes included in the frames deleted.
+                if(maxFrameCount < animDataStorage.maxFrameCount){
+                    canSetMaxFrame = warnUser("Are you sure? If you proceed, you may delete keyframes!",
+                            "Setting Max Frame");
+                }
+
+                if(!canSetMaxFrame) {
+                    textField.setText(String.valueOf(animDataStorage.maxFrameCount));
+                }
+                else {
+                    frameSlider.setMaximum(maxFrameCount); //sets the maximum limit of frame slider
+                    animDataStorage.maxFrameCount = maxFrameCount;
+                }
+
             }
             catch (NumberFormatException ex) {
                 textField.setText(String.valueOf(animDataStorage.maxFrameCount));
@@ -294,6 +311,47 @@ public class Timeline extends JPanel {
         return textField;
     }
     //endregion
+
+    private void resetKeyframeArraySize(){
+        ArrayList<ArrayList<Keyframe>> newKeyFrames = parentLayer.currentLayer.keyframes;
+
+        if(newKeyFrames.size() > animDataStorage.maxFrameCount){
+            removeKeyFrames(newKeyFrames);
+        }
+    }
+
+    /*
+    private void addKeyFrames(ArrayList<ArrayList<Keyframe>> newKeyFrames){
+        for (int i = newKeyFrames.size(); i < animDataStorage.maxFrameCount; i++) {
+            ArrayList<Keyframe> tempKeyframe = new ArrayList<>();
+
+
+        }
+    }
+     */
+
+    private void removeKeyFrames(ArrayList<ArrayList<Keyframe>> newKeyFrames){
+        if (newKeyFrames.size() > animDataStorage.maxFrameCount + 1) {
+            newKeyFrames.subList(animDataStorage.maxFrameCount + 1, newKeyFrames.size()).clear();
+        }
+    }
+
+    private boolean warnUser(String prompt, String windowName){
+
+        int choice = JOptionPane.showOptionDialog(
+                null, // Parent component (null means center on screen)
+                prompt, // Message to display
+                windowName, // Dialog title
+                JOptionPane.YES_NO_OPTION, // Option type (Yes, No, Cancel)
+                JOptionPane.QUESTION_MESSAGE, // Message type (question icon)
+                null, // Custom icon (null means no custom icon)
+                yesNoOptions, // Custom options array
+                yesNoOptions[1] // Initial selection (default is "Cancel")
+        );
+
+        return choice == JOptionPane.YES_OPTION;
+
+    }
 
     private JSlider setUpSlider(){
         JSlider slider = new JSlider(0, 120, 0);
