@@ -29,8 +29,8 @@ public class Keyframe {
      * @param percentage the amount between the 2 values
      * @return the value between the 2
      */
-    public static double valueBetweenPoints(double a, double b,double percentage,EaseType easing)
-    {
+    public static double valueBetweenPoints(double a, double b,double percentage,EaseType easing) {
+
         switch(easing)
         {
             case EaseType.SINE:

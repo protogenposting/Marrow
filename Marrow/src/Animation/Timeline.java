@@ -18,9 +18,9 @@ public class Timeline extends JPanel {
     JLabel maxFrameCountLabel = new JLabel("Max Frame Count:");
     JLabel fpsLabel = new JLabel("Frames per Second:");
 
-    JTextField maxFrameCount = setUpMaxFrameCount();
-    JTextField framesPerSecond = setUpFramesPerSecond();
-    JTextField currentFrameTextField = setUpCurrentFrame();
+    JTextField maxFrameCount = setUpMaxFrameCount(new JTextField("120", 6));
+    JTextField framesPerSecond = setUpFramesPerSecond(new JTextField("24", 4));
+    JTextField currentFrameTextField = setUpCurrentFrame(new JTextField("0", 6));
 
     JPanel keyFramePanel = new JPanel();
     JScrollPane keyFramePanels;
@@ -96,6 +96,7 @@ public class Timeline extends JPanel {
                 continue;
             }
             JButton keyframe = new JButton(String.valueOf(i));
+            keyframe.addActionListener(e -> keyframeChannelSelection(parentLayer.currentLayer.keyframes.getFirst()));
             keyFramePanel.add(keyframe);
         }
 
@@ -108,35 +109,48 @@ public class Timeline extends JPanel {
         this.add(keyFramePanels, 0);
     }
 
-    private void keyframeChannelSelection(){
+    private void keyframeChannelSelection(ArrayList<Keyframe> keyframe){
         JPanel channels = new JPanel();
         channels.setLayout(new BoxLayout(channels, BoxLayout.Y_AXIS));
 
+        channels.add(createChannel("X", TransformChannels.x.getValue(), keyframe.getFirst()));
+        channels.add(createChannel("Y", TransformChannels.y.getValue(), keyframe.get(1)));
+        channels.add(createChannel("Scale X", TransformChannels.scaleX.getValue(), keyframe.get(2)));
+        channels.add(createChannel("Scale Y", TransformChannels.scaleY.getValue(), keyframe.get(3)));
 
+        channels.setVisible(true);
+
+        this.add(channels);
     }
 
-    private void createChannel(String channelName, int channelID){
+    private JPanel createChannel(String channelName, int channelID, Keyframe keyframe){
 
         JPanel channel = new JPanel();
         channel.setLayout(new BoxLayout(channel, BoxLayout.X_AXIS));
 
         JLabel channelValue = new JLabel(channelName + ":");
-        JTextField channelValueTextbox = new JTextField(4);
+        JTextField channelValueTextbox = new JTextField("0", 4);
 
         channelValueTextbox.addActionListener(e -> {
             String userInput = channelValueTextbox.getText();
-            
 
+            keyframe.value = Double.parseDouble(userInput);
 
         });
 
+        channel.add(channelValue);
+        channel.add(channelValueTextbox);
+        return channel;
     }
 
-
     //region textField methods
-    private JTextField setUpCurrentFrame(){
-        JTextField textField = new JTextField("0", 6);
-        textField.setVisible(true);
+
+    /**
+     * Sets a text field to show the current frame the timeline is on at all times.
+     * It will also change frameSlider's current frame accordingly if a value is entered.
+     * @return The edited text field.
+     */
+    private JTextField setUpCurrentFrame(JTextField textField){
 
         textField.addActionListener(e -> {
             try{
@@ -151,29 +165,40 @@ public class Timeline extends JPanel {
         return textField;
     }
 
-    private JTextField setUpFramesPerSecond(){
-        JTextField textField = new JTextField("24", 4);
-        textField.setVisible(true);
+    /**
+     * Sets a text field to allow you to change how many frames the animation plays every second.
+     * @return The edited text field.
+     */
+    private JTextField setUpFramesPerSecond(JTextField textField){
 
         textField.addActionListener(e -> {
 
-            int fps;
+            int framesPerSecond;
 
             try{
-                fps = Integer.parseInt(textField.getText());
-                animDataStorage.framesPerSecond = fps;
+                framesPerSecond = Integer.parseInt(textField.getText());
+
+                // This is for refresh rate limits.
+                if(framesPerSecond > 360){
+                    framesPerSecond = 360;
+                }
+
+                animDataStorage.framesPerSecond = framesPerSecond;
             }
             catch (NumberFormatException ex) {
-                textField.setText("N/A");
+                textField.setText(String.valueOf(animDataStorage.framesPerSecond));
             }
         });
 
         return textField;
     }
 
-    private JTextField setUpMaxFrameCount(){
-        JTextField textField = new JTextField("120", 6);
-        textField.setVisible(true);
+    /**
+     * Sets a text field to allow you to change the maximum amount of frames there are in the animation.
+     * The maximum frameSlider value is also changed accordingly when the created text field is used.
+     * @return The edited text field.
+     */
+    private JTextField setUpMaxFrameCount(JTextField textField){
 
         textField.addActionListener(e -> {
             int maxFrameCount;
@@ -186,7 +211,7 @@ public class Timeline extends JPanel {
                 setTickSpacingFromTextField(frameSlider);
             }
             catch (NumberFormatException ex) {
-                textField.setText("ERROR: ENTER A NUMBER");
+                textField.setText("N/A");
             }
         });
 
