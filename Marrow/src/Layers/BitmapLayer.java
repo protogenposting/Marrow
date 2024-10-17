@@ -52,6 +52,7 @@ public class BitmapLayer extends ChildLayer {
 
         // note: index out of bounds occurs because "keyframes" has 128 keyframes, and each keyframe has 7 channels
         // to fix, probably change frame1-3 into Arraylists
+        //TIGER DON'T DO THAT NO TIGER YOU'RE GONNA BREAK MY SYSTEM
 
         keyframes.get(0).set(0, frame1);
 
