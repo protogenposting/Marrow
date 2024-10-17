@@ -50,9 +50,6 @@ public class BitmapLayer extends ChildLayer {
 
         setSize(128);
 
-        // note: index out of bounds occurs because "keyframes" has 128 keyframes, and each keyframe has 7 channels
-        // to fix, probably change frame1-3 into Arraylists
-
         keyframes.get(0).set(0, frame1);
 
         frame1.easing = EaseType.SINEIN;
@@ -118,20 +115,12 @@ public class BitmapLayer extends ChildLayer {
         parent.repaint();
     }
 
-    /**
-     * Adds an amount of keyframes in the bitmap.
-     * @param size The amount of keyframes being added.
-     */
     public void setSize(int size) {
         keyframes = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-
-            //add a keyframe for every frame
+        for (TransformChannels channel : TransformChannels.values()) {
             ArrayList<Keyframe> list2 = new ArrayList<>();
             keyframes.add(list2);
-
-            //add 7 channels for each keyframe
-            for (TransformChannels channel : TransformChannels.values()) {
+            for (int i = 0; i < size; i++) {
                 list2.add(new Keyframe());
             }
         }
