@@ -27,9 +27,10 @@ public class BitmapLayer extends ChildLayer {
 
     public BufferedImage drawnImage;
 
-    public BitmapLayer(ToolContainer toolContainer,String name) {
+    public BitmapLayer(ToolContainer toolContainer,String name, ParentLayer parentLayer) {
         this(toolContainer, name, new Bitmap());
         bitmap.setSize(800,400);
+        this.parent = parentLayer;
     }
 
     public BitmapLayer(ToolContainer toolContainer, String name, Bitmap bitmap) {
@@ -60,6 +61,7 @@ public class BitmapLayer extends ChildLayer {
                 System.out.println(toolContainer.currentTool.toString());
                 drawnImage = bitmap.toImage();
                 parent.repaint();
+                repaint();
             }
            // @Override
             public void mouseReleased(MouseEvent e) {
@@ -71,6 +73,7 @@ public class BitmapLayer extends ChildLayer {
                 }
                 drawnImage = bitmap.toImage();
                 parent.repaint();
+                repaint();
             }
       //  });
         //listened for mouse movement
@@ -88,6 +91,7 @@ public class BitmapLayer extends ChildLayer {
                 oldY = currentY;
                 drawnImage = bitmap.toImage();
                 parent.repaint();
+                repaint();
             }
        // });
 
