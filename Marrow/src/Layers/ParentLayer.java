@@ -102,7 +102,26 @@ public class ParentLayer extends Layer {
         //RENDERING
 
         loopThroughChildren(children,(everyChildLayer) -> {
-            childrenPainting(everyChildLayer);
+            if(everyChildLayer.getClass().equals(BitmapLayer.class)) {
+                //draw the bitmap layer's image :3
+                BitmapLayer bitmapChild = (BitmapLayer)everyChildLayer;
+                AffineTransform currentTransform = new AffineTransform();
+
+                //currentTransform.scale(1,0.1);
+
+                if(bitmapChild == currentLayer) {
+                    graphics.drawRect(
+                            (int) bitmapChild.transform.x,
+                            (int) bitmapChild.transform.y,
+                            (int) (bitmapChild.transform.x + bitmapChild.getWidth() * bitmapChild.transform.scaleX),
+                            (int) (bitmapChild.transform.y + bitmapChild.getHeight() * bitmapChild.transform.scaleY)
+                    );
+                }
+
+
+                graphics.drawImage(bitmapChild.drawnImage, currentTransform, this);
+                //System.out.println(child.isCurrentLayer);
+            }
         });
 
         graphicsImported.drawImage(image,0,0,null);
@@ -123,26 +142,7 @@ public class ParentLayer extends Layer {
     }
 
     private void childrenPainting(ChildLayer child){
-        if(child.getClass().equals(BitmapLayer.class)) {
-            //draw the bitmap layer's image :3
-            BitmapLayer bitmapChild = (BitmapLayer)child;
-            AffineTransform currentTransform = new AffineTransform();
 
-            //currentTransform.scale(1,0.1);
-
-            if(bitmapChild == currentLayer) {
-                graphics.drawRect(
-                        (int) bitmapChild.transform.x,
-                        (int) bitmapChild.transform.y,
-                        (int) (bitmapChild.transform.x + bitmapChild.getWidth() * bitmapChild.transform.scaleX),
-                        (int) (bitmapChild.transform.y + bitmapChild.getHeight() * bitmapChild.transform.scaleY)
-                );
-            }
-
-
-            graphics.drawImage(bitmapChild.drawnImage, currentTransform, this);
-            //System.out.println(child.isCurrentLayer);
-        }
     }
 
     /**
