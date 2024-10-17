@@ -80,14 +80,14 @@ public class LayerWindow extends JPanel {
                     newChild =  parentLayer.currentLayer.name + "'s Layer " +
                             parentLayer.currentLayer.getChildren().size();
 
-                    parentLayer.currentLayer.addChild(new BitmapLayer(toolContainer, newChild, parentLayer));
+                    parentLayer.currentLayer.addChild(new BitmapLayer(toolContainer, newChild));
 
 
                 }else{
 
                     newChild = "Layer " + parentLayer.getChildren().size();
 
-                    parentLayer.addChild(new BitmapLayer(toolContainer,  newChild, parentLayer));
+                    parentLayer.addChild(new BitmapLayer(toolContainer,  newChild));
                 }
 
 

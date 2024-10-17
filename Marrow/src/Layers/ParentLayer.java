@@ -80,9 +80,6 @@ public class ParentLayer extends Layer {
         onAddChild.accept(layer);
         layer.setOpaque(false);
         layer.parent = this;
-        if (layer instanceof BitmapLayer){
-            ((BitmapLayer) layer).bitmap.setSize(800,400);
-        }
     }
 
     protected void paintComponent(Graphics graphicsImported) {
@@ -176,21 +173,20 @@ public class ParentLayer extends Layer {
      */
     public void setChildTo(ChildLayer layer) {
         currentLayer = layer;
-
-        loopThroughChildren(children, (getChild) -> {
-            ChildLayer child = getChild;
+        for(int i = 0; i < children.size(); i++)
+        {
+            ChildLayer child = children.get(i);
 
             child.isCurrentLayer = currentLayer == child;
 
             this.remove(child);
-        });
-
+        }
         layer.isCurrentLayer = true;
         this.add(layer);
         layer.setSize(getWidth(),getHeight());
-        if(layer instanceof BitmapLayer) {
+        if(layer instanceof BitmapLayer)
+        {
             ((BitmapLayer) layer).bitmap.setSize(getWidth(),getHeight());
         }
-        repaint();
     }
 }
