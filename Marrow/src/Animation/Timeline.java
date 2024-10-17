@@ -23,7 +23,9 @@ public class Timeline extends JPanel {
     JTextField currentFrameTextField = setUpCurrentFrame(new JTextField("0", 6));
 
     JPanel keyFramePanel = new JPanel();
-    JScrollPane keyFramePanels;
+    JScrollPane channelPanel;
+    JPanel keyframes = new JPanel();
+    JPanel keyframeValuePanel = new JPanel();
 
     public Timeline(AnimationDataStorage animDataStorage, ParentLayer parentLayer)
     {
@@ -66,81 +68,149 @@ public class Timeline extends JPanel {
 
     public void addKeyframes(){
 
-        if(keyFramePanels == null){
+        if(channelPanel == null){
             setUpKeyFramePanels();
             return;
         }
-        keyFramePanels.add(new JButton( String.valueOf( animDataStorage.currentFrame )));
+        channelPanel.add(new JButton( String.valueOf( animDataStorage.currentFrame )));
 
     }
 
     private void setUpKeyFramePanels(){
 
-        keyFramePanels = new JScrollPane();
-        keyFramePanels.setPreferredSize(new Dimension(100, 150));
+        channelPanel = new JScrollPane();
+        channelPanel.setPreferredSize(new Dimension(100, 200));
 
-        keyFramePanels.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        channelPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         keyFramePanel.setLayout(new BoxLayout(keyFramePanel, BoxLayout.Y_AXIS));
-        ArrayList<Keyframe> keyframes;
 
-        try {
-            keyframes = parentLayer.currentLayer.keyframes.getFirst();
-        }
-        catch (NullPointerException e){
-            return;
-        }
-
-        //adds all active keyframes to this panel
-        for (int i = 0; i < keyframes.size(); i++) {
-            if(!keyframes.get(i).isActive){
-                continue;
-            }
-            JButton keyframe = new JButton(String.valueOf(i));
-            keyframe.addActionListener(e -> keyframeChannelSelection(parentLayer.currentLayer.keyframes.getFirst()));
-            keyFramePanel.add(keyframe);
-        }
+        //region add channel buttons
+        //replace channelID with TransformChannels enum values
+        keyFramePanel.add(createChannelButton("X", 0));
+        keyFramePanel.add(createChannelButton("Y", 1));
+        keyFramePanel.add(createChannelButton("Scale X", 2));
+        keyFramePanel.add(createChannelButton("Scale Y", 3));
+        keyFramePanel.add(createChannelButton("Rotation", 4));
+        keyFramePanel.add(createChannelButton("Shear", 5));
+        keyFramePanel.add(createChannelButton("Opacity", 6));
+        //endregion
 
         keyFramePanel.setVisible(true);
 
-        keyFramePanels.add(keyFramePanel);
-        keyFramePanels.setVisible(true);
-        keyFramePanels.setViewportView(keyFramePanel);
+        channelPanel.add(keyFramePanel);
+        channelPanel.setVisible(true);
+        channelPanel.setViewportView(keyFramePanel);
 
-        this.add(keyFramePanels, 0);
+        this.add(channelPanel, 0);
     }
 
-    private void keyframeChannelSelection(ArrayList<Keyframe> keyframe){
-        JPanel channels = new JPanel();
-        channels.setLayout(new BoxLayout(channels, BoxLayout.Y_AXIS));
+    /**
+     * Creates a channel button that directs to a certain TransformChannel and its corresponding keyframes.
+     * @param name The name of the channel.
+     * @return The created channel button.
+     */
+    private JButton createChannelButton(String name, int channelID){
+        JButton channelButton = new JButton(name);
 
-        channels.add(createChannel("X", TransformChannels.x.getValue(), keyframe.getFirst()));
-        channels.add(createChannel("Y", TransformChannels.y.getValue(), keyframe.get(1)));
-        channels.add(createChannel("Scale X", TransformChannels.scaleX.getValue(), keyframe.get(2)));
-        channels.add(createChannel("Scale Y", TransformChannels.scaleY.getValue(), keyframe.get(3)));
+        channelButton.setPreferredSize(new Dimension(100, 30));
+        channelButton.addActionListener(e -> keyframeSelection(parentLayer.currentLayer.keyframes.get(channelID), channelID));
 
-        channels.setVisible(true);
-
-        this.add(channels);
+        return channelButton;
     }
 
-    private JPanel createChannel(String channelName, int channelID, Keyframe keyframe){
+    private void keyframeSelection(ArrayList<Keyframe> keyframe, int channelID){
 
-        JPanel channel = new JPanel();
-        channel.setLayout(new BoxLayout(channel, BoxLayout.X_AXIS));
+        if(keyframes.isVisible()){
+            keyframes.removeAll();
+            keyframes.setVisible(false);
+        }
 
-        JLabel channelValue = new JLabel(channelName + ":");
-        JTextField channelValueTextbox = new JTextField("0", 4);
+        keyframes.setLayout(new BoxLayout(keyframes, BoxLayout.X_AXIS));
 
-        channelValueTextbox.addActionListener(e -> {
-            String userInput = channelValueTextbox.getText();
+        keyframes.add(new JLabel("Keyframes: "));
 
-            keyframe.value = Double.parseDouble(userInput);
+        for (int i = 0; i < keyframe.size(); i++) {
+            if(!keyframe.get(i).isActive){
+                continue;
+            }
+
+            JButton keyframeButton = new JButton(String.valueOf(i));
+            int finalI = i;
+            keyframeButton.addActionListener(e -> editKeyframeValue(channelID, finalI, String.valueOf(finalI)));
+
+            keyframes.add(keyframeButton);
+        }
+
+        JButton addKeyFrameButton = new JButton("Add Keyframe");
+        JButton removeKeyFrameButton = new JButton("Remove Keyframe");
+
+        addKeyFrameButton.addActionListener(e -> addKeyFrame(keyframe, channelID));
+        removeKeyFrameButton.addActionListener(e -> removeKeyFrame(keyframe, channelID));
+
+        keyframes.add(addKeyFrameButton);
+        keyframes.add(removeKeyFrameButton);
+
+        keyframes.setVisible(true);
+
+        this.add(keyframes);
+        revalidate();
+        repaint();
+    }
+
+    private JButton createKeyFrameButton(int channelID){
+
+        int currentFrame = animDataStorage.currentFrame;
+
+        JButton keyframeButton = new JButton(String.valueOf(currentFrame));
+        keyframeButton.addActionListener(e -> editKeyframeValue(channelID, currentFrame, String.valueOf(currentFrame)));
+
+        return keyframeButton;
+    }
+
+    private void addKeyFrame(ArrayList<Keyframe> keyframe, int channelID){
+        Keyframe currentKeyframe = parentLayer.currentLayer.keyframes.get(channelID).get(animDataStorage.currentFrame);
+        currentKeyframe.isActive = true;
+
+        keyframeSelection(keyframe, channelID);
+    }
+
+    private void removeKeyFrame(ArrayList<Keyframe> keyframe, int channelID){
+        Keyframe currentKeyframe = parentLayer.currentLayer.keyframes.get(channelID).get(animDataStorage.currentFrame);
+
+        currentKeyframe.isActive = false;
+        currentKeyframe.value = 0;
+        keyframeSelection(keyframe, channelID);
+    }
+
+    private void editKeyframeValue(int channelID, int keyframeID, String name){
+        // parentLayer.currentLayer.keyframes.get(channelID);
+
+        if(keyframeValuePanel.isVisible()){
+            keyframeValuePanel.removeAll();
+            keyframeValuePanel.setVisible(false);
+        }
+
+        double currentValue = parentLayer.currentLayer.keyframes.get(channelID).get(keyframeID).value;
+
+        JLabel keyframeValue = new JLabel("Keyframe " + name + " Value: ");
+        JTextField keyframeValueTextbox = new JTextField(String.valueOf(currentValue), 4);
+
+        keyframeValueTextbox.addActionListener(e -> {
+            String userInput = keyframeValueTextbox.getText();
+
+            parentLayer.currentLayer.keyframes.get(channelID).get(keyframeID).value = Double.parseDouble(userInput);
 
         });
 
-        channel.add(channelValue);
-        channel.add(channelValueTextbox);
-        return channel;
+        keyframeValuePanel.setLayout(new BoxLayout(keyframeValuePanel, BoxLayout.X_AXIS));
+
+        keyframeValuePanel.add(keyframeValue);
+        keyframeValuePanel.add(keyframeValueTextbox);
+        keyframeValuePanel.setVisible(true);
+
+        this.add(keyframeValuePanel);
+        revalidate();
+        repaint();
     }
 
     //region textField methods

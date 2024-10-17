@@ -58,7 +58,7 @@ public class BitmapLayer extends ChildLayer {
 
         frame2.easing = EaseType.SINEOUT;
 
-        keyframes.get(0).set(127, frame3);
+        keyframes.get(0).set(119, frame3);
 
         bitmap.setSize(800, 400);
     }
