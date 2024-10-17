@@ -157,34 +157,43 @@ public class Timeline extends JPanel {
         repaint();
     }
 
-    private JButton createKeyFrameButton(int channelID){
-
-        int currentFrame = animDataStorage.currentFrame;
-
-        JButton keyframeButton = new JButton(String.valueOf(currentFrame));
-        keyframeButton.addActionListener(e -> editKeyframeValue(channelID, currentFrame, String.valueOf(currentFrame)));
-
-        return keyframeButton;
-    }
-
-    private void addKeyFrame(ArrayList<Keyframe> keyframe, int channelID){
+    /**
+     * Adds a keyframe to the currently selected channel.
+     * @param channel The current channel.
+     * @param channelID The channel the keyframe is on.
+     */
+    private void addKeyFrame(ArrayList<Keyframe> channel, int channelID){
         Keyframe currentKeyframe = parentLayer.currentLayer.keyframes.get(channelID).get(animDataStorage.currentFrame);
         currentKeyframe.isActive = true;
 
-        keyframeSelection(keyframe, channelID);
+        // "repaint"
+        keyframeSelection(channel, channelID);
     }
 
-    private void removeKeyFrame(ArrayList<Keyframe> keyframe, int channelID){
+    /**
+     * Removes a keyframe from the currently selected channel.
+     * @param channel The current channel.
+     * @param channelID The channel the keyframe is on.
+     */
+    private void removeKeyFrame(ArrayList<Keyframe> channel, int channelID){
         Keyframe currentKeyframe = parentLayer.currentLayer.keyframes.get(channelID).get(animDataStorage.currentFrame);
 
         currentKeyframe.isActive = false;
         currentKeyframe.value = 0;
-        keyframeSelection(keyframe, channelID);
+
+        // "repaint"
+        keyframeSelection(channel, channelID);
     }
 
+    /**
+     * Creates a panel with a text field that allows you to edit the value of a keyframe.
+     * @param channelID The channel the keyframe is on.
+     * @param keyframeID The location of the keyframe in the channel.
+     * @param name The name of the keyframe. Usually a number.
+     */
     private void editKeyframeValue(int channelID, int keyframeID, String name){
-        // parentLayer.currentLayer.keyframes.get(channelID);
 
+        // if this panel already exists, reset and create it again
         if(keyframeValuePanel.isVisible()){
             keyframeValuePanel.removeAll();
             keyframeValuePanel.setVisible(false);
@@ -199,7 +208,6 @@ public class Timeline extends JPanel {
             String userInput = keyframeValueTextbox.getText();
 
             parentLayer.currentLayer.keyframes.get(channelID).get(keyframeID).value = Double.parseDouble(userInput);
-
         });
 
         keyframeValuePanel.setLayout(new BoxLayout(keyframeValuePanel, BoxLayout.X_AXIS));
@@ -275,13 +283,11 @@ public class Timeline extends JPanel {
 
             try{
                 maxFrameCount = Integer.parseInt(textField.getText());
-                frameSlider.setMaximum(maxFrameCount);
+                frameSlider.setMaximum(maxFrameCount); //sets the maximum limit of frame slider
                 animDataStorage.maxFrameCount = maxFrameCount;
-
-                setTickSpacingFromTextField(frameSlider);
             }
             catch (NumberFormatException ex) {
-                textField.setText("N/A");
+                textField.setText(String.valueOf(animDataStorage.maxFrameCount));
             }
         });
 
