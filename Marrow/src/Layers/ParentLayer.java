@@ -113,6 +113,9 @@ public class ParentLayer extends Layer {
 
                         Arrays.fill(nextKeyframes, -1);
 
+                        int lastKeyframe = lastKeyframes[channelID];
+                        int nextKeyframe = nextKeyframes[channelID];
+
                         //get next and last keyframes
                         for (int keyframe = 0; keyframe < keyframes.size(); keyframe++) {
                             Keyframe currentKeyframe = keyframes.get(keyframe);
@@ -122,26 +125,25 @@ public class ParentLayer extends Layer {
                             }
 
                             if (keyframe <= currentFrame) {
-                                lastKeyframes[channelID] = keyframe;
+                                lastKeyframe = keyframe;
                             }
 
-                            if (keyframe > currentFrame && nextKeyframes[channelID] == -1) {
-                                nextKeyframes[channelID] = keyframe;
+                            if (keyframe > currentFrame && nextKeyframe == -1) {
+                                nextKeyframe = keyframe;
                             }
                         }
 
-                        if (lastKeyframes[channelID] == -1 || nextKeyframes[channelID] == -1) {
+                        if (lastKeyframe == -1 || nextKeyframe == -1) {
                             channelID++;
                             continue;
                         }
 
-                        Keyframe last = keyframes.get(lastKeyframes[channelID]);
+                        Keyframe last = keyframes.get(lastKeyframe);
+                        Keyframe next = keyframes.get(nextKeyframe);
 
-                        Keyframe next = keyframes.get(nextKeyframes[channelID]);
+                        int distance = nextKeyframe - lastKeyframe;
 
-                        int distance = nextKeyframes[channelID] - lastKeyframes[channelID];
-
-                        double percent = (double) (currentFrame - lastKeyframes[channelID]) / distance;
+                        double percent = (double) (currentFrame - lastKeyframe) / distance;
 
                         double value = Keyframe.valueBetweenPoints(last.value, next.value, percent, last.easing);
 

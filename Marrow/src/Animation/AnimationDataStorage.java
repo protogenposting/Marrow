@@ -32,9 +32,12 @@ public class AnimationDataStorage {
                 if(isPlaying)
                 {
                     currentFrame ++;
+
                     timeline.currentFrameTextField.setText(String.valueOf(currentFrame));
                     timeline.frameSlider.setValue(currentFrame);
+
                     parentLayer.repaint();
+
                     if(currentFrame >= maxFrameCount)
                     {
                         currentFrame = 0;

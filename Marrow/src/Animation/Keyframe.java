@@ -6,7 +6,7 @@ import Layers.Layer;
  * Keyframes are used to save the state of a certain layer's properties
  */
 public class Keyframe {
-    public double value = 0;
+    public double value = 0; // note: "0" eventually gets replaced by a value from TransformChannels
 
     public boolean isActive = false;
 

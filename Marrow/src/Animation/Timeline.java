@@ -27,32 +27,41 @@ public class Timeline extends JPanel {
 
     public Timeline(AnimationDataStorage animDataStorage, ParentLayer parentLayer)
     {
-        this.setLayout(new FlowLayout());
-        this.parentLayer = parentLayer;
-        this.animDataStorage = animDataStorage;
-
-        //yes the components are added in this specific order for a reason
-
-        this.add(fpsLabel);
-        this.add(framesPerSecond);
-
-        this.add(maxFrameCountLabel);
-        this.add(maxFrameCount);
-
-        //region button setup
         playButton.addActionListener(e -> playOrPause());
         animModeButton.addActionListener(e -> animateOnOrOff());
 
         playButton.setVisible(true);
         animModeButton.setVisible(true);
 
-        this.add(playButton);
-        this.add(animModeButton);
-        //endregion
+        this.setLayout(new FlowLayout(FlowLayout.LEFT));
+        this.parentLayer = parentLayer;
+        this.animDataStorage = animDataStorage;
 
-        this.add(frameSlider);
-        this.add(currentFrameLabel);
-        this.add(currentFrameTextField);
+        //yes the components are added in this specific order for a reason
+
+        addComponents();
+    }
+
+    /**
+     * Adds all the immediately necessary GUIs to the Timeline object.
+     * The line a GUI is added determines its position on the timeline.
+     */
+    private void addComponents(){
+        JPanel timeline = new JPanel();
+        timeline.add(fpsLabel);
+        timeline.add(framesPerSecond);
+
+        timeline.add(maxFrameCountLabel);
+        timeline.add(maxFrameCount);
+
+        timeline.add(playButton);
+        timeline.add(animModeButton);
+
+        timeline.add(frameSlider);
+        timeline.add(currentFrameLabel);
+        timeline.add(currentFrameTextField);
+
+        this.add(timeline);
     }
 
     public void addKeyframes(){
@@ -61,14 +70,14 @@ public class Timeline extends JPanel {
             setUpKeyFramePanels();
             return;
         }
-        keyFramePanels.add(new JButton("1"));
+        keyFramePanels.add(new JButton( String.valueOf( animDataStorage.currentFrame )));
 
     }
 
     private void setUpKeyFramePanels(){
 
         keyFramePanels = new JScrollPane();
-        keyFramePanels.setPreferredSize(new Dimension(200, 100));
+        keyFramePanels.setPreferredSize(new Dimension(100, 150));
 
         keyFramePanels.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         keyFramePanel.setLayout(new BoxLayout(keyFramePanel, BoxLayout.Y_AXIS));
@@ -81,7 +90,7 @@ public class Timeline extends JPanel {
             return;
         }
 
-
+        //adds all active keyframes to this panel
         for (int i = 0; i < keyframes.size(); i++) {
             if(!keyframes.get(i).isActive){
                 continue;
@@ -89,15 +98,42 @@ public class Timeline extends JPanel {
             JButton keyframe = new JButton(String.valueOf(i));
             keyFramePanel.add(keyframe);
         }
+
         keyFramePanel.setVisible(true);
 
         keyFramePanels.add(keyFramePanel);
         keyFramePanels.setVisible(true);
         keyFramePanels.setViewportView(keyFramePanel);
 
-        this.add(keyFramePanels);
+        this.add(keyFramePanels, 0);
     }
 
+    private void keyframeChannelSelection(){
+        JPanel channels = new JPanel();
+        channels.setLayout(new BoxLayout(channels, BoxLayout.Y_AXIS));
+
+
+    }
+
+    private void createChannel(String channelName, int channelID){
+
+        JPanel channel = new JPanel();
+        channel.setLayout(new BoxLayout(channel, BoxLayout.X_AXIS));
+
+        JLabel channelValue = new JLabel(channelName + ":");
+        JTextField channelValueTextbox = new JTextField(4);
+
+        channelValueTextbox.addActionListener(e -> {
+            String userInput = channelValueTextbox.getText();
+            
+
+
+        });
+
+    }
+
+
+    //region textField methods
     private JTextField setUpCurrentFrame(){
         JTextField textField = new JTextField("0", 6);
         textField.setVisible(true);
@@ -156,14 +192,20 @@ public class Timeline extends JPanel {
 
         return textField;
     }
+    //endregion
 
     private JSlider setUpSlider(){
         JSlider slider = new JSlider(0, 120, 0);
 
         slider.setVisible(true);
+
+        /*
+        until we figure out why the tick spacing never wants to change for some reason,
+        keep this code commented (or just delete it eventually)
         slider.setPaintTrack(true);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
+         */
 
         int majorTickSpacing = setTickSpacing(slider.getMaximum(), 5);
         int minorTickSpacing = setTickSpacing(slider.getMaximum(), 20);
@@ -207,7 +249,6 @@ public class Timeline extends JPanel {
 
     private void playOrPause(){
         animDataStorage.isPlaying = !(animDataStorage.isPlaying);
-        System.out.println(animDataStorage.isPlaying);
 
         if(animDataStorage.isPlaying){
             playButton.setText("Pause");
@@ -219,7 +260,6 @@ public class Timeline extends JPanel {
 
     private void animateOnOrOff(){
         animDataStorage.isInAnimateMode = !animDataStorage.isInAnimateMode;
-        System.out.println(animDataStorage.isInAnimateMode);
 
         if(animDataStorage.isInAnimateMode){
             animModeButton.setText("Stop Animating");
