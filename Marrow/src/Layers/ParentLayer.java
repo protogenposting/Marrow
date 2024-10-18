@@ -154,10 +154,25 @@ public class ParentLayer extends Layer {
                             case TransformChannels.y:
                                 currentTransform.setToTranslation(currentTransform.getTranslateX(), value);
                                 break;
+                            case TransformChannels.scaleX:
+                                currentTransform.setToScale(value,currentTransform.getScaleY());
+                                break;
+                            case TransformChannels.scaleY:
+                                currentTransform.setToScale(currentTransform.getScaleX(),value);
+                                break;
                             case TransformChannels.rotation:
                                 double width = bitmapChild.transform.rotationCenterX * bitmapChild.getWidth();
                                 double height = bitmapChild.transform.rotationCenterY * bitmapChild.getHeight();
                                 currentTransform.setToRotation(Math.toRadians(value), width, height);
+                                break;
+                            case TransformChannels.shearX:
+                                currentTransform.setToShear(value,currentTransform.getShearY());
+                                break;
+                            case TransformChannels.shearY:
+                                currentTransform.setToShear(currentTransform.getShearX(),value);
+                                break;
+                            case TransformChannels.opacity:
+                                //OH GOD IT ISN'T IN THE AFFINE TRANSFORM HELP-
                                 break;
                         }
                         channelID++;

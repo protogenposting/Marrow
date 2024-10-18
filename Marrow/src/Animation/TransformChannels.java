@@ -6,8 +6,9 @@ public enum TransformChannels{
     scaleX(2),
     scaleY(3),
     rotation(4),
-    shear(5),
-    opacity(6);
+    shearX(5),
+    shearY(6),
+    opacity(7);
     private final int value;
     private TransformChannels(int value) {
         this.value = value;
