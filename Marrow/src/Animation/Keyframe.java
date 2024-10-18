@@ -49,6 +49,18 @@ public class Keyframe {
                 break;
         }
 
+        double smaller;
+
+        if(a < b) {
+            smaller = a;
+        }
+        else if(a > b) {
+            smaller = b;
+        }
+        else {
+            return a;
+        }
+
         double distance = b-a;
 
         return a + distance * percentage;

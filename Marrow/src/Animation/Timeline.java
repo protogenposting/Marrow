@@ -31,6 +31,7 @@ public class Timeline extends JPanel {
     JPanel keyframeValuePanel = new JPanel();
 
     Object[] yesNoOptions = {"Yes", "No"};
+    String[] easingOptions = {"None", "Sine", "Sine In", "Sine Out"};
 
     public Timeline(AnimationDataStorage animDataStorage, ParentLayer parentLayer)
     {
@@ -71,7 +72,7 @@ public class Timeline extends JPanel {
         this.add(timeline);
     }
 
-    public void addKeyframes(){
+    public void addChannels(){
 
         if(channelPanel == null){
             setUpKeyFramePanels();
@@ -149,8 +150,8 @@ public class Timeline extends JPanel {
         JButton addKeyFrameButton = new JButton("Add Keyframe");
         JButton removeKeyFrameButton = new JButton("Remove Keyframe");
 
-        addKeyFrameButton.addActionListener(e -> addKeyFrame(keyframe, channelID));
-        removeKeyFrameButton.addActionListener(e -> removeKeyFrame(keyframe, channelID));
+        addKeyFrameButton.addActionListener(e -> addSpecificKeyFrame(keyframe, channelID));
+        removeKeyFrameButton.addActionListener(e -> removeSpecificKeyframe(keyframe, channelID));
 
         keyframes.add(addKeyFrameButton);
         keyframes.add(removeKeyFrameButton);
@@ -167,7 +168,7 @@ public class Timeline extends JPanel {
      * @param channel The current channel.
      * @param channelID The channel the keyframe is on.
      */
-    private void addKeyFrame(ArrayList<Keyframe> channel, int channelID){
+    private void addSpecificKeyFrame(ArrayList<Keyframe> channel, int channelID){
         Keyframe currentKeyframe = parentLayer.currentLayer.keyframes.get(channelID).get(animDataStorage.currentFrame);
         currentKeyframe.isActive = true;
 
@@ -180,7 +181,7 @@ public class Timeline extends JPanel {
      * @param channel The current channel.
      * @param channelID The channel the keyframe is on.
      */
-    private void removeKeyFrame(ArrayList<Keyframe> channel, int channelID){
+    private void removeSpecificKeyframe(ArrayList<Keyframe> channel, int channelID){
         Keyframe currentKeyframe = parentLayer.currentLayer.keyframes.get(channelID).get(animDataStorage.currentFrame);
 
         currentKeyframe.isActive = false;
@@ -243,7 +244,7 @@ public class Timeline extends JPanel {
     //region textField methods
 
     /**
-     * Sets a text field to show the current frame the timeline is on at all times.
+     * Sets up a text field to show the current frame the timeline is on at all times.
      * It will also change frameSlider's current frame accordingly if a value is entered.
      * @return The edited text field.
      */
@@ -255,7 +256,7 @@ public class Timeline extends JPanel {
                 frameSlider.setValue(Integer.parseInt(textField.getText()));
 
             } catch (NumberFormatException ex) {
-                textField.setText("ERROR");
+                textField.setText(String.valueOf(animDataStorage.currentFrame));
             }
         });
 
@@ -281,6 +282,8 @@ public class Timeline extends JPanel {
                 }
 
                 animDataStorage.framesPerSecond = framesPerSecond;
+                animDataStorage.resetFramesPerSecond();
+
             }
             catch (NumberFormatException ex) {
                 textField.setText(String.valueOf(animDataStorage.framesPerSecond));
@@ -316,6 +319,7 @@ public class Timeline extends JPanel {
                 else {
                     frameSlider.setMaximum(maxFrameCount); //sets the maximum limit of frame slider
                     animDataStorage.maxFrameCount = maxFrameCount;
+                    resetKeyframeArraySize();
                 }
 
             }
@@ -331,24 +335,38 @@ public class Timeline extends JPanel {
     private void resetKeyframeArraySize(){
         ArrayList<ArrayList<Keyframe>> newKeyFrames = parentLayer.currentLayer.keyframes;
 
-        if(newKeyFrames.size() > animDataStorage.maxFrameCount){
+        if(newKeyFrames.size() < animDataStorage.maxFrameCount){
             removeKeyFrames(newKeyFrames);
         }
-    }
-
-    /*
-    private void addKeyFrames(ArrayList<ArrayList<Keyframe>> newKeyFrames){
-        for (int i = newKeyFrames.size(); i < animDataStorage.maxFrameCount; i++) {
-            ArrayList<Keyframe> tempKeyframe = new ArrayList<>();
-
-
+        else if(newKeyFrames.size() > animDataStorage.maxFrameCount){
+            addChannels(newKeyFrames);
         }
     }
-     */
+
+    private void addChannels(ArrayList<ArrayList<Keyframe>> newKeyFrames){
+        //add the new keyframes to each channel
+        for(int channel = 0; channel < TransformChannels.values().length; channel++) {
+
+            for (int i = newKeyFrames.size(); i < animDataStorage.maxFrameCount; i++) {
+                newKeyFrames.get(channel).add(new Keyframe());
+            }
+        }
+    }
 
     private void removeKeyFrames(ArrayList<ArrayList<Keyframe>> newKeyFrames){
-        if (newKeyFrames.size() > animDataStorage.maxFrameCount + 1) {
-            newKeyFrames.subList(animDataStorage.maxFrameCount + 1, newKeyFrames.size()).clear();
+        if (newKeyFrames.getFirst().size() > animDataStorage.maxFrameCount + 1) {
+
+            for (int channel = 0; channel < TransformChannels.values().length; channel++) {
+
+                for (int aKeyFrame = animDataStorage.maxFrameCount; aKeyFrame < newKeyFrames.get(channel).size(); aKeyFrame++) {
+
+                    removeSpecificKeyframe(newKeyFrames.get(channel), channel);
+
+                }
+            }
+
+
+
         }
     }
 

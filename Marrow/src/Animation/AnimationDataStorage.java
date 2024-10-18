@@ -20,32 +20,41 @@ public class AnimationDataStorage {
     public boolean isPlaying = false;
     public ParentLayer parentLayer;
     public Timeline timeline;
-    public int maxFrameCount = 128;
+    public int maxFrameCount = 120;
+    Timer timer = new Timer();
+
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public AnimationDataStorage() {
-        Runnable yourRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if(isPlaying)
+        runAnimation();
+    }
+
+
+    public void runAnimation(){
+        Runnable yourRunnable = () -> {
+            if(isPlaying)
+            {
+                currentFrame ++;
+
+                timeline.currentFrameTextField.setText(String.valueOf(currentFrame));
+                timeline.frameSlider.setValue(currentFrame);
+
+                parentLayer.repaint();
+
+                if(currentFrame >= maxFrameCount)
                 {
-                    currentFrame ++;
-
-                    timeline.currentFrameTextField.setText(String.valueOf(currentFrame));
-                    timeline.frameSlider.setValue(currentFrame);
-
-                    parentLayer.repaint();
-
-                    if(currentFrame >= maxFrameCount)
-                    {
-                        currentFrame = 0;
-                    }
+                    currentFrame = 0;
                 }
             }
         };
         int initialDelay = 0;
         int delay = 1000/framesPerSecond;
         scheduler.scheduleWithFixedDelay(yourRunnable, initialDelay, delay, TimeUnit.MILLISECONDS);
+    }
+
+    public void resetFramesPerSecond(){
+        scheduler.shutdown();
+        runAnimation();
     }
 
     /**
