@@ -11,8 +11,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Animation Data Storage lets us transfer data between anything that uses animation.<br>
- * I want to krill myself this code is so ass
+ * Animation Data Storage lets us transfer data between anything that uses animation.
  */
 public class AnimationDataStorage {
     public int currentFrame = 0;
@@ -22,7 +21,6 @@ public class AnimationDataStorage {
     public ParentLayer parentLayer;
     public Timeline timeline;
     public int maxFrameCount = 128;
-    Timer timer = new Timer();
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public AnimationDataStorage() {
