@@ -4,6 +4,8 @@ import Layers.ParentLayer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.security.Key;
 import java.util.ArrayList;
 
@@ -219,7 +221,21 @@ public class Timeline extends JPanel {
         keyframeValuePanel.add(keyframeValueTextbox);
         keyframeValuePanel.setVisible(true);
 
+        EaseType[] choices = EaseType.values();
+
+        JComboBox<EaseType> dropdown = new JComboBox<>(choices);
+
+        dropdown.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                parentLayer.currentLayer.keyframes.get(channelID).get(keyframeID).easing = (EaseType) dropdown.getSelectedItem();
+            }
+        });
+
+        dropdown.setSelectedItem(parentLayer.currentLayer.keyframes.get(channelID).get(keyframeID).easing);
+
         this.add(keyframeValuePanel);
+        this.add(dropdown);
         revalidate();
         repaint();
     }
