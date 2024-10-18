@@ -239,8 +239,9 @@ public class Timeline extends JPanel {
 
         dropdown.setSelectedItem(parentLayer.currentLayer.keyframes.get(channelID).get(keyframeID).easing);
 
+        keyframeValuePanel.add(dropdown);
+
         this.add(keyframeValuePanel);
-        this.add(dropdown);
         revalidate();
         repaint();
     }
@@ -322,7 +323,7 @@ public class Timeline extends JPanel {
                 }
                 else {
                     frameSlider.setMaximum(maxFrameCount); //sets the maximum limit of frame slider
-                    animDataStorage.maxFrameCount = maxFrameCount;
+                    animDataStorage.maxFrameCount = maxFrameCount + 1;
                     resetKeyframeArraySize();
                 }
 
