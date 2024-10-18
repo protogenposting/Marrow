@@ -23,7 +23,6 @@ public class Timeline extends JPanel {
     JTextField currentFrameTextField = setUpCurrentFrame(new JTextField("0", 6));
 
     JPanel keyFramePanel = new JPanel();
-    JPanel channels = new JPanel();
     JScrollPane keyFramePanels;
 
     public Timeline(AnimationDataStorage animDataStorage, ParentLayer parentLayer)
@@ -93,14 +92,11 @@ public class Timeline extends JPanel {
 
         //adds all active keyframes to this panel
         for (int i = 0; i < keyframes.size(); i++) {
-
             if(!keyframes.get(i).isActive){
                 continue;
             }
             JButton keyframe = new JButton(String.valueOf(i));
-
-            int finalI = i;
-            keyframe.addActionListener(e -> keyframeChannelSelection(parentLayer.currentLayer.keyframes.get(finalI)));
+            keyframe.addActionListener(e -> keyframeChannelSelection(parentLayer.currentLayer.keyframes.getFirst()));
             keyFramePanel.add(keyframe);
         }
 
@@ -113,51 +109,32 @@ public class Timeline extends JPanel {
         this.add(keyFramePanels, 0);
     }
 
-    /**
-     * Creates a panel that allows you to edit any channel in the given keyframe.
-     * @param keyframe The keyframe that will be edited.
-     */
     private void keyframeChannelSelection(ArrayList<Keyframe> keyframe){
-
-        //if there's one already created, reset all the values inside of it
-        if(channels.isVisible()){
-            channels.removeAll();
-        }
-
+        JPanel channels = new JPanel();
         channels.setLayout(new BoxLayout(channels, BoxLayout.Y_AXIS));
 
-        channels.add(createChannel("X", keyframe.get( TransformChannels.x.getValue() )));
-        channels.add(createChannel("Y", keyframe.get( TransformChannels.y.getValue() )));
-        channels.add(createChannel("Scale X", keyframe.get( TransformChannels.scaleX.getValue() )));
-        channels.add(createChannel("Scale Y", keyframe.get( TransformChannels.scaleY.getValue() )));
+        channels.add(createChannel("X", TransformChannels.x.getValue(), keyframe.getFirst()));
+        channels.add(createChannel("Y", TransformChannels.y.getValue(), keyframe.get(1)));
+        channels.add(createChannel("Scale X", TransformChannels.scaleX.getValue(), keyframe.get(2)));
+        channels.add(createChannel("Scale Y", TransformChannels.scaleY.getValue(), keyframe.get(3)));
 
         channels.setVisible(true);
 
         this.add(channels);
-        revalidate();
-        repaint();
     }
 
-    /**
-     * Creates a panel that allows you to edit the value of a channel in a keyframe, i.e. rotation.
-     * @param channelName The name of the channel.
-     * @param keyframeChannel The channel that will be edited.
-     * @return A panel that allows you to edit the value of a channel in a keyframe.
-     */
-    private JPanel createChannel(String channelName, Keyframe keyframeChannel){
+    private JPanel createChannel(String channelName, int channelID, Keyframe keyframe){
 
         JPanel channel = new JPanel();
         channel.setLayout(new BoxLayout(channel, BoxLayout.X_AXIS));
 
-        String currentValue = String.valueOf(keyframeChannel.value);
-
         JLabel channelValue = new JLabel(channelName + ":");
-        JTextField channelValueTextbox = new JTextField(currentValue, 4);
+        JTextField channelValueTextbox = new JTextField("0", 4);
 
         channelValueTextbox.addActionListener(e -> {
             String userInput = channelValueTextbox.getText();
 
-            keyframeChannel.value = Double.parseDouble(userInput);
+            keyframe.value = Double.parseDouble(userInput);
 
         });
 
