@@ -218,6 +218,8 @@ public class Timeline extends JPanel {
             String userInput = keyframeValueTextbox.getText();
 
             parentLayer.currentLayer.keyframes.get(channelID).get(keyframeID).value = Double.parseDouble(userInput);
+
+            parentLayer.repaint();
         });
 
         keyframeValuePanel.setLayout(new BoxLayout(keyframeValuePanel, BoxLayout.X_AXIS));
@@ -234,6 +236,7 @@ public class Timeline extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 parentLayer.currentLayer.keyframes.get(channelID).get(keyframeID).easing = (EaseType) dropdown.getSelectedItem();
+                parentLayer.repaint();
             }
         });
 
@@ -414,6 +417,8 @@ public class Timeline extends JPanel {
         slider.addChangeListener(e -> {
 
             animDataStorage.currentFrame = slider.getValue();
+
+            parentLayer.repaint();
 
             String frameValue = String.valueOf(slider.getValue());
             currentFrameTextField.setText(frameValue);
