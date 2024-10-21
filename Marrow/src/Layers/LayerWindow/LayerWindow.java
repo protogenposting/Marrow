@@ -61,7 +61,7 @@ public class LayerWindow extends JPanel {
         layerAdding.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                parentLayer.addChild(new BitmapLayer(toolContainer,"Big Gay Layer " + new Random().nextInt()));
+                parentLayer.addChild(new BitmapLayer(toolContainer,"Layer " + parentLayer.getChildren().size()));
                 revalidate();
                 repaint();
             }
