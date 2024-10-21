@@ -2,17 +2,10 @@ package Layers;
 
 import Animation.AnimationDataStorage;
 import Animation.Keyframe;
-import Animation.Transform2D;
 import Animation.TransformChannels;
-import Main.Main;
 import Tools.ToolContainer;
 
-import javax.swing.*;
-import javax.xml.crypto.dsig.Transform;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,12 +52,14 @@ public class ParentLayer extends Layer {
 
         layer.setSize(defaultWidth,defaultHeight);
 
+        layer.width = defaultWidth;
+
+        layer.height = defaultHeight;
+
         if(layer instanceof BitmapLayer)
         {
             BitmapLayer currentLayer = (BitmapLayer) layer;
             currentLayer.bitmap.setSize(defaultWidth,defaultHeight);
-            currentLayer.transform.scaleX = defaultWidth;
-            currentLayer.transform.scaleY = defaultHeight;
         }
 
         if(children.isEmpty()) {
@@ -89,24 +84,29 @@ public class ParentLayer extends Layer {
         graphics.setColor(Color.black);
         //clear the image again
         clear();
+
+
         //RENDERING
-
         loopThroughChildren(children, (child) -> {
-
-
+            //selection rectangle
+            if (child == currentLayer) {
+                graphics.drawRect(
+                        (int) (child.transform.centerX - child.transform.x),
+                        (int) (child.transform.centerY - child.transform.y),
+                        (int) (child.transform.centerX + child.transform.x + child.width * child.transform.scaleX),
+                        (int) (child.transform.centerY + child.transform.y + child.height * child.transform.scaleY)
+                );
+                graphics.drawOval(
+                        (int) (child.transform.centerX + child.transform.x) - 15,
+                        (int) (child.transform.centerY + child.transform.y) - 15,
+                        30,
+                        30
+                );
+            }
             if (child.getClass().equals(BitmapLayer.class)) {
                 //draw the bitmap layer's image :3
                 BitmapLayer bitmapChild = (BitmapLayer) child;
                 AffineTransform currentTransform = new AffineTransform();
-                //selection rectangle
-                if (bitmapChild == currentLayer) {
-                    graphics.drawRect(
-                            (int) (bitmapChild.transform.rotationCenterX - bitmapChild.transform.x),
-                            (int) (bitmapChild.transform.rotationCenterY - bitmapChild.transform.y),
-                            (int) (bitmapChild.transform.rotationCenterX + bitmapChild.transform.x + bitmapChild.transform.scaleX),
-                            (int) (bitmapChild.transform.rotationCenterY + bitmapChild.transform.y + bitmapChild.transform.scaleY)
-                    );
-                }
 
                 // this section deals with actually animating!
 
@@ -183,8 +183,8 @@ public class ParentLayer extends Layer {
                                 currentTransform.setToScale(currentTransform.getScaleX(),value);
                                 break;
                             case TransformChannels.rotation:
-                                double width = bitmapChild.transform.rotationCenterX * bitmapChild.getWidth();
-                                double height = bitmapChild.transform.rotationCenterY * bitmapChild.getHeight();
+                                double width = bitmapChild.transform.centerX * bitmapChild.getWidth();
+                                double height = bitmapChild.transform.centerY * bitmapChild.getHeight();
                                 currentTransform.setToRotation(Math.toRadians(value), width, height);
                                 break;
                             case TransformChannels.shearX:
