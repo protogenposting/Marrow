@@ -137,6 +137,8 @@ public class Main {
                 writer.write("\n" + dashCount + childLayerName);
                 System.out.print("\n" + dashCount + childLayerName);
 
+                saveKeyFrames(child, writer, dashCount);
+
                 //SAVE THE IMAGE!!!
                 if(child.getClass().equals(BitmapLayer.class))
                 {
@@ -146,6 +148,8 @@ public class Main {
                 }
             }
             catch (IOException ignore) {}
+
+
 
             if(thereIsChild){
                 ArrayList<ChildLayer> secondChildLayers = childLayers.get(i).getChildren(); //get the children of the child in childLayers
@@ -163,6 +167,32 @@ public class Main {
             } // if this is not here, it will print duplicate layers
             if(hasRepeated){
                 break;
+            }
+        }
+    }
+
+    private static void saveKeyFrames(ChildLayer child, FileWriter writer, String dashCount) throws IOException {
+        ArrayList<ArrayList<Keyframe>> channels = child.keyframes;
+
+        Keyframe keyframe;
+        TransformChannels[] channelNames = TransformChannels.values();
+        TransformChannels channelName;
+
+        for (int channel = 0; channel < channels.size(); channel++) {
+
+            channelName = channelNames[channel];
+
+            writer.write("\n" + (dashCount + "-") + "CHANNEL: " + channelName.name());
+
+            for (int keyframes = 0; keyframes < channels.get(channel).size(); keyframes++) {
+
+                keyframe = channels.get(channel).get(keyframes);
+
+                if(!keyframe.isActive){
+                    continue;
+                }
+
+                writer.write("\n" + (dashCount + "--") + "KF " + keyframes + keyframe.value);
             }
         }
     }
@@ -234,6 +264,7 @@ public class Main {
         return returningName.toString();
     }
     //endregion
+
      /**
      * Sets up the main frame that the user draws on
      */

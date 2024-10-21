@@ -137,7 +137,11 @@ public class Timeline extends JPanel {
 
         keyframes.setLayout(new BoxLayout(keyframes, BoxLayout.X_AXIS));
 
-        keyframes.add(new JLabel("Keyframes: "));
+        TransformChannels[] channels = TransformChannels.values();
+        TransformChannels channel = channels[channelID];
+
+
+        keyframes.add(new JLabel("Channel: " + channel.name() + ", Keyframes: "));
 
         for (int i = 0; i < keyframe.size(); i++) {
             if(!keyframe.get(i).isActive){
