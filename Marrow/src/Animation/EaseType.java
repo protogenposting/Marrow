@@ -1,7 +1,7 @@
 package Animation;
 
 /**
- * ease type will be used for smoother animation.
+ * easing is used to create smoother animation and automate some of the process.
  */
 public enum EaseType {
     NONE,

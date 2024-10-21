@@ -4,6 +4,8 @@ import Layers.ParentLayer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.security.Key;
 import java.util.ArrayList;
 
@@ -29,6 +31,8 @@ public class Timeline extends JPanel {
     JPanel keyframeValuePanel = new JPanel();
 
     Object[] yesNoOptions = {"Yes", "No"};
+
+    private int currentChannel = 0;
 
     public Timeline(AnimationDataStorage animDataStorage, ParentLayer parentLayer)
     {
@@ -69,7 +73,7 @@ public class Timeline extends JPanel {
         this.add(timeline);
     }
 
-    public void addKeyframes(){
+    public void addChannels(){
 
         if(channelPanel == null){
             setUpKeyFramePanels();
@@ -116,7 +120,10 @@ public class Timeline extends JPanel {
         JButton channelButton = new JButton(name);
 
         channelButton.setPreferredSize(new Dimension(100, 30));
-        channelButton.addActionListener(e -> keyframeSelection(parentLayer.currentLayer.keyframes.get(channelID), channelID));
+        channelButton.addActionListener(e -> {
+            keyframeSelection(parentLayer.currentLayer.keyframes.get(channelID), channelID);
+            currentChannel = channelID;
+        });
 
         return channelButton;
     }
@@ -147,8 +154,8 @@ public class Timeline extends JPanel {
         JButton addKeyFrameButton = new JButton("Add Keyframe");
         JButton removeKeyFrameButton = new JButton("Remove Keyframe");
 
-        addKeyFrameButton.addActionListener(e -> addKeyFrame(keyframe, channelID));
-        removeKeyFrameButton.addActionListener(e -> removeKeyFrame(keyframe, channelID));
+        addKeyFrameButton.addActionListener(e -> addSpecificKeyFrame(keyframe, channelID));
+        removeKeyFrameButton.addActionListener(e -> removeSpecificKeyframe(keyframe, channelID, animDataStorage.currentFrame));
 
         keyframes.add(addKeyFrameButton);
         keyframes.add(removeKeyFrameButton);
@@ -165,7 +172,7 @@ public class Timeline extends JPanel {
      * @param channel The current channel.
      * @param channelID The channel the keyframe is on.
      */
-    private void addKeyFrame(ArrayList<Keyframe> channel, int channelID){
+    private void addSpecificKeyFrame(ArrayList<Keyframe> channel, int channelID){
         Keyframe currentKeyframe = parentLayer.currentLayer.keyframes.get(channelID).get(animDataStorage.currentFrame);
         currentKeyframe.isActive = true;
 
@@ -178,8 +185,8 @@ public class Timeline extends JPanel {
      * @param channel The current channel.
      * @param channelID The channel the keyframe is on.
      */
-    private void removeKeyFrame(ArrayList<Keyframe> channel, int channelID){
-        Keyframe currentKeyframe = parentLayer.currentLayer.keyframes.get(channelID).get(animDataStorage.currentFrame);
+    private void removeSpecificKeyframe(ArrayList<Keyframe> channel, int channelID, int currentFrame){
+        Keyframe currentKeyframe = parentLayer.currentLayer.keyframes.get(channelID).get(currentFrame);
 
         currentKeyframe.isActive = false;
         currentKeyframe.value = 0;
@@ -211,6 +218,8 @@ public class Timeline extends JPanel {
             String userInput = keyframeValueTextbox.getText();
 
             parentLayer.currentLayer.keyframes.get(channelID).get(keyframeID).value = Double.parseDouble(userInput);
+
+            parentLayer.repaint();
         });
 
         keyframeValuePanel.setLayout(new BoxLayout(keyframeValuePanel, BoxLayout.X_AXIS));
@@ -218,6 +227,22 @@ public class Timeline extends JPanel {
         keyframeValuePanel.add(keyframeValue);
         keyframeValuePanel.add(keyframeValueTextbox);
         keyframeValuePanel.setVisible(true);
+
+        EaseType[] choices = EaseType.values();
+
+        JComboBox<EaseType> dropdown = new JComboBox<>(choices);
+
+        dropdown.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                parentLayer.currentLayer.keyframes.get(channelID).get(keyframeID).easing = (EaseType) dropdown.getSelectedItem();
+                parentLayer.repaint();
+            }
+        });
+
+        dropdown.setSelectedItem(parentLayer.currentLayer.keyframes.get(channelID).get(keyframeID).easing);
+
+        keyframeValuePanel.add(dropdown);
 
         this.add(keyframeValuePanel);
         revalidate();
@@ -227,7 +252,7 @@ public class Timeline extends JPanel {
     //region textField methods
 
     /**
-     * Sets a text field to show the current frame the timeline is on at all times.
+     * Sets up a text field to show the current frame the timeline is on at all times.
      * It will also change frameSlider's current frame accordingly if a value is entered.
      * @return The edited text field.
      */
@@ -239,7 +264,7 @@ public class Timeline extends JPanel {
                 frameSlider.setValue(Integer.parseInt(textField.getText()));
 
             } catch (NumberFormatException ex) {
-                textField.setText("ERROR");
+                textField.setText(String.valueOf(animDataStorage.currentFrame));
             }
         });
 
@@ -265,6 +290,8 @@ public class Timeline extends JPanel {
                 }
 
                 animDataStorage.framesPerSecond = framesPerSecond;
+                animDataStorage.resetFramesPerSecond();
+
             }
             catch (NumberFormatException ex) {
                 textField.setText(String.valueOf(animDataStorage.framesPerSecond));
@@ -299,7 +326,8 @@ public class Timeline extends JPanel {
                 }
                 else {
                     frameSlider.setMaximum(maxFrameCount); //sets the maximum limit of frame slider
-                    animDataStorage.maxFrameCount = maxFrameCount;
+                    animDataStorage.maxFrameCount = maxFrameCount + 1;
+                    resetKeyframeArraySize();
                 }
 
             }
@@ -315,25 +343,39 @@ public class Timeline extends JPanel {
     private void resetKeyframeArraySize(){
         ArrayList<ArrayList<Keyframe>> newKeyFrames = parentLayer.currentLayer.keyframes;
 
-        if(newKeyFrames.size() > animDataStorage.maxFrameCount){
+        if(newKeyFrames.getFirst().size() > animDataStorage.maxFrameCount){
             removeKeyFrames(newKeyFrames);
         }
-    }
-
-    /*
-    private void addKeyFrames(ArrayList<ArrayList<Keyframe>> newKeyFrames){
-        for (int i = newKeyFrames.size(); i < animDataStorage.maxFrameCount; i++) {
-            ArrayList<Keyframe> tempKeyframe = new ArrayList<>();
-
-
+        else if(newKeyFrames.getFirst().size() < animDataStorage.maxFrameCount){
+            addChannels(newKeyFrames);
         }
     }
-     */
+
+    private void addChannels(ArrayList<ArrayList<Keyframe>> newKeyFrames){
+        //add the new keyframes to each channel
+        for(int channel = 0; channel < TransformChannels.values().length; channel++) {
+            for (int i = newKeyFrames.get(channel).size(); i < animDataStorage.maxFrameCount; i++) {
+                newKeyFrames.get(channel).add(new Keyframe());
+                System.out.println(newKeyFrames.get(channel).size());
+            }
+        }
+    }
 
     private void removeKeyFrames(ArrayList<ArrayList<Keyframe>> newKeyFrames){
-        if (newKeyFrames.size() > animDataStorage.maxFrameCount + 1) {
-            newKeyFrames.subList(animDataStorage.maxFrameCount + 1, newKeyFrames.size()).clear();
+        if (!(newKeyFrames.getFirst().size() > animDataStorage.maxFrameCount + 1)) {
+            return;
         }
+
+        for (int channel = 0; channel < TransformChannels.values().length; channel++) {
+
+            for (int aKeyFrame = animDataStorage.maxFrameCount; aKeyFrame < newKeyFrames.get(channel).size(); aKeyFrame++) {
+
+                removeSpecificKeyframe(newKeyFrames.get(channel), channel, aKeyFrame);
+
+            }
+        }
+
+        keyframeSelection(parentLayer.currentLayer.keyframes.get(currentChannel), currentChannel);
     }
 
     private boolean warnUser(String prompt, String windowName){
@@ -375,6 +417,8 @@ public class Timeline extends JPanel {
         slider.addChangeListener(e -> {
 
             animDataStorage.currentFrame = slider.getValue();
+
+            parentLayer.repaint();
 
             String frameValue = String.valueOf(slider.getValue());
             currentFrameTextField.setText(frameValue);

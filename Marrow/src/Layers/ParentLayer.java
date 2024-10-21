@@ -97,7 +97,8 @@ public class ParentLayer extends Layer {
                 }
 
                 // this section deals with actually animating!
-                if (animDataStorage.isInAnimateMode && animDataStorage.isPlaying) {
+
+                if(animDataStorage.isInAnimateMode) {
                     int channelID = 0;
                     for (TransformChannels channel : TransformChannels.values()) {
                         int currentFrame = animDataStorage.currentFrame;
@@ -132,19 +133,29 @@ public class ParentLayer extends Layer {
                             }
                         }
 
-                        if (lastKeyframe == -1 || nextKeyframe == -1) {
+                        if (lastKeyframe == -1) {
                             channelID++;
                             continue;
                         }
 
+                        double value;
+
                         Keyframe last = keyframes.get(lastKeyframe);
-                        Keyframe next = keyframes.get(nextKeyframe);
 
-                        int distance = nextKeyframe - lastKeyframe;
+                        if(nextKeyframe == -1)
+                        {
+                            value = last.value;
+                        }
+                        else
+                        {
+                            Keyframe next = keyframes.get(nextKeyframe);
 
-                        double percent = (double) (currentFrame - lastKeyframe) / distance;
+                            int distance = nextKeyframe - lastKeyframe;
 
-                        double value = Keyframe.valueBetweenPoints(last.value, next.value, percent, last.easing);
+                            double percent = (double) (currentFrame - lastKeyframe) / distance;
+
+                            value = Keyframe.valueBetweenPoints(last.value, next.value, percent, last.easing);
+                        }
 
                         switch (channel) {
                             case TransformChannels.x:
@@ -153,10 +164,25 @@ public class ParentLayer extends Layer {
                             case TransformChannels.y:
                                 currentTransform.setToTranslation(currentTransform.getTranslateX(), value);
                                 break;
+                            case TransformChannels.scaleX:
+                                currentTransform.setToScale(value,currentTransform.getScaleY());
+                                break;
+                            case TransformChannels.scaleY:
+                                currentTransform.setToScale(currentTransform.getScaleX(),value);
+                                break;
                             case TransformChannels.rotation:
                                 double width = bitmapChild.transform.rotationCenterX * bitmapChild.getWidth();
                                 double height = bitmapChild.transform.rotationCenterY * bitmapChild.getHeight();
                                 currentTransform.setToRotation(Math.toRadians(value), width, height);
+                                break;
+                            case TransformChannels.shearX:
+                                currentTransform.setToShear(value,currentTransform.getShearY());
+                                break;
+                            case TransformChannels.shearY:
+                                currentTransform.setToShear(currentTransform.getShearX(),value);
+                                break;
+                            case TransformChannels.opacity:
+                                //OH GOD IT ISN'T IN THE AFFINE TRANSFORM HELP-
                                 break;
                         }
                         channelID++;

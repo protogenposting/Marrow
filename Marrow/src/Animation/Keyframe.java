@@ -1,9 +1,8 @@
 package Animation;
 
-import Layers.Layer;
-
 /**
- * Keyframes are used to save the state of a certain layer's properties
+ * Keyframes are used to save the state of a certain property.
+ * They are arranged in a layer's different channels according to the property of the channel.
  */
 public class Keyframe {
     public double value = 0; // note: "0" eventually gets replaced by a value from TransformChannels
@@ -17,6 +16,10 @@ public class Keyframe {
 
     }
 
+    /**
+     *
+     * @param isActive determines if a keyframe actually affects the animation and is viewable
+     */
     public Keyframe(boolean isActive)
     {
         this.isActive = isActive;
@@ -27,10 +30,12 @@ public class Keyframe {
      * @param a value 1
      * @param b value 2
      * @param percentage the amount between the 2 values
+     * @param easing the easing type of the value. Use <a href = https://www.desmos.com/calculator>desmos<a> if you want to view any of these formulas
      * @return the value between the 2
      */
     public static double valueBetweenPoints(double a, double b,double percentage,EaseType easing) {
 
+        //change the percentage based on the easing type. If it's NONE do nothing lol
         switch(easing)
         {
             case EaseType.SINE:
@@ -43,14 +48,13 @@ public class Keyframe {
                 percentage = Math.sin(Math.PI * (percentage + 3)/2) + 1;
                 break;
         }
+
         double smaller;
 
-        if(a < b)
-        {
+        if(a < b) {
             smaller = a;
         }
-        else if(a > b)
-        {
+        else if(a > b) {
             smaller = b;
         }
         else {

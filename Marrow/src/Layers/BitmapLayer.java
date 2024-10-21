@@ -48,17 +48,11 @@ public class BitmapLayer extends ChildLayer {
 
         frame3.value = 0;
 
-        setSize(128);
+        setSize(120);
 
-        keyframes.get(0).set(0, frame1);
-
-        frame1.easing = EaseType.SINEIN;
-
-        keyframes.get(0).set(64, frame2);
-
-        frame2.easing = EaseType.SINEOUT;
-
-        keyframes.get(0).set(119, frame3);
+        // note: index out of bounds occurs because "keyframes" has 128 keyframes, and each keyframe has 7 channels
+        // to fix, probably change frame1-3 into Arraylists
+        //TIGER DON'T DO THAT NO TIGER YOU'RE GONNA BREAK MY SYSTEM
 
         bitmap.setSize(800, 400);
     }
