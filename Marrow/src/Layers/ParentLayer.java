@@ -16,6 +16,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Consumer;
 
 /**
  * The layer on top of the layer hierarchy. Contains all other layers and draws them on a canvas.
@@ -77,18 +78,16 @@ public class ParentLayer extends Layer {
         //clear the image again
         clear();
         //RENDERING
-        for(int i = 0; i < children.size(); i++)
-        {
-            ChildLayer child = children.get(i);
 
-            if(child.getClass().equals(BitmapLayer.class))
-            {
+        loopThroughChildren(children, (child) -> {
+
+
+            if (child.getClass().equals(BitmapLayer.class)) {
                 //draw the bitmap layer's image :3
-                BitmapLayer bitmapChild = (BitmapLayer)child;
+                BitmapLayer bitmapChild = (BitmapLayer) child;
                 AffineTransform currentTransform = new AffineTransform();
-
                 //selection rectangle
-                if(bitmapChild == currentLayer) {
+                if (bitmapChild == currentLayer) {
                     graphics.drawRect(
                             (int) bitmapChild.transform.x,
                             (int) bitmapChild.transform.y,
@@ -98,7 +97,7 @@ public class ParentLayer extends Layer {
                 }
 
                 // this section deals with actually animating!
-                if(animDataStorage.isInAnimateMode && animDataStorage.isPlaying) {
+                if (animDataStorage.isInAnimateMode && animDataStorage.isPlaying) {
                     int channelID = 0;
                     for (TransformChannels channel : TransformChannels.values()) {
                         int currentFrame = animDataStorage.currentFrame;
@@ -165,12 +164,28 @@ public class ParentLayer extends Layer {
                 }
 
                 //draw the image with the transform
-                graphics.drawImage(bitmapChild.drawnImage,currentTransform, this);
+                graphics.drawImage(bitmapChild.drawnImage, currentTransform, this);
             }
-        }
-
+        });
+        
         g.drawImage(image,0,0,null);
     }
+
+    private void loopThroughChildren(ArrayList<ChildLayer> childrenArray, Consumer<ChildLayer> importedFunction){
+        ChildLayer child;
+        for(int chuldNum = 0; chuldNum < childrenArray.size(); chuldNum++) {
+            child = childrenArray.get(chuldNum);
+
+            if (!child.getChildren().isEmpty()){
+                loopThroughChildren(child.getChildren(), importedFunction);
+            }
+
+            importedFunction.accept(child);
+
+        }
+    }
+
+
 
     /**
      * clears the entire window with white
