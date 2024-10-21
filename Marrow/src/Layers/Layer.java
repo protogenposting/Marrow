@@ -25,11 +25,39 @@ public class Layer extends JPanel {
 
     public ArrayList<ArrayList<Keyframe>> keyframes = new ArrayList<>();
 
+    /**
+     * this function adds a child
+     * @param layer the layer to add as a child
+     */
     public void addChild(ChildLayer layer)
     {
+        //if we have no child then the current layer is the one we just added
         children.add(layer);
-        onAddChild.accept(layer);
-    }
 
+        //run the function that runs on child add (used for the layer organizer)
+        onAddChild.accept(layer);
+
+        layer.setOpaque(false);
+
+        layer.parent = this;
+
+        int defaultWidth = 400;
+
+        int defaultHeight = 400;
+
+        layer.setSize(defaultWidth,defaultHeight);
+
+        layer.width = defaultWidth;
+
+        layer.height = defaultHeight;
+
+        if(layer instanceof BitmapLayer)
+        {
+            BitmapLayer currentLayer = (BitmapLayer) layer;
+            currentLayer.bitmap.setSize(defaultWidth,defaultHeight);
+        }
+
+
+    }
 
 }

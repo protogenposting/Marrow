@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class LayerWindow extends JPanel {
@@ -72,8 +73,11 @@ public class LayerWindow extends JPanel {
                 if (parentLayer.currentLayer == null) {
                     parentLayer.addChild(new BitmapLayer(toolContainer, "Layer " + parentLayer.getChildren().size()));
                 }else {
-                    parentLayer.currentLayer.addChild(new BitmapLayer(toolContainer, parentLayer.currentLayer.name
-                                                + "'s Layer" + parentLayer.currentLayer.getChildren().size()));
+
+                    String indentCount = getIndentCount("⤷ ", parentLayer.currentLayer.getChildren());
+
+                    parentLayer.currentLayer.addChild(new BitmapLayer(toolContainer, indentCount +
+                            parentLayer.currentLayer.name + "'s Layer" + parentLayer.currentLayer.getChildren().size()));
                 }
 
 
@@ -82,6 +86,14 @@ public class LayerWindow extends JPanel {
             }
         });
         return layerAdding;
+    }
+
+    static String getIndentCount(String indent, ArrayList<ChildLayer> childrenArray){
+
+
+
+        return indent;
+
     }
 
    static void addChildrenToChildren(ChildLayer newChild, ParentLayer parentLayer, JPanel innerPanel,
@@ -97,6 +109,8 @@ public class LayerWindow extends JPanel {
            innerPanel.add(layerButton);
 
            timeline.addChannels();
+
+           addChildrenToChildren(newerChild, parentLayer, innerPanel, timeline);
        };
    }
 
