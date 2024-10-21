@@ -53,7 +53,7 @@ public class LayerWindow extends JPanel {
 
             innerPanel.add(layerButton);
 
-            timeline.addKeyframes();
+            timeline.addChannels();
 
             addChildrenToChildren(newChild, parentLayer, innerPanel, timeline);
         };
@@ -97,7 +97,7 @@ public class LayerWindow extends JPanel {
 
            innerPanel.add(layerButton);
 
-           timeline.addKeyframes();
+           timeline.addChannels();
        };
    }
 
