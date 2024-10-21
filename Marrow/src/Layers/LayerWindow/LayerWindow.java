@@ -2,6 +2,7 @@ package Layers.LayerWindow;
 
 import Animation.Timeline;
 import Layers.BitmapLayer;
+import Layers.ChildLayer;
 import Layers.Layer;
 import Layers.ParentLayer;
 import Tools.ToolContainer;
@@ -16,40 +17,47 @@ public class LayerWindow extends JPanel {
     Layer parentLayer;
     Timeline timeline;
 
-    public LayerWindow(ParentLayer parentLayer, ToolContainer toolContainer, Timeline timeline)
-    {
+    public LayerWindow(ParentLayer parentLayer, ToolContainer toolContainer, Timeline timeline) {
         this.timeline = timeline;
         this.setVisible(true);
         this.setSize(256,768);
         this.parentLayer = parentLayer;
         this.setLayout(new FlowLayout());
 
-        JPanel panel = new JPanel();
+        JPanel innerPanel = new JPanel();
 
         JButton layerAdding = getjButton(parentLayer, toolContainer);
         add(layerAdding);
 
-        panel.setLayout(new BoxLayout(panel,BoxLayout.PAGE_AXIS));
+        JButton parentLayerButton = new JButton("Parent Layer");
+        parentLayerButton.addActionListener(e -> {parentLayer.currentLayer = null;});
+        innerPanel.add(parentLayerButton);
+
+        innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.PAGE_AXIS));
 
         JScrollPane scrollPane = new JScrollPane();
 
-        scrollPane.setViewportView(panel);
+        scrollPane.setViewportView(innerPanel);
 
         scrollPane.setPreferredSize(new Dimension(200,300));
 
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        parentLayer.onAddChild = (a) -> {
-            LayerButton layerButton = new LayerButton(a.name);
+        parentLayer.onAddChild = (newChild) -> {
+            LayerButton layerButton = new LayerButton(newChild.name);
 
-            layerButton.layer = a;
+            layerButton.layer = newChild;
 
             layerButton.parentLayer = parentLayer;
 
-            panel.add(layerButton);
+            innerPanel.add(layerButton);
 
             timeline.addChannels();
+
+            addChildrenToChildren(newChild, parentLayer, innerPanel, timeline);
         };
+
+
 
         this.add(scrollPane);
     }
@@ -60,11 +68,37 @@ public class LayerWindow extends JPanel {
         layerAdding.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                parentLayer.addChild(new BitmapLayer(toolContainer,"Layer " + parentLayer.getChildren().size()));
+
+                if (parentLayer.currentLayer == null) {
+                    parentLayer.addChild(new BitmapLayer(toolContainer, "Layer " + parentLayer.getChildren().size()));
+                }else {
+                    parentLayer.currentLayer.addChild(new BitmapLayer(toolContainer, parentLayer.currentLayer.name
+                                                + "'s Layer" + parentLayer.currentLayer.getChildren().size()));
+                }
+
+
                 revalidate();
                 repaint();
             }
         });
         return layerAdding;
     }
+
+   static void addChildrenToChildren(ChildLayer newChild, ParentLayer parentLayer, JPanel innerPanel,
+                                     Timeline timeline){
+        
+       newChild.onAddChild = (newerChild) -> {
+           LayerButton layerButton = new LayerButton(newerChild.name);
+
+           layerButton.layer = newerChild;
+
+           layerButton.parentLayer = parentLayer;
+
+           innerPanel.add(layerButton);
+
+           timeline.addChannels();
+       };
+   }
+
+
 }
