@@ -1,10 +1,6 @@
 package Tools;
 
-import Bitmaps.RGBColor;
-
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 public class Toolbox extends JPanel {
@@ -32,11 +28,11 @@ public class Toolbox extends JPanel {
         // "if button is pressed, do this event"
         // the code below makes it so when you press the corresponding tool button, your current tool will swap to it
 
-        ToolButton paintBrush = new ToolButton("/iconImages/brushTool.png", new Paintbrush());
-        ToolButton bucket = new ToolButton("/iconImages/bucketTool.png", new Bucket());
-        ToolButton line = new ToolButton("/iconImages/lineTool.png", new LineTool());
-        ToolButton shape = new ToolButton("/iconImages/shapeTool.png", new ShapeTool());
-        ToolButton eraser = new ToolButton("/iconImages/eraserTool.png", new Eraser());
+        ToolButton paintBrush = new ToolButton("/IconImages/Tools/brushTool.png", new Paintbrush());
+        ToolButton bucket = new ToolButton("/IconImages/Tools/bucketTool.png", new Bucket());
+        ToolButton line = new ToolButton("/IconImages/Tools/lineTool.png", new LineTool());
+        ToolButton shape = new ToolButton("/IconImages/Tools/shapeTool.png", new ShapeTool());
+        ToolButton eraser = new ToolButton("/IconImages/Tools/eraserTool.png", new Eraser());
 
         paintBrush.toolButton.addActionListener(e -> {setTool(paintBrush);});
         bucket.toolButton.addActionListener(e -> {setTool(bucket);});

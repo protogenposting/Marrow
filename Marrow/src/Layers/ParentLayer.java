@@ -44,10 +44,6 @@ public class ParentLayer extends Layer {
     public void addChild(ChildLayer layer)
     {
         //if we have no child then the current layer is the one we just added
-        if(children.isEmpty())
-        {
-            setChildTo(layer);
-        }
         children.add(layer);
         //run the function that runs on child add (used for the layer organizer)
         onAddChild.accept(layer);
@@ -57,6 +53,11 @@ public class ParentLayer extends Layer {
         if(layer instanceof BitmapLayer)
         {
             ((BitmapLayer) layer).bitmap.setSize(getWidth(),getHeight());
+            System.out.println(getWidth());
+            System.out.println(getHeight());
+        }
+        if(children.isEmpty()) {
+            setChildTo(layer);
         }
     }
 
