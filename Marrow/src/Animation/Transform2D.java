@@ -6,8 +6,8 @@ public class Transform2D {
     public double scaleX = 1;
     public double scaleY = 1;
     public double rotation = 0;
-    public double rotationCenterX = 0.5;
-    public double rotationCenterY = 0.5;
+    public double centerX = 0;
+    public double centerY = 0;
     public double shear = 0;
     public double opacity = 100;
 
@@ -22,8 +22,8 @@ public class Transform2D {
         this.scaleX = scaleX;
         this.scaleY = scaleY;
         this.rotation = rotation;
-        this.rotationCenterX = rotationCenterX;
-        this.rotationCenterY = rotationCenterY;
+        this.centerX = rotationCenterX;
+        this.centerY = rotationCenterY;
         this.shear = shear;
         this.opacity = opacity;
     }
