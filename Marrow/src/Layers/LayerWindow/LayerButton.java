@@ -26,6 +26,8 @@ public class LayerButton extends JButton
             public void actionPerformed(ActionEvent e) {
                 parentLayer.repaint();
                 parentLayer.setChildTo(layer);
+                System.out.println(layer.getWidth());
+                System.out.println(layer.getHeight());
                 repaint();
             }
         });

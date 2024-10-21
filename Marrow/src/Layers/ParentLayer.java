@@ -45,17 +45,28 @@ public class ParentLayer extends Layer {
     {
         //if we have no child then the current layer is the one we just added
         children.add(layer);
+
         //run the function that runs on child add (used for the layer organizer)
         onAddChild.accept(layer);
+
         layer.setOpaque(false);
+
         layer.parent = this;
-        layer.setSize(getWidth(),getHeight());
+
+        int defaultWidth = 400;
+
+        int defaultHeight = 400;
+
+        layer.setSize(defaultWidth,defaultHeight);
+
         if(layer instanceof BitmapLayer)
         {
-            ((BitmapLayer) layer).bitmap.setSize(getWidth(),getHeight());
-            System.out.println(getWidth());
-            System.out.println(getHeight());
+            BitmapLayer currentLayer = (BitmapLayer) layer;
+            currentLayer.bitmap.setSize(defaultWidth,defaultHeight);
+            currentLayer.transform.scaleX = defaultWidth;
+            currentLayer.transform.scaleY = defaultHeight;
         }
+
         if(children.isEmpty()) {
             setChildTo(layer);
         }
@@ -90,10 +101,10 @@ public class ParentLayer extends Layer {
                 //selection rectangle
                 if (bitmapChild == currentLayer) {
                     graphics.drawRect(
-                            (int) bitmapChild.transform.x,
-                            (int) bitmapChild.transform.y,
-                            (int) (bitmapChild.transform.x + bitmapChild.getWidth() * bitmapChild.transform.scaleX),
-                            (int) (bitmapChild.transform.y + bitmapChild.getHeight() * bitmapChild.transform.scaleY)
+                            (int) (bitmapChild.transform.rotationCenterX - bitmapChild.transform.x),
+                            (int) (bitmapChild.transform.rotationCenterY - bitmapChild.transform.y),
+                            (int) (bitmapChild.transform.rotationCenterX + bitmapChild.transform.x + bitmapChild.transform.scaleX),
+                            (int) (bitmapChild.transform.rotationCenterY + bitmapChild.transform.y + bitmapChild.transform.scaleY)
                     );
                 }
 
