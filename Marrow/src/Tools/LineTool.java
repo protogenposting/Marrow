@@ -7,7 +7,7 @@ import Layers.BitmapLayer;
 
 import javax.swing.*;
 
-public class LineTool extends Tool {
+public class LineTool extends DragTool {
 
     public LineTool(){}
 
@@ -61,7 +61,9 @@ public class LineTool extends Tool {
             {
                 double tan = Math.tan(theta)*xProgress;
                 int yResult = (int)Math.round(tan);
-                bitmap.addPixel(xProgress + x1,yResult + y1,new Pixel(currentColor));
+
+                drawCircle(xProgress + x1, yResult + y1, bitmap, drawSize);
+
                 xProgress += signX;
             }
         }
@@ -72,7 +74,9 @@ public class LineTool extends Tool {
             for(int i = 0; i < height; i++)
             {
                 int xResult = (int)Math.round(yProgress/Math.tan(theta));
-                bitmap.addPixel(xResult + x1,yProgress + y1,new Pixel(currentColor));
+
+                drawCircle(xResult + x1, yProgress + y1, bitmap, drawSize);
+
                 yProgress += signY;
             }
         }
