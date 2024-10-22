@@ -47,7 +47,7 @@ public class Main {
      * saves the parentLayer and its children into a custom text file named "save.marrow"
      * @param parentLayer the layer and its children being saved
      */
-    public static void saveLayers(ParentLayer parentLayer){
+    public static void saveLayers(ParentLayer parentLayer, AnimationDataStorage animDataStorage){
         try {
 
             FileWriter writer = getSaveFileWriter();
@@ -68,6 +68,11 @@ public class Main {
 
             writer.write("MARROW\n\nParentLayer");
             System.out.print("\nMARROW\n\nParentLayer");
+
+            writer.write("\n\nMax Frame Count: ");
+            writer.write(String.valueOf(animDataStorage.maxFrameCount));
+            writer.write("\nFPS: ");
+            writer.write(String.valueOf(animDataStorage.framesPerSecond));
 
             saveChildrenInChildLayer(
                     childLayers,
@@ -127,7 +132,7 @@ public class Main {
                                                 FileWriter writer, boolean hasRepeated,
                                                 String childLayerName){
         boolean thereIsChild;
-		
+
         for (int i = 0; i < childLayers.size(); i++) {
             thereIsChild = isThereChildrenInChildLayer(childLayers.get(i));
 
@@ -182,7 +187,7 @@ public class Main {
 
             channelName = channelNames[channel];
 
-            writer.write("\n" + (dashCount + "-") + "CHANNEL: " + channelName.name());
+            writer.write("\n" + (dashCount + "-") + "CHANNEL: " + channel + channelName.name());
 
             for (int keyframes = 0; keyframes < channels.get(channel).size(); keyframes++) {
 
@@ -192,14 +197,14 @@ public class Main {
                     continue;
                 }
 
-                writer.write("\n" + (dashCount + "--") + "KF " + keyframes + keyframe.value);
+                writer.write("\n" + (dashCount + "--") + keyframes + ": " + keyframe.value);
             }
         }
     }
     //endregion
 
     //region LOAD FUNCTIONS
-    public static ArrayList<BitmapLayer> loadLayers(ToolContainer toolContainer) throws IOException {
+    public static ArrayList<BitmapLayer> loadLayers(ToolContainer toolContainer, AnimationDataStorage animDataStorage) throws IOException {
         File saveFile = new File(currentSaveDirectory + "/save.marrow");
         Scanner fileReader = new Scanner(saveFile);
 
@@ -218,12 +223,24 @@ public class Main {
             layerNames.add(layerName);
         }
 
+        int maxFrameCount = getNumberFromString(layerNames.get(4));
+        int framesPerSecond = getNumberFromString(layerNames.get(5));
+
+        animDataStorage.maxFrameCount = maxFrameCount;
+        animDataStorage.framesPerSecond = framesPerSecond;
+
         for (int i = 0; i < layerNames.size(); i++) {
-            if(i < 2){
+            if(i < 6){
                 continue;
             }
 
             String layerName = layerNames.get(i);
+
+            if(isSavedChannel(layerName)){
+
+                i = saveKeyframesToBitmap(bitmapLayers.get(i - 2), layerNames, i);
+                continue;
+            }
 
             String filePath = currentSaveDirectory + "/" + layerName + ".png";
             File layer = new File(filePath);
@@ -241,6 +258,122 @@ public class Main {
         }
 
         return bitmapLayers;
+    }
+
+    private static int getNumberFromString(String stringWithNumber){
+
+        for (int i = 0; i < stringWithNumber.length(); i++) {
+            if (!(stringWithNumber.charAt(i) == ' ')){
+                continue;
+            }
+            try {
+                return Integer.parseInt(stringWithNumber.substring(i + 1));
+            } catch (NumberFormatException e) {
+                return 1;
+            }
+        }
+    }
+
+    private static int saveKeyframesToBitmap(BitmapLayer bitmapLayers, LinkedList<String> layerNames, int layerNameIndex){
+
+        ArrayList<ArrayList<Keyframe>> channels = bitmapLayers.keyframes;
+
+        //loop through all the layer names at i's position
+        //get keyframeID and insert the corresponding value to the channel
+        //return i once finished
+        int channelID = 0;
+
+        int keyframeID;
+        double keyframeValue;
+        String layerName;
+
+        while(channelID < channels.size()) {
+
+            layerName = layerNames.get(layerNameIndex);
+
+            //check if this is a saved channel
+            if(isSavedChannel(layerName)){
+                channelID++;
+                layerNameIndex++;
+                continue;
+            }
+
+            //find which keyframe in the channel to set
+            keyframeID = findKeyframeID(layerNames.get(layerNameIndex));
+
+            //if less than 0, no longer looking at keyframes and channels but another bitmapLayer
+            if(keyframeID < 0){
+                layerNameIndex++;
+                return layerNameIndex;
+            }
+
+            //find the value to set
+            keyframeValue = findKeyframeValue(layerNames.get(layerNameIndex));
+
+            Keyframe keyframe = channels.get(channelID).get(keyframeID);
+
+            keyframe.isActive = true;
+            keyframe.value = keyframeValue;
+
+            layerNameIndex++;
+        }
+
+        return layerNameIndex;
+    }
+
+    private static int findKeyframeID(String layerName){
+
+        for (int i = 0; i < layerName.length(); i++) {
+
+            if(!(layerName.charAt(i) == ':')){
+                continue;
+            }
+
+            try{
+                return Integer.parseInt(layerName.substring(0, i));
+            } catch (NumberFormatException e) {
+                return -2;
+            }
+
+        }
+
+        return -1;
+    }
+
+    private static double findKeyframeValue(String keyframeValue){
+
+        boolean ignoreLoop = true;
+        StringBuilder value = new StringBuilder();
+
+        for (int i = 0; i < keyframeValue.length(); i++) {
+
+            if(keyframeValue.charAt(i) == ':'){
+                ignoreLoop = false;
+            }
+            else if(ignoreLoop || keyframeValue.charAt(i) == ' '){
+                continue;
+            }
+
+            value.append(keyframeValue.charAt(i));
+        }
+
+        try{
+            return Double.parseDouble(String.valueOf(value));
+        }
+        catch (NumberFormatException ex){
+            return 0.0;
+        }
+    }
+
+    private static boolean isSavedChannel(String layerName){
+        try{
+            String getChannel = layerName.substring(0, 8);
+
+            return getChannel.equalsIgnoreCase("CHANNEL:");
+        }
+        catch (ArrayIndexOutOfBoundsException ex){
+            return false;
+        }
     }
 
     /**
@@ -371,7 +504,7 @@ public class Main {
             @Override
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode()==KeyEvent.VK_S){
-                    saveLayers(parentLayer);
+                    saveLayers(parentLayer, animDataStorage);
                     BitmapLayer layer = (BitmapLayer) parentLayer.getChildren().get(1);
                     ArrayList<ArrayList<Pixel>> bitmap = layer.bitmap.bitmap;
                     for (ArrayList<Pixel> x : bitmap) {
@@ -457,19 +590,19 @@ public class Main {
 
         //endregion
 
-        frame.setJMenuBar(createMenuBar(parentLayer, toolContainer));
+        frame.setJMenuBar(createMenuBar(parentLayer, toolContainer, animDataStorage));
         //frame.setLocationByPlatform(true);
 
     }
 
-    static JMenuBar createMenuBar(ParentLayer parentLayer, ToolContainer toolContainer) {
+    static JMenuBar createMenuBar(ParentLayer parentLayer, ToolContainer toolContainer, AnimationDataStorage animDataStorage) {
         JMenuBar menuBar = new JMenuBar();
-        menuBar.add(createFileMenu(parentLayer, toolContainer));
+        menuBar.add(createFileMenu(parentLayer, toolContainer, animDataStorage));
         menuBar.add(createEditMenu());
         return menuBar;
     }
 
-    static JMenu createFileMenu(ParentLayer parentLayer, ToolContainer toolContainer) {
+    static JMenu createFileMenu(ParentLayer parentLayer, ToolContainer toolContainer, AnimationDataStorage animDataStorage) {
         JMenu fileMenu = new JMenu("File");
         JMenuItem newItem = new JMenuItem("New");
         fileMenu.add(newItem);
@@ -479,7 +612,7 @@ public class Main {
 
         openItem.addActionListener(e -> {
             try {
-                ArrayList<BitmapLayer> bitmapLayers = loadLayers(toolContainer);
+                ArrayList<BitmapLayer> bitmapLayers = loadLayers(toolContainer, animDataStorage);
 
                 for (BitmapLayer bitmapLayer : bitmapLayers) {
                     parentLayer.addChild(bitmapLayer);
@@ -495,7 +628,7 @@ public class Main {
         });
 
         saveItem.addActionListener(e -> {
-            saveLayers(parentLayer);
+            saveLayers(parentLayer, animDataStorage);
         });
         fileMenu.add(saveItem);
         return fileMenu;
