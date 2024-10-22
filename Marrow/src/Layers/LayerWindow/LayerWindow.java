@@ -12,11 +12,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
+import java.util.function.Consumer;
 
 public class LayerWindow extends JPanel {
     Layer parentLayer;
     Timeline timeline;
+
+    static ArrayList <LayerButton> buttonLinkedList = new ArrayList<>();
+
+    static boolean foundCurrentLayer;
 
     public LayerWindow(ParentLayer parentLayer, ToolContainer toolContainer, Timeline timeline) {
         this.timeline = timeline;
@@ -56,6 +62,8 @@ public class LayerWindow extends JPanel {
             timeline.addChannels();
 
             addChildrenToChildren(newChild, parentLayer, innerPanel, timeline);
+
+            addToListAndResort(innerPanel, layerButton, parentLayer.currentLayer);
         };
 
 
@@ -74,10 +82,16 @@ public class LayerWindow extends JPanel {
                     parentLayer.addChild(new BitmapLayer(toolContainer, "Layer " + parentLayer.getChildren().size()));
                 }else {
 
-                    String indentCount = getIndentCount("⤷ ", parentLayer.currentLayer.getChildren());
+                    StringBuilder indentCount = new StringBuilder();
 
-                    parentLayer.currentLayer.addChild(new BitmapLayer(toolContainer, indentCount +
-                            parentLayer.currentLayer.name + "'s Layer" + parentLayer.currentLayer.getChildren().size()));
+                    int depth = getIndentCount(parentLayer.currentLayer, parentLayer.getChildren(), 1);
+
+                    for (int depthSeeker = 0; depthSeeker < depth; depthSeeker++){
+                        indentCount.append("⤷ ");
+                    }
+
+                    parentLayer.currentLayer.addChild(new BitmapLayer(toolContainer, indentCount + "Layer "
+                            + parentLayer.currentLayer.getChildren().size()));
                 }
 
 
@@ -88,15 +102,29 @@ public class LayerWindow extends JPanel {
         return layerAdding;
     }
 
-    static String getIndentCount(String indent, ArrayList<ChildLayer> childrenArray){
-
-
-
-        return indent;
-
+    static int getIndentCount( ChildLayer currentLayer,
+                                ArrayList<ChildLayer> childrenArray, int depth) {
+    //return cases
+        ChildLayer child;
+        int returnDepth=-1;
+        for (int childLocation = 0; childLocation < childrenArray.size(); childLocation++) {
+            child = childrenArray.get(childLocation);
+            if (currentLayer == child ) {
+              return depth;
+            }
+            if(child.getChildren().isEmpty()){
+                return -1;
+            }
+            //call function
+            returnDepth = getIndentCount(currentLayer, child.getChildren(), depth+1);
+            if(returnDepth!=-1){
+                break;
+            }
+        }
+        return returnDepth;
     }
 
-   static void addChildrenToChildren(ChildLayer newChild, ParentLayer parentLayer, JPanel innerPanel,
+    static void addChildrenToChildren(ChildLayer newChild, ParentLayer parentLayer, JPanel innerPanel,
                                      Timeline timeline){
         
        newChild.onAddChild = (newerChild) -> {
@@ -111,8 +139,59 @@ public class LayerWindow extends JPanel {
            timeline.addChannels();
 
            addChildrenToChildren(newerChild, parentLayer, innerPanel, timeline);
+
+           addToListAndResort(innerPanel, layerButton, parentLayer.currentLayer);
        };
    }
+
+    public static void addToListAndResort(JPanel innerPannel, LayerButton newButton, ChildLayer currentLayer){
+
+        if(buttonLinkedList.isEmpty()){
+            buttonLinkedList.add(newButton);
+        }
+
+        for (int i = 0; i < buttonLinkedList.size(); i++) {
+            if(buttonLinkedList.get(i).layer==currentLayer){
+                buttonLinkedList.add(countChildren(currentLayer.getChildren(), i),newButton);
+            }
+        }
+
+        for (int i = 0; i < buttonLinkedList.size(); i++) {
+            innerPannel.add(buttonLinkedList.get(i));
+            innerPannel.repaint();
+            innerPannel.revalidate();
+        }
+    }
+
+    /*  PL
+
+        A0
+        ⤷ B0
+        ⤷ ⤷ C0
+        ⤷ ⤷ ⤷ D0
+        ⤷ ⤷ ⤷ D1
+        ⤷ ⤷ ⤷ ⤷ E0
+        ⤷ ⤷ ⤷ D2
+        ⤷ ⤷ C1
+        ⤷ B1
+        A1
+     */
+
+    public static int countChildren(ArrayList<ChildLayer> childrenArray, int numberOfChildren){
+        ChildLayer child;
+        if (childrenArray.isEmpty()){
+            return numberOfChildren;
+        }
+        numberOfChildren+= childrenArray.size();
+
+        for(int chuldNum = 0; chuldNum < childrenArray.size(); chuldNum++) {
+            child = childrenArray.get(chuldNum);
+
+            numberOfChildren = countChildren(child.getChildren(), numberOfChildren);
+        }
+
+        return numberOfChildren;
+    }
 
 
 }

@@ -24,6 +24,7 @@ public class LayerButton extends JButton
         addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 parentLayer.repaint();
                 parentLayer.setChildTo(layer);
                 System.out.println(layer.getWidth());

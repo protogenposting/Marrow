@@ -173,7 +173,7 @@ public class ParentLayer extends Layer {
         g.drawImage(image,0,0,null);
     }
 
-    private void loopThroughChildren(ArrayList<ChildLayer> childrenArray, Consumer<ChildLayer> importedFunction){
+    public void loopThroughChildren(ArrayList<ChildLayer> childrenArray, Consumer<ChildLayer> importedFunction){
         ChildLayer child;
         for(int chuldNum = 0; chuldNum < childrenArray.size(); chuldNum++) {
             child = childrenArray.get(chuldNum);
@@ -183,7 +183,6 @@ public class ParentLayer extends Layer {
             }
 
             importedFunction.accept(child);
-
         }
     }
 
