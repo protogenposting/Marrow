@@ -114,7 +114,8 @@ public class BitmapLayer extends ChildLayer {
         for (TransformChannels channel : TransformChannels.values()) {
             ArrayList<Keyframe> list2 = new ArrayList<>();
             keyframes.add(list2);
-            for (int i = 0; i < size; i++) {
+            //size is added by 1 so the user doesn't accidentally go out of bounds when setting frame
+            for (int i = 0; i < size + 1; i++) {
                 list2.add(new Keyframe());
             }
         }

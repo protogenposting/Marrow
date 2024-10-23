@@ -5,7 +5,7 @@ package Animation;
  * They are arranged in a layer's different channels according to the property of the channel.
  */
 public class Keyframe {
-    public double value = 0; // note: "0" eventually gets replaced by a value from TransformChannels
+    public double value = 0;
 
     public boolean isActive = false;
 

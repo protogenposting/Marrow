@@ -69,7 +69,7 @@ public class Main {
             writer.write("MARROW\n\nParentLayer");
             System.out.print("\nMARROW\n\nParentLayer");
 
-            writer.write("\n\nMax Frame Count: ");
+            writer.write("\n\nMaxFrameCount: ");
             writer.write(String.valueOf(animDataStorage.maxFrameCount));
             writer.write("\nFPS: ");
             writer.write(String.valueOf(animDataStorage.framesPerSecond));
@@ -182,6 +182,7 @@ public class Main {
         Keyframe keyframe;
         TransformChannels[] channelNames = TransformChannels.values();
         TransformChannels channelName;
+        EaseType easing;
 
         for (int channel = 0; channel < channels.size(); channel++) {
 
@@ -192,12 +193,13 @@ public class Main {
             for (int keyframes = 0; keyframes < channels.get(channel).size(); keyframes++) {
 
                 keyframe = channels.get(channel).get(keyframes);
+                easing = keyframe.easing;
 
                 if(!keyframe.isActive){
                     continue;
                 }
 
-                writer.write("\n" + (dashCount + "--") + keyframes + ": " + keyframe.value);
+                writer.write("\n" + (dashCount + "--") + keyframes + ": " + keyframe.value + " $" + easing.name());
             }
         }
     }
@@ -223,14 +225,16 @@ public class Main {
             layerNames.add(layerName);
         }
 
-        int maxFrameCount = getNumberFromString(layerNames.get(4));
-        int framesPerSecond = getNumberFromString(layerNames.get(5));
+        int maxFrameCount = getNumberFromString(layerNames.get(2));
+        int framesPerSecond = getNumberFromString(layerNames.get(3));
 
         animDataStorage.maxFrameCount = maxFrameCount;
         animDataStorage.framesPerSecond = framesPerSecond;
 
+        int currentBitmapIndex = -1;
+
         for (int i = 0; i < layerNames.size(); i++) {
-            if(i < 6){
+            if(i < 4){
                 continue;
             }
 
@@ -238,7 +242,7 @@ public class Main {
 
             if(isSavedChannel(layerName)){
 
-                i = saveKeyframesToBitmap(bitmapLayers.get(i - 2), layerNames, i);
+                i = saveKeyframesToBitmap(bitmapLayers.get(currentBitmapIndex), layerNames, i);
                 continue;
             }
 
@@ -254,7 +258,9 @@ public class Main {
             Bitmap imageToBitmap = new Bitmap(image);
 
             BitmapLayer bitmapLayer = new BitmapLayer(toolContainer, layerName, imageToBitmap);
+            bitmapLayer.setSize(maxFrameCount);
             bitmapLayers.add(bitmapLayer);
+            currentBitmapIndex += 1;
         }
 
         return bitmapLayers;
@@ -272,6 +278,7 @@ public class Main {
                 return 1;
             }
         }
+        return 1;
     }
 
     private static int saveKeyframesToBitmap(BitmapLayer bitmapLayers, LinkedList<String> layerNames, int layerNameIndex){
@@ -281,13 +288,18 @@ public class Main {
         //loop through all the layer names at i's position
         //get keyframeID and insert the corresponding value to the channel
         //return i once finished
-        int channelID = 0;
+        int channelID = -1;
 
         int keyframeID;
         double keyframeValue;
         String layerName;
+        EaseType easing;
 
         while(channelID < channels.size()) {
+
+            if(layerNames.size() <= layerNameIndex){
+                return layerNameIndex - 1;
+            }
 
             layerName = layerNames.get(layerNameIndex);
 
@@ -299,7 +311,7 @@ public class Main {
             }
 
             //find which keyframe in the channel to set
-            keyframeID = findKeyframeID(layerNames.get(layerNameIndex));
+            keyframeID = findKeyframeID(layerName);
 
             //if less than 0, no longer looking at keyframes and channels but another bitmapLayer
             if(keyframeID < 0){
@@ -308,7 +320,8 @@ public class Main {
             }
 
             //find the value to set
-            keyframeValue = findKeyframeValue(layerNames.get(layerNameIndex));
+            keyframeValue = findKeyframeValue(layerName);
+            easing = findKeyframeEasing(layerName);
 
             Keyframe keyframe = channels.get(channelID).get(keyframeID);
 
@@ -319,6 +332,27 @@ public class Main {
         }
 
         return layerNameIndex;
+    }
+
+    private static EaseType findKeyframeEasing(String layerName){
+
+        boolean ignoreLoop = true;
+        StringBuilder value = new StringBuilder();
+
+        for (int i = 0; i < layerName.length(); i++) {
+
+            if(layerName.charAt(i) == '$'){
+                ignoreLoop = false;
+                continue;
+            }
+            else if(ignoreLoop){
+                continue;
+            }
+
+            value.append(layerName.charAt(i));
+        }
+
+        return EaseType.valueOf(String.valueOf(value));
     }
 
     private static int findKeyframeID(String layerName){
@@ -347,11 +381,16 @@ public class Main {
 
         for (int i = 0; i < keyframeValue.length(); i++) {
 
-            if(keyframeValue.charAt(i) == ':'){
+            if(keyframeValue.charAt(i) == ' '){
                 ignoreLoop = false;
-            }
-            else if(ignoreLoop || keyframeValue.charAt(i) == ' '){
                 continue;
+            }
+            else if(ignoreLoop){
+                continue;
+            }
+
+            if(keyframeValue.charAt(i) == '$'){
+                break;
             }
 
             value.append(keyframeValue.charAt(i));
@@ -371,7 +410,7 @@ public class Main {
 
             return getChannel.equalsIgnoreCase("CHANNEL:");
         }
-        catch (ArrayIndexOutOfBoundsException ex){
+        catch (StringIndexOutOfBoundsException ex){
             return false;
         }
     }
