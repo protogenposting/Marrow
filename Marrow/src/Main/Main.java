@@ -334,6 +334,7 @@ public class Main {
         return layerNameIndex;
     }
 
+    //region find keyframe values
     private static EaseType findKeyframeEasing(String layerName){
 
         boolean ignoreLoop = true;
@@ -403,6 +404,7 @@ public class Main {
             return 0.0;
         }
     }
+    //endregion
 
     private static boolean isSavedChannel(String layerName){
         try{
@@ -445,9 +447,7 @@ public class Main {
         frame.getContentPane().add(mainSP);
 
         ToolContainer toolContainer = new ToolContainer();
-
         AnimationDataStorage animDataStorage = new AnimationDataStorage();
-
         ParentLayer parentLayer = new ParentLayer(toolContainer, animDataStorage);
 
         animDataStorage.parentLayer = parentLayer;
@@ -467,6 +467,7 @@ public class Main {
 
         LayerWindow layerOrganization = new LayerWindow(parentLayer,toolContainer, timeline);
 
+        //region color chooser gui
         JColorChooser colorChooser = new JColorChooser();
 
         colorChooser.getSelectionModel().addChangeListener(new ChangeListener() {
@@ -487,6 +488,7 @@ public class Main {
         colorFrame.setSize(500,384);
         colorFrame.add(colorChooser);
         colorFrame.setVisible(true);
+        //endregion
 
         frame.setSize(1366,768);
 
@@ -500,6 +502,7 @@ public class Main {
             public void windowClosing(WindowEvent e) {
 
                 frame.dispose();
+                //askToSave();
                 System.exit(0);
             }
         });
