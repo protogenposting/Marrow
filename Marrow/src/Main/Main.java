@@ -514,7 +514,7 @@ public class Main {
 
         LayerWindow layerOrganization = new LayerWindow(parentLayer,toolContainer, timeline);
 
-        //region color chooser gui
+        //region color chooser gui used for determining the color of the drawTool || lineTool || paintBucket
         JColorChooser colorChooser = new JColorChooser();
 
         colorChooser.getSelectionModel().addChangeListener(new ChangeListener() {
@@ -558,7 +558,7 @@ public class Main {
         parentLayer.addMouseListener(new MouseAdapter(){
             @Override
             public void mousePressed(MouseEvent e) {
-                System.out.println("Parent layer clicked");
+                //System.out.println("Parent layer clicked");
                 if(parentLayer.currentLayer != null) {
                     if(parentLayer.currentLayer instanceof BitmapLayer bitmapLayer) {
                         bitmapLayer.mousePressed(e);
@@ -612,6 +612,9 @@ public class Main {
             @Override
             public void keyReleased(KeyEvent e) {}
         });
+
+
+        // region useless code??
         /*
         frame.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent componentEvent) {
@@ -664,6 +667,8 @@ public class Main {
             }
         });
         */
+        //endregion
+
         //region Split Pane Settup
         mainSP.setOrientation(JSplitPane.VERTICAL_SPLIT);
         mainSP.setDividerLocation(75);
@@ -690,7 +695,18 @@ public class Main {
 
     }
 
+
     //region create menu methods
+
+    /**
+     * the dropdown menu that is used to hold the file dropdown menu and edit dropdown menu
+     *
+     * @param parentLayer the layer that holds all layers that the user draws on
+     * @param toolContainer the tool container that declares which tools are being used
+     * @param animDataStorage the data storage for the animation
+     * @return menuBar
+     */
+
     static JMenuBar createMenuBar(ParentLayer parentLayer, ToolContainer toolContainer, AnimationDataStorage animDataStorage) {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createFileMenu(parentLayer, toolContainer, animDataStorage));
@@ -698,6 +714,15 @@ public class Main {
         return menuBar;
     }
 
+    /**
+     * dropdown menu that allows the user to create a new animation open, a previous animation or
+     * save the current animation
+     *
+     * @param parentLayer the layer that holds all layers that the user draws on
+     * @param toolContainer the tool container that declares which tools are being used
+     * @param animDataStorage the data storage for the animation
+     * @return fileMenu
+     */
     static JMenu createFileMenu(ParentLayer parentLayer, ToolContainer toolContainer, AnimationDataStorage animDataStorage) {
         JMenu fileMenu = new JMenu("File");
         JMenuItem newItem = new JMenuItem("New");
@@ -720,7 +745,7 @@ public class Main {
                 parentLayer.revalidate();
                 parentLayer.repaint();
 
-                System.out.println("load successful");
+                //System.out.println("load successful");
             }
             catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -734,6 +759,11 @@ public class Main {
         return fileMenu;
     }
 
+    /**
+     * dropdown menu that allows the user to cut, copy, or paste a piece of animation
+     *
+     * @return editMenu
+     */
     static JMenu createEditMenu() {
         JMenu editMenu = new JMenu("Edit");
         JMenuItem cutItem = new JMenuItem("Cut");

@@ -6,6 +6,7 @@ import Layers.ChildLayer;
 import Layers.Layer;
 import Layers.ParentLayer;
 import Tools.ToolContainer;
+import org.w3c.dom.ls.LSOutput;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,6 +52,12 @@ public class LayerWindow extends JPanel {
 
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
+
+        /*
+            When a new child gets created under the parentLayer, it creates a button affiliated with that child and
+            calls the function addChildrenToChildren which applies the same code to the child's onAddChildren
+            afterwards calls the function addToListAndResort which sorts the buttons by layer & layerChildren
+         */
         parentLayer.onAddChild = (newChild) -> {
             LayerButton layerButton = new LayerButton(newChild.name);
 
@@ -72,6 +79,14 @@ public class LayerWindow extends JPanel {
         this.add(scrollPane);
     }
 
+
+    /** CALLED WHEN SETTING UP WINDOW
+     * function that creates a button that adds children to either the parentLayer or the currently selected
+     * layer. Calls getIndentCount()
+     * @param parentLayer the layer that holds all layers
+     * @param toolContainer the object that determines what drawing tool is used
+     * @return the newly created button
+     */
     private JButton getjButton(ParentLayer parentLayer, ToolContainer toolContainer) {
         JButton layerAdding = new JButton("Add Layer");
 
@@ -103,17 +118,25 @@ public class LayerWindow extends JPanel {
         return layerAdding;
     }
 
-    static int getIndentCount( ChildLayer currentLayer,
-                                ArrayList<ChildLayer> childrenArray, int depth) {
+    /** RECURSIVE FUNCTION && CALLED WHEN CREATING THE NAME FOR A NEW LAYER THAT IS A CHILD OF ANOTHER LAYER
+     * Searches through the parent layer's children until it finds the depth that the current layer is on and returns
+     * currentLayer's depth +1
+     *
+     * @param currentLayer the currently selected layer
+     * @param childrenArray the children array that is scanned for finding the depth of the newChild
+     * @param depth the amount of layers between the parentLayer & the currentLayer
+     * @return depth // return depth
+     */
+    static int getIndentCount( ChildLayer currentLayer, ArrayList<ChildLayer> childrenArray, int depth) {
     //return cases
         ChildLayer child;
         int returnDepth=-1;
 
-        System.out.println("Size of Array: " + childrenArray.size());
+        //System.out.println("Size of Array: " + childrenArray.size());
 
         for (int childLocation = 0; childLocation < childrenArray.size(); childLocation++) {
             child = childrenArray.get(childLocation);
-            System.out.println("Now Searching: " + childLocation);
+            //System.out.println("Now Searching: " + childLocation);
 
             if (currentLayer == child ) {
               return depth;
@@ -130,7 +153,16 @@ public class LayerWindow extends JPanel {
         return returnDepth;
     }
 
-    static void addChildrenToChildren(ChildLayer newChild, ParentLayer parentLayer, JPanel innerPanel,
+    /** RECURSIVE FUNCTION && CALLED WHEN A LAYER IS CREATED
+     * This function adds the method required for a new layer to add more new layers to itself,
+     * reflects this code onto newly created children
+     *
+     * @param newChild the newly created child
+     * @param parentLayer the layer that holds all children & their children
+     * @param innerPanel the panel that holds the buttons
+     * @param timeline the timeline that holds the keyFrames for the new layer
+     */
+    private void addChildrenToChildren(ChildLayer newChild, ParentLayer parentLayer, JPanel innerPanel,
                                      Timeline timeline){
         
        newChild.onAddChild = (newerChild) -> {
@@ -150,7 +182,18 @@ public class LayerWindow extends JPanel {
        };
    }
 
-    public static void addToListAndResort(JPanel innerPannel, LayerButton newButton, ChildLayer currentLayer){
+    /** CALLED WHEN A NEW LAYER IS CREATED
+     * Searches for the parent of the newly created button,
+     * adds the new button immediately after the current layer's location or after the last child of the current layer
+     * afterward reorders the buttons currently displayed on screen to reflect their parent layers
+     *
+     * calls countChildren() passes the currentLayer's childrenArray & the current count of layers
+     *
+     * @param innerPanel panel to add the button to
+     * @param newButton the newly created button
+     * @param currentLayer the layer that is the parent of the newly created button's layer
+     */
+    public static void addToListAndResort(JPanel innerPanel, LayerButton newButton, ChildLayer currentLayer){
 
         boolean buttonAdded = false;
 
@@ -159,36 +202,29 @@ public class LayerWindow extends JPanel {
             buttonAdded = true;
         }
 
-        for (int i = 0; i < buttonLinkedList.size(); i++) {
-            if(buttonLinkedList.get(i).layer==currentLayer){
-                buttonLinkedList.add(countChildren(currentLayer.getChildren(), i),newButton);
+        for (int listIndex = 0; listIndex < buttonLinkedList.size(); listIndex++) {
+            if(buttonLinkedList.get(listIndex).layer==currentLayer){
+                buttonLinkedList.add(countChildren(currentLayer.getChildren(), listIndex),newButton);
             } else if (currentLayer == null && !buttonAdded) {
                 buttonLinkedList.add(newButton);
                 buttonAdded = true;
             }
         }
 
-        for (int i = 0; i < buttonLinkedList.size(); i++) {
-            innerPannel.add(buttonLinkedList.get(i));
-            innerPannel.repaint();
-            innerPannel.revalidate();
+        for (int listIndex = 0; listIndex < buttonLinkedList.size(); listIndex++) {
+            innerPanel.add(buttonLinkedList.get(listIndex));
+            innerPanel.repaint();
+            innerPanel.revalidate();
         }
     }
 
-    /*  PL
-
-        A0
-        ⤷ B0
-        ⤷ ⤷ C0
-        ⤷ ⤷ ⤷ D0
-        ⤷ ⤷ ⤷ D1
-        ⤷ ⤷ ⤷ ⤷ E0
-        ⤷ ⤷ ⤷ D2
-        ⤷ ⤷ C1
-        ⤷ B1
-        A1
+    /** CALLED BY addToListAndResort()
+     * counts all children inside the parents childrenArray && the children in each child's childrenArray
+     *
+     * @param childrenArray the array of layers that belongs to a pre-counted parent layer
+     * @param numberOfChildren the total count for number of children
+     * @return numberOfChildren
      */
-
     public static int countChildren(ArrayList<ChildLayer> childrenArray, int numberOfChildren){
         ChildLayer child;
         if (childrenArray.isEmpty()){
