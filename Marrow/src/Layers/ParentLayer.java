@@ -30,42 +30,6 @@ public class ParentLayer extends Layer {
         this.toolContainer = toolContainer;
     }
 
-    /**
-     * this function adds a child
-     * @param layer the layer to add as a child
-     */
-    public void addChild(ChildLayer layer)
-    {
-        //if we have no child then the current layer is the one we just added
-        children.add(layer);
-
-        //run the function that runs on child add (used for the layer organizer)
-        onAddChild.accept(layer);
-
-        layer.setOpaque(false);
-
-        layer.parent = this;
-
-        int defaultWidth = 400;
-
-        int defaultHeight = 400;
-
-        layer.setSize(defaultWidth,defaultHeight);
-
-        layer.width = defaultWidth;
-
-        layer.height = defaultHeight;
-
-        if(layer instanceof BitmapLayer)
-        {
-            BitmapLayer currentLayer = (BitmapLayer) layer;
-            currentLayer.bitmap.setSize(defaultWidth,defaultHeight);
-        }
-
-        if(children.isEmpty()) {
-            setChildTo(layer);
-        }
-    }
 
     protected void paintComponent(Graphics g) {
         //if the image is null then make some graphics and stuff
@@ -209,7 +173,7 @@ public class ParentLayer extends Layer {
         g.drawImage(image,0,0,null);
     }
 
-    private void loopThroughChildren(ArrayList<ChildLayer> childrenArray, Consumer<ChildLayer> importedFunction){
+    public void loopThroughChildren(ArrayList<ChildLayer> childrenArray, Consumer<ChildLayer> importedFunction){
         ChildLayer child;
         for(int chuldNum = 0; chuldNum < childrenArray.size(); chuldNum++) {
             child = childrenArray.get(chuldNum);
@@ -219,7 +183,6 @@ public class ParentLayer extends Layer {
             }
 
             importedFunction.accept(child);
-
         }
     }
 
@@ -263,5 +226,14 @@ public class ParentLayer extends Layer {
         }
         layer.isCurrentLayer = true;
         this.add(layer);
+    }
+
+    @Override
+    public void addChild(ChildLayer layer) {
+        super.addChild(layer);
+
+        if(children.isEmpty()) {
+            setChildTo(layer);
+        }
     }
 }
