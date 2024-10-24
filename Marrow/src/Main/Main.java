@@ -2,7 +2,6 @@ package Main;
 
 import Animation.*;
 import Bitmaps.Bitmap;
-import Bitmaps.Bitmap;
 import Animation.Timeline;
 import Bitmaps.Pixel;
 import Bitmaps.RGBColor;
@@ -37,6 +36,9 @@ public class Main {
     static JSplitPane bottomScreenSPHor = new JSplitPane();
 
     public static String currentSaveDirectory = "MarrowSaves"; // change later on to be able to find the directory user saved it at
+    public static String currentLoadDirectory = "MarrowSaves";
+    public static boolean hasSaved = false;
+    public static boolean stopSavingOrLoading = false;
 
     public static void main(String[] args) {
         frameSetup();
@@ -49,6 +51,14 @@ public class Main {
      */
     public static void saveLayers(ParentLayer parentLayer, AnimationDataStorage animDataStorage){
         try {
+            if(!hasSaved) {
+                getSaveDirectory();
+            }
+
+            if(stopSavingOrLoading){
+                stopSavingOrLoading = false;
+                return;
+            }
 
             FileWriter writer = getSaveFileWriter();
 
@@ -66,7 +76,7 @@ public class Main {
 
             ArrayList<ChildLayer> childLayers = parentLayer.getChildren();
 
-            writer.write("MARROW\n\nParentLayer");
+            writer.write("MARROW - Don't change name of this file!\n\nParentLayer");
             System.out.print("\nMARROW\n\nParentLayer");
 
             writer.write("\n\nMaxFrameCount: ");
@@ -206,8 +216,16 @@ public class Main {
     //endregion
 
     //region LOAD FUNCTIONS
-    public static ArrayList<BitmapLayer> loadLayers(ToolContainer toolContainer, AnimationDataStorage animDataStorage) throws IOException {
-        File saveFile = new File(currentSaveDirectory + "/save.marrow");
+    public static ArrayList<BitmapLayer> loadLayers(ToolContainer toolContainer, AnimationDataStorage animDataStorage)throws IOException{
+
+        getLoadDirectory();
+
+        if(stopSavingOrLoading){
+            stopSavingOrLoading = false;
+            return null;
+        }
+
+        File saveFile = new File(currentLoadDirectory + "/save.marrow");
         Scanner fileReader = new Scanner(saveFile);
 
         LinkedList<String> layerNames = new LinkedList<>();
@@ -246,7 +264,7 @@ public class Main {
                 continue;
             }
 
-            String filePath = currentSaveDirectory + "/" + layerName + ".png";
+            String filePath = currentLoadDirectory + "/" + layerName + ".png";
             File layer = new File(filePath);
 
             if (layer.createNewFile()) {
@@ -439,6 +457,35 @@ public class Main {
     }
     //endregion
 
+    /**
+     * Sets the current save directory to where the user wants it to be.
+     */
+    private static void getSaveDirectory(){
+        JFileChooser chooseFile = new JFileChooser(currentSaveDirectory);
+        int fileChosen = chooseFile.showSaveDialog(null);
+
+        if(fileChosen == JFileChooser.APPROVE_OPTION){
+            currentSaveDirectory = chooseFile.getSelectedFile().getAbsolutePath();
+        }
+        else{
+            stopSavingOrLoading = true;
+        }
+    }
+
+    private static void getLoadDirectory(){
+        JFileChooser chooseFile = new JFileChooser(currentLoadDirectory);
+        chooseFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        int fileChosen = chooseFile.showOpenDialog(null);
+
+        if(fileChosen == JFileChooser.APPROVE_OPTION){
+            currentLoadDirectory = chooseFile.getSelectedFile().getAbsolutePath();
+        }
+        else{
+            stopSavingOrLoading = true;
+        }
+    }
+
      /**
      * Sets up the main frame that the user draws on
      */
@@ -507,6 +554,7 @@ public class Main {
             }
         });
 
+        //region parent layer mouse listeners
         parentLayer.addMouseListener(new MouseAdapter(){
             @Override
             public void mousePressed(MouseEvent e) {
@@ -538,6 +586,8 @@ public class Main {
             }
 
         });
+
+        //endregion
 
         frame.addKeyListener(new KeyListener() {
             @Override
@@ -632,11 +682,15 @@ public class Main {
 
         //endregion
 
+
+
+
         frame.setJMenuBar(createMenuBar(parentLayer, toolContainer, animDataStorage));
         //frame.setLocationByPlatform(true);
 
     }
 
+    //region create menu methods
     static JMenuBar createMenuBar(ParentLayer parentLayer, ToolContainer toolContainer, AnimationDataStorage animDataStorage) {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createFileMenu(parentLayer, toolContainer, animDataStorage));
@@ -655,6 +709,10 @@ public class Main {
         openItem.addActionListener(e -> {
             try {
                 ArrayList<BitmapLayer> bitmapLayers = loadLayers(toolContainer, animDataStorage);
+
+                if(bitmapLayers == null){
+                    return;
+                }
 
                 for (BitmapLayer bitmapLayer : bitmapLayers) {
                     parentLayer.addChild(bitmapLayer);
@@ -686,4 +744,5 @@ public class Main {
         editMenu.add(pasteItem);
         return editMenu;
     }
+    //endregion
 }

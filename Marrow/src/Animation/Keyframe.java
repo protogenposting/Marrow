@@ -11,10 +11,7 @@ public class Keyframe {
 
     public EaseType easing = EaseType.NONE;
 
-    public Keyframe()
-    {
-
-    }
+    public Keyframe() {}
 
     /**
      *
