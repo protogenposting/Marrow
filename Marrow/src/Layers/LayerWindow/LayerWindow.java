@@ -108,13 +108,18 @@ public class LayerWindow extends JPanel {
     //return cases
         ChildLayer child;
         int returnDepth=-1;
+
+        System.out.println("Size of Array: " + childrenArray.size());
+
         for (int childLocation = 0; childLocation < childrenArray.size(); childLocation++) {
             child = childrenArray.get(childLocation);
+            System.out.println("Now Searching: " + childLocation);
+
             if (currentLayer == child ) {
               return depth;
             }
             if(child.getChildren().isEmpty()){
-                return -1;
+                returnDepth = -1;
             }
             //call function
             returnDepth = getIndentCount(currentLayer, child.getChildren(), depth+1);
