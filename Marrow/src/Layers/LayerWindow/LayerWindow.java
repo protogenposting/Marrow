@@ -19,7 +19,8 @@ import java.util.function.Consumer;
 public class LayerWindow extends JPanel {
     Layer parentLayer;
     Timeline timeline;
-
+    
+    static JPanel innerPanel = new JPanel();
     static ArrayList <LayerButton> buttonLinkedList = new ArrayList<>();
 
     static boolean foundCurrentLayer;
@@ -31,7 +32,7 @@ public class LayerWindow extends JPanel {
         this.parentLayer = parentLayer;
         this.setLayout(new FlowLayout());
 
-        JPanel innerPanel = new JPanel();
+
 
         JButton layerAdding = getjButton(parentLayer, toolContainer);
         add(layerAdding);
