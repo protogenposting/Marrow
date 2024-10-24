@@ -8,8 +8,7 @@ public class Toolbox extends JPanel {
     ToolContainer toolContainer;
 
     JLabel promptCloser = new JLabel("Set brush size(Pixels)");
-    JTextField setBrushSize = new JTextField("          1");
-    JButton activateChange = new JButton("Submit");
+    JTextField setBrushSize = new JTextField(5);
 
     final int drawSizeCap = 1000;
 
@@ -48,15 +47,11 @@ public class Toolbox extends JPanel {
 
         //endregion
 
-
-
         //frame.setJMenuBar(createMenuBar());
         //frame.setLocationByPlatform(true);
 
         //panel.setResizable(true);
         this.setVisible(true);
-
-        //region ANTHONY'S UNFINISHED CODE
 
         this.add(promptCloser);
         promptCloser.setSize(200,120);
@@ -66,32 +61,7 @@ public class Toolbox extends JPanel {
         setBrushSize.setSize(200,120);
         setBrushSize.setVisible(true);
 
-        setBrushSize.setText("Enter a Number");
-
-        this.add(activateChange);
-        activateChange.setSize(200,120);
-        activateChange.setVisible(true);
-
-        activateChange.addActionListener(e -> {
-            try{
-                int newDrawSize = Integer.parseInt(setBrushSize.getText());
-                if(newDrawSize > drawSizeCap)
-                {
-                    newDrawSize = drawSizeCap;
-                }
-                if (toolContainer.currentTool == paintBrush.tool) {
-                    paintBrush.tool.drawSize = newDrawSize;
-                    System.out.println("Paint Brush draw size is now " + paintBrush.tool.drawSize);
-                } else if (toolContainer.currentTool == eraser.tool) {
-                    eraser.tool.drawSize = newDrawSize;
-                    System.out.println("Eraser draw size is now " + eraser.tool.drawSize);
-                }
-            } catch (NumberFormatException Ex){
-                System.out.println("ERROR: INVALID INPUT");
-            }
-        });
-        //endregion
-
+        setBrushSize.addActionListener(e -> {resetBrushSizeText(eraser);});
     }
 
     /**
@@ -101,48 +71,27 @@ public class Toolbox extends JPanel {
     private void setTool(ToolButton toolButton){
         toolContainer.currentTool = toolButton.tool;
         toolContainer.currentTool.currentColor = toolContainer.currentColor;
+
+        setBrushSize.setText(String.valueOf(toolButton.tool.drawSize));
     }
 
-    //region create menus
-    /**
-     * Creates the edit menu
-     * @return the created edit menu
-     */
-    private JMenu createEditMenu() {
-        JMenu editMenu = new JMenu("Edit");
-        JMenuItem cutItem = new JMenuItem("Cut");
-        editMenu.add(cutItem);
-        JMenuItem copyItem = new JMenuItem("Copy");
-        editMenu.add(copyItem);
-        JMenuItem pasteItem = new JMenuItem("Paste");
-        editMenu.add(pasteItem);
-        return editMenu;
-    }
+    private void resetBrushSizeText(ToolButton eraser){
+        try{
+            int newDrawSize = Integer.parseInt(setBrushSize.getText());
+            if(newDrawSize > drawSizeCap)
+            {
+                newDrawSize = drawSizeCap;
+            }
 
-    /**
-     * creates the File menu
-     * @return the created file menu
-     */
-    private JMenu createFileMenu() {
-        JMenu fileMenu = new JMenu("File");
-        JMenuItem newItem = new JMenuItem("New");
-        fileMenu.add(newItem);
-        JMenuItem openItem = new JMenuItem("Open");
-        fileMenu.add(openItem);
-        JMenuItem saveItem = new JMenuItem("Save");
-        fileMenu.add(saveItem);
-        return fileMenu;
+            //here so eraser draw size is separate from everything else
+            if (toolContainer.currentTool == eraser.tool) {
+                eraser.tool.drawSize = newDrawSize;
+            }
+            else{
+                toolContainer.currentTool.drawSize = newDrawSize;
+            }
+        } catch (NumberFormatException Ex){
+            setBrushSize.setText(String.valueOf(toolContainer.currentTool.drawSize));
+        }
     }
-
-    /**
-     * creates the menu bar
-     * @return the created menu bar
-     */
-    private JMenuBar createMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.add(createFileMenu());
-        menuBar.add(createEditMenu());
-        return menuBar;
-    }
-    //endregion
 }
