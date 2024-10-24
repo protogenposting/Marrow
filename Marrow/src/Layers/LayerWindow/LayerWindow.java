@@ -147,13 +147,19 @@ public class LayerWindow extends JPanel {
 
     public static void addToListAndResort(JPanel innerPannel, LayerButton newButton, ChildLayer currentLayer){
 
+        boolean buttonAdded = false;
+
         if(buttonLinkedList.isEmpty()){
             buttonLinkedList.add(newButton);
+            buttonAdded = true;
         }
 
         for (int i = 0; i < buttonLinkedList.size(); i++) {
             if(buttonLinkedList.get(i).layer==currentLayer){
                 buttonLinkedList.add(countChildren(currentLayer.getChildren(), i),newButton);
+            } else if (currentLayer == null && !buttonAdded) {
+                buttonLinkedList.add(newButton);
+                buttonAdded = true;
             }
         }
 
