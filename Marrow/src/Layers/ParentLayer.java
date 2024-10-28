@@ -30,7 +30,6 @@ public class ParentLayer extends Layer {
         this.toolContainer = toolContainer;
     }
 
-
     protected void paintComponent(Graphics g) {
         //if the image is null then make some graphics and stuff
         if(image==null)
@@ -52,21 +51,6 @@ public class ParentLayer extends Layer {
 
         //RENDERING
         loopThroughChildren(children, (child) -> {
-            //selection rectangle
-            if (child == currentLayer) {
-                graphics.drawRect(
-                        (int) (child.transform.centerX - child.transform.x),
-                        (int) (child.transform.centerY - child.transform.y),
-                        (int) (child.transform.centerX + child.transform.x + child.width * child.transform.scaleX),
-                        (int) (child.transform.centerY + child.transform.y + child.height * child.transform.scaleY)
-                );
-                graphics.drawOval(
-                        (int) (child.transform.centerX + child.transform.x) - 15,
-                        (int) (child.transform.centerY + child.transform.y) - 15,
-                        30,
-                        30
-                );
-            }
             if (child.getClass().equals(BitmapLayer.class)) {
                 //draw the bitmap layer's image :3
                 BitmapLayer bitmapChild = (BitmapLayer) child;
@@ -163,6 +147,23 @@ public class ParentLayer extends Layer {
                         }
                         channelID++;
                     }
+                }
+
+                if (child == currentLayer) {
+                    //selection rectangle
+                    graphics.drawRect(
+                            (int) (currentTransform.getTranslateX() + child.transform.centerX - child.width),
+                            (int) (currentTransform.getTranslateY() + child.transform.centerY - child.height),
+                            (int) (currentTransform.getTranslateX() + child.transform.centerX + child.width),
+                            (int) (currentTransform.getTranslateY() + child.transform.centerY + child.height)
+                    );
+                    //the centerpoint, make this a jsomething later!
+                    graphics.drawOval(
+                            (int) (child.transform.centerX + currentTransform.getTranslateX()) - 15,
+                            (int) (child.transform.centerY + currentTransform.getTranslateY()) - 15,
+                            30,
+                            30
+                    );
                 }
 
                 //draw the image with the transform
