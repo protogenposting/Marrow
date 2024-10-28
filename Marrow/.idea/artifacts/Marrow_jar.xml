@@ -1,10 +1,7 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="Marrow:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/Marrow_jar</output-path>
-    <root id="archive" name="Marrow_jar.jar">
-      <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
-      </element>
+    <root id="archive" name="Marrow.jar">
       <element id="module-output" name="Marrow" />
     </root>
   </artifact>
