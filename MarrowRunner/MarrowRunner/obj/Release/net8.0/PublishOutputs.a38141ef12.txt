@@ -1,5 +1,0 @@
-C:\Users\ck6100\Documents\GitHub\Marrow\MarrowRunner\MarrowRunner\bin\Release\net8.0\publish\MarrowRunner.exe
-C:\Users\ck6100\Documents\GitHub\Marrow\MarrowRunner\MarrowRunner\bin\Release\net8.0\publish\MarrowRunner.dll
-C:\Users\ck6100\Documents\GitHub\Marrow\MarrowRunner\MarrowRunner\bin\Release\net8.0\publish\MarrowRunner.deps.json
-C:\Users\ck6100\Documents\GitHub\Marrow\MarrowRunner\MarrowRunner\bin\Release\net8.0\publish\MarrowRunner.runtimeconfig.json
-C:\Users\ck6100\Documents\GitHub\Marrow\MarrowRunner\MarrowRunner\bin\Release\net8.0\publish\MarrowRunner.pdb
