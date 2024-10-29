@@ -1,5 +1,6 @@
 package Main;
 
+//region imports
 import Animation.*;
 import Bitmaps.Bitmap;
 import Animation.Timeline;
@@ -25,9 +26,10 @@ import java.util.ArrayList;
 import java.io.*;
 import java.util.LinkedList;
 import java.util.Scanner;
+//endregion
 
 public class Main {
-    //region the main frame we will be drawing on
+
     public static JFrame frame = new JFrame("Marrow");
 
     static JSplitPane mainSP = new JSplitPane();
@@ -607,12 +609,11 @@ public class Main {
             @Override
             public void windowClosing(WindowEvent e) {
 
-                frame.dispose();
-
                 if(askToSave()){
                     saveLayers(parentLayer, animDataStorage);
                 }
 
+                frame.dispose();
                 System.exit(0);
             }
         });
