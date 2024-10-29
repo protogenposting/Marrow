@@ -40,6 +40,8 @@ public class Main {
     public static boolean hasSaved = false;
     public static boolean stopSavingOrLoading = false; // stops the saving or loading if user changes their mind when choosing files
 
+    public static Object[] yesNoOptions = {"Yes", "No"};
+
     public static void main(String[] args) {
         frameSetup();
     }
@@ -216,7 +218,16 @@ public class Main {
     //endregion
 
     //region LOAD FUNCTIONS
-    public static ArrayList<BitmapLayer> loadLayers(ToolContainer toolContainer, AnimationDataStorage animDataStorage)throws IOException{
+
+    /**
+     * Loads all the layers and their corresponding keyframes in a user-chosen save folder.
+     * @param toolContainer For BitmapLayer constructor.
+     * @param animDataStorage Loads previous animation data into this object.
+     * @return An ArrayList of loaded {@link BitmapLayer}s.
+     * @throws IOException In the event a file can't be read.
+     */
+    public static ArrayList<BitmapLayer> loadLayers(ToolContainer toolContainer,
+                                                    AnimationDataStorage animDataStorage)throws IOException{
 
         setLoadDirectory();
 
@@ -285,6 +296,11 @@ public class Main {
         return bitmapLayers;
     }
 
+    /**
+     * Gets a number from a string if possible.
+     * @param stringWithNumber The string the number is from.
+     * @return The number from the string. If the number doesn't exist, it returns -1.
+     */
     private static int getNumberFromString(String stringWithNumber){
 
         for (int i = 0; i < stringWithNumber.length(); i++) {
@@ -294,14 +310,14 @@ public class Main {
             try {
                 return Integer.parseInt(stringWithNumber.substring(i + 1));
             } catch (NumberFormatException e) {
-                return 1;
+                return -1;
             }
         }
-        return 1;
+        return -1;
     }
 
     /**
-     * Loads a set of keyframes from a save file into a BitmapLayer.
+     * Loads a set of keyframes from a save file into a {@link BitmapLayer}.
      * @param bitmapLayer the layer having its keyframes set
      * @param layerNames the save file being loaded
      * @param layerNameIndex the scanner's position in the save file
@@ -476,9 +492,9 @@ public class Main {
     }
 
     /**
-     * removes the dashes at the back of a layer name
-     * @param layerName the name having its dashes removed
-     * @return the layer name with the removed dashes
+     * Removes the dashes at the back of a layer name.
+     * @param layerName The name having its dashes removed.
+     * @return The layer name with the removed dashes.
      */
     private static String removeDashes(String layerName){
         StringBuilder returningName = new StringBuilder();
@@ -512,6 +528,9 @@ public class Main {
         }
     }
 
+    /**
+     * Sets the current load directory to where the user wants it to be.
+     */
     private static void setLoadDirectory(){
         JFileChooser chooseFile = new JFileChooser(currentLoadDirectory);
         chooseFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -589,7 +608,11 @@ public class Main {
             public void windowClosing(WindowEvent e) {
 
                 frame.dispose();
-                //askToSave();
+
+                if(askToSave()){
+                    saveLayers(parentLayer, animDataStorage);
+                }
+
                 System.exit(0);
             }
         });
@@ -727,14 +750,24 @@ public class Main {
 
         //endregion
 
-
-
-
         frame.setJMenuBar(createMenuBar(parentLayer, toolContainer, animDataStorage));
         //frame.setLocationByPlatform(true);
-
     }
 
+    private static boolean askToSave(){
+        int choice = JOptionPane.showOptionDialog(
+                null, // Parent component (null means center on screen)
+                "Would you like to save before you exit?", // Message to display
+                "SAVE OPTION", // Dialog title
+                JOptionPane.YES_NO_OPTION, // Option type (Yes, No, Cancel)
+                JOptionPane.QUESTION_MESSAGE, // Message type (question icon)
+                null, // Custom icon (null means no custom icon)
+                yesNoOptions, // Custom options array
+                yesNoOptions[1] // Initial selection (default is "Cancel")
+        );
+
+        return choice == JOptionPane.YES_OPTION;
+    }
 
     //region create menu methods
 
