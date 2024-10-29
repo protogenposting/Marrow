@@ -1,5 +1,9 @@
 Hello users, This is how you use Marrow
 
+Marrow User Manual
+
+Launcher: https://github.com/protogenposting/Marrow-Launcher
+
 First To start drawing you'll need to create a layer,
 
 1. To create a layer you need to look at the panel on the left side with a box that has a button called 'Parent Layer' in it
