@@ -107,7 +107,7 @@ public class LayerWindow extends JPanel {
                     }
 
                     parentLayer.currentLayer.addChild(new BitmapLayer(toolContainer, indentCount + "Layer "
-                            + parentLayer.currentLayer.getChildren().size()));
+                            + parentLayer.currentLayer.getChildren().size(), parentLayer.currentLayer.keyframes));
                 }
 
 
