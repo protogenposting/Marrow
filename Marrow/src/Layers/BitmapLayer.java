@@ -71,6 +71,11 @@ public class BitmapLayer extends ChildLayer {
         //this.bitmap.setSize(800,400);
     }
 
+    public BitmapLayer(ToolContainer toolContainer, String name, ArrayList<ArrayList<Keyframe>> keyframes){
+        this(toolContainer, name, new Bitmap());
+        this.keyframes = keyframes;
+    }
+
     public void mousePressed(MouseEvent e) {
         //save the old coords
         oldX = e.getX();
