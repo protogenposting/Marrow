@@ -38,7 +38,7 @@ public class Main {
     public static String currentSaveDirectory = "MarrowSaves"; // change later on to be able to find the directory user saved it at
     public static String currentLoadDirectory = "MarrowSaves";
     public static boolean hasSaved = false;
-    public static boolean stopSavingOrLoading = false;
+    public static boolean stopSavingOrLoading = false; // stops the saving or loading if user changes their mind when choosing files
 
     public static void main(String[] args) {
         frameSetup();
@@ -52,7 +52,7 @@ public class Main {
     public static void saveLayers(ParentLayer parentLayer, AnimationDataStorage animDataStorage){
         try {
             if(!hasSaved) {
-                getSaveDirectory();
+                setSaveDirectory();
             }
 
             if(stopSavingOrLoading){
@@ -218,7 +218,7 @@ public class Main {
     //region LOAD FUNCTIONS
     public static ArrayList<BitmapLayer> loadLayers(ToolContainer toolContainer, AnimationDataStorage animDataStorage)throws IOException{
 
-        getLoadDirectory();
+        setLoadDirectory();
 
         if(stopSavingOrLoading){
             stopSavingOrLoading = false;
@@ -231,6 +231,7 @@ public class Main {
         LinkedList<String> layerNames = new LinkedList<>();
         ArrayList<BitmapLayer> bitmapLayers = new ArrayList<>();
 
+        //contain everything in the save file into a list of strings
         while(fileReader.hasNextLine()){
             String layerName = fileReader.nextLine();
 
@@ -299,13 +300,17 @@ public class Main {
         return 1;
     }
 
-    private static int saveKeyframesToBitmap(BitmapLayer bitmapLayers, LinkedList<String> layerNames, int layerNameIndex){
+    /**
+     * Loads a set of keyframes from a save file into a BitmapLayer.
+     * @param bitmapLayer the layer having its keyframes set
+     * @param layerNames the save file being loaded
+     * @param layerNameIndex the scanner's position in the save file
+     * @return the current position of the scanner in the save file
+     */
+    private static int saveKeyframesToBitmap(BitmapLayer bitmapLayer, LinkedList<String> layerNames, int layerNameIndex){
 
-        ArrayList<ArrayList<Keyframe>> channels = bitmapLayers.keyframes;
+        ArrayList<ArrayList<Keyframe>> channels = bitmapLayer.keyframes;
 
-        //loop through all the layer names at i's position
-        //get keyframeID and insert the corresponding value to the channel
-        //return i once finished
         int channelID = -1;
 
         int keyframeID;
@@ -313,8 +318,11 @@ public class Main {
         String layerName;
         EaseType easing;
 
+        //load all the keyframes in a channel, then move to another channel
+        //repeat until no more channels need to be set or an error occurs
         while(channelID < channels.size()) {
 
+            //for if the scanner has reached the end of the file
             if(layerNames.size() <= layerNameIndex){
                 return layerNameIndex - 1;
             }
@@ -345,6 +353,7 @@ public class Main {
 
             keyframe.isActive = true;
             keyframe.value = keyframeValue;
+            keyframe.easing = easing;
 
             layerNameIndex++;
         }
@@ -353,14 +362,20 @@ public class Main {
     }
 
     //region find keyframe values
-    private static EaseType findKeyframeEasing(String layerName){
+
+    /**
+     * Finds the easing type of the keyframe
+     * @param keyframeName the keyframe being loaded
+     * @return the keyframe's easing type
+     */
+    private static EaseType findKeyframeEasing(String keyframeName){
 
         boolean ignoreLoop = true;
         StringBuilder value = new StringBuilder();
 
-        for (int i = 0; i < layerName.length(); i++) {
+        for (int i = 0; i < keyframeName.length(); i++) {
 
-            if(layerName.charAt(i) == '$'){
+            if(keyframeName.charAt(i) == '$'){
                 ignoreLoop = false;
                 continue;
             }
@@ -368,24 +383,37 @@ public class Main {
                 continue;
             }
 
-            value.append(layerName.charAt(i));
+            value.append(keyframeName.charAt(i));
         }
 
-        return EaseType.valueOf(String.valueOf(value));
+        try {
+            return EaseType.valueOf(String.valueOf(value));
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Keyframe's ease type could not be found!");
+        }
     }
 
-    private static int findKeyframeID(String layerName){
+    /**
+     * Finds the frame the keyframe was made in
+     * @param keyframeName the keyframe being loaded
+     * @return the frame the keyframe was on
+     */
+    private static int findKeyframeID(String keyframeName){
 
-        for (int i = 0; i < layerName.length(); i++) {
+        for (int i = 0; i < keyframeName.length(); i++) {
 
-            if(!(layerName.charAt(i) == ':')){
+            //keyframe's ID is the first thing in keyframeName
+            //the colon is the end of the ID
+            if(!(keyframeName.charAt(i) == ':')){
                 continue;
             }
 
+            //return
             try{
-                return Integer.parseInt(layerName.substring(0, i));
-            } catch (NumberFormatException e) {
-                return -2;
+                return Integer.parseInt(keyframeName.substring(0, i));
+            }
+            catch (NumberFormatException e) {
+                return -1;
             }
 
         }
@@ -393,14 +421,20 @@ public class Main {
         return -1;
     }
 
-    private static double findKeyframeValue(String keyframeValue){
+    /**
+     * Finds the value of the keyframe being loaded
+     * @param keyframeName the keyframe being loaded
+     * @return the keyframe's value
+     */
+    private static double findKeyframeValue(String keyframeName){
 
         boolean ignoreLoop = true;
         StringBuilder value = new StringBuilder();
 
-        for (int i = 0; i < keyframeValue.length(); i++) {
+        for (int i = 0; i < keyframeName.length(); i++) {
 
-            if(keyframeValue.charAt(i) == ' '){
+            //skip until after the first space
+            if(keyframeName.charAt(i) == ' '){
                 ignoreLoop = false;
                 continue;
             }
@@ -408,22 +442,28 @@ public class Main {
                 continue;
             }
 
-            if(keyframeValue.charAt(i) == '$'){
+            //the $ sign is when it starts loading the ease type instead, so stop looping here
+            if(keyframeName.charAt(i) == '$'){
                 break;
             }
 
-            value.append(keyframeValue.charAt(i));
+            value.append(keyframeName.charAt(i));
         }
 
         try{
             return Double.parseDouble(String.valueOf(value));
         }
         catch (NumberFormatException ex){
-            return 0.0;
+            throw new RuntimeException("Keyframe value could not be found!");
         }
     }
     //endregion
 
+    /**
+     * Checks if a string is a saved channel
+     * @param layerName the string being checked
+     * @return true if it is a saved channel, false if it isn't
+     */
     private static boolean isSavedChannel(String layerName){
         try{
             String getChannel = layerName.substring(0, 8);
@@ -460,7 +500,7 @@ public class Main {
     /**
      * Sets the current save directory to where the user wants it to be.
      */
-    private static void getSaveDirectory(){
+    private static void setSaveDirectory(){
         JFileChooser chooseFile = new JFileChooser(currentSaveDirectory);
         int fileChosen = chooseFile.showSaveDialog(null);
 
@@ -472,7 +512,7 @@ public class Main {
         }
     }
 
-    private static void getLoadDirectory(){
+    private static void setLoadDirectory(){
         JFileChooser chooseFile = new JFileChooser(currentLoadDirectory);
         chooseFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
