@@ -4,6 +4,7 @@ import Animation.Keyframe;
 import Animation.Transform2D;
 
 import javax.swing.*;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.function.Consumer;
@@ -15,6 +16,8 @@ public class Layer extends JPanel {
     public ArrayList<ChildLayer> children = new ArrayList<>();
 
     public Transform2D transform = new Transform2D();
+
+    AffineTransform currentAnimatedTransform = new AffineTransform();
 
     public Consumer<ChildLayer> onAddChild = (a) -> {};
 

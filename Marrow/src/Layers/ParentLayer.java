@@ -131,9 +131,7 @@ public class ParentLayer extends Layer {
                                 currentTransform.setToScale(currentTransform.getScaleX(),value);
                                 break;
                             case TransformChannels.rotation:
-                                double width = bitmapChild.transform.centerX * bitmapChild.getWidth();
-                                double height = bitmapChild.transform.centerY * bitmapChild.getHeight();
-                                currentTransform.setToRotation(Math.toRadians(value), width, height);
+                                currentTransform.setToRotation(Math.toRadians(value));
                                 break;
                             case TransformChannels.shearX:
                                 currentTransform.setToShear(value,currentTransform.getShearY());
@@ -165,6 +163,8 @@ public class ParentLayer extends Layer {
                             30
                     );
                 }
+
+                bitmapChild.currentAnimatedTransform = currentTransform;
 
                 //draw the image with the transform
                 graphics.drawImage(bitmapChild.drawnImage, currentTransform, this);
