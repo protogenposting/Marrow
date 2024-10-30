@@ -4,7 +4,6 @@ package Main;
 import Animation.*;
 import Bitmaps.Bitmap;
 import Animation.Timeline;
-import Bitmaps.Pixel;
 import Bitmaps.RGBColor;
 import Layers.*;
 import Layers.LayerWindow.LayerWindow;
@@ -42,7 +41,7 @@ public class Main {
 
     public static String currentSaveDirectory;
     public static String currentLoadDirectory;
-    public static boolean hasSaved = false;
+    public static boolean hasSavedOrLoaded = false;
     public static boolean stopSavingOrLoading = false; // stops the saving or loading if user changes their mind when choosing files
 
     public static Object[] yesNoOptions = {"Yes", "No"};
@@ -58,7 +57,7 @@ public class Main {
      */
     public static void saveLayers(ParentLayer parentLayer, AnimationDataStorage animDataStorage){
         try {
-            if(!hasSaved) {
+            if(!hasSavedOrLoaded) {
                 setSaveDirectory();
             }
 
@@ -527,7 +526,7 @@ public class Main {
 
         if(fileChosen == JFileChooser.APPROVE_OPTION){
             currentSaveDirectory = chooseFile.getSelectedFile().getAbsolutePath();
-            hasSaved = true;
+            hasSavedOrLoaded = true;
         }
         else{
             stopSavingOrLoading = true;
@@ -545,6 +544,7 @@ public class Main {
 
         if(fileChosen == JFileChooser.APPROVE_OPTION){
             currentLoadDirectory = chooseFile.getSelectedFile().getAbsolutePath();
+            hasSavedOrLoaded = true;
         }
         else{
             stopSavingOrLoading = true;
@@ -850,7 +850,7 @@ public class Main {
         });
 
         saveAsItem.addActionListener(e -> {
-            if(hasSaved){
+            if(hasSavedOrLoaded){
                 setSaveDirectory();
             }
             saveLayers(parentLayer, animDataStorage);
