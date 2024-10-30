@@ -603,13 +603,13 @@ public class Main {
         frame.setResizable(true);
         frame.setVisible(true);
         frame.setLocationRelativeTo(null); //places window at the center of the screen
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // this allows it to save the stuff when user exits
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
 
-                if(askToSave()){
+                if(askUser("Would you like to save before you exit?", "SAVE OPTION")){
                     saveLayers(parentLayer, animDataStorage);
                 }
 
@@ -753,13 +753,20 @@ public class Main {
 
         frame.setJMenuBar(createMenuBar(parentLayer, toolContainer, animDataStorage));
         //frame.setLocationByPlatform(true);
+        System.out.println(parentLayer.getChildren().size());
     }
 
-    private static boolean askToSave(){
+    /**
+     * Asks the user to answer a yes or no question.
+     * @param prompt The question.
+     * @param windowName The name of the window the question is in.
+     * @return True if user answers yes, false if answered no.
+     */
+    private static boolean askUser(String prompt, String windowName){
         int choice = JOptionPane.showOptionDialog(
-                null, // Parent component (null means center on screen)
-                "Would you like to save before you exit?", // Message to display
-                "SAVE OPTION", // Dialog title
+                null, // center of screen
+                prompt,
+                windowName,
                 JOptionPane.YES_NO_OPTION, // Option type (Yes, No, Cancel)
                 JOptionPane.QUESTION_MESSAGE, // Message type (question icon)
                 null, // Custom icon (null means no custom icon)
@@ -806,6 +813,12 @@ public class Main {
         JMenuItem saveItem = new JMenuItem("Save");
 
         openItem.addActionListener(e -> {
+            if(!askUser("Warning: if you load, your unsaved progress WILL be lost! Continue?", "LOADING")){
+                return;
+            }
+            if(!parentLayer.getChildren().isEmpty()){
+                parentLayer.getChildren().clear();
+            }
             try {
                 ArrayList<BitmapLayer> bitmapLayers = loadLayers(toolContainer, animDataStorage);
 
