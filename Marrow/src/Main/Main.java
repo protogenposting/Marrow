@@ -30,15 +30,18 @@ import java.util.Scanner;
 
 public class Main {
 
+    //region the main frame everything will be put on
+
     public static JFrame frame = new JFrame("Marrow");
 
+    //these are all split panes, which can be resized
     static JSplitPane mainSP = new JSplitPane();
     static JSplitPane topScreenSP = new JSplitPane();
     static JSplitPane bottomScreenSPVert = new JSplitPane();
     static JSplitPane bottomScreenSPHor = new JSplitPane();
 
-    public static String currentSaveDirectory = "MarrowSaves"; // change later on to be able to find the directory user saved it at
-    public static String currentLoadDirectory = "MarrowSaves";
+    public static String currentSaveDirectory;
+    public static String currentLoadDirectory;
     public static boolean hasSaved = false;
     public static boolean stopSavingOrLoading = false; // stops the saving or loading if user changes their mind when choosing files
 
@@ -551,7 +554,6 @@ public class Main {
      * Sets up the main frame that the user draws on
      */
     static void frameSetup(){
-
         frame.getContentPane().add(mainSP);
 
         ToolContainer toolContainer = new ToolContainer();
@@ -570,6 +572,28 @@ public class Main {
         animDataStorage.setSize(240);
 
         Timeline timeline = new Timeline(animDataStorage, parentLayer);
+
+        frame.setFocusable(true);
+        frame.requestFocusInWindow();
+
+        frame.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_P) {
+                    timeline.playOrPause();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
 
         animDataStorage.timeline = timeline;
 
@@ -652,30 +676,6 @@ public class Main {
         });
 
         //endregion
-
-        frame.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {}
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode()==KeyEvent.VK_S){
-                    saveLayers(parentLayer, animDataStorage);
-                    BitmapLayer layer = (BitmapLayer) parentLayer.getChildren().get(1);
-                    ArrayList<ArrayList<Pixel>> bitmap = layer.bitmap.bitmap;
-                    for (ArrayList<Pixel> x : bitmap) {
-
-                        for (Pixel y : x) {
-                            if (y.alpha != 0) {
-                                System.out.println(y.alpha);
-                            }
-                        }
-                    }
-                }
-            }
-            @Override
-            public void keyReleased(KeyEvent e) {}
-        });
 
 
         // region useless code??

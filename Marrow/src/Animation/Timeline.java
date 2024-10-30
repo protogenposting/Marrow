@@ -454,7 +454,7 @@ public class Timeline extends JPanel {
         }
     }
 
-    private void playOrPause(){
+    public void playOrPause(){
         animDataStorage.isPlaying = !(animDataStorage.isPlaying);
 
         if(animDataStorage.isPlaying){
