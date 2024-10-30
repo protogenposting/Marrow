@@ -527,6 +527,7 @@ public class Main {
 
         if(fileChosen == JFileChooser.APPROVE_OPTION){
             currentSaveDirectory = chooseFile.getSelectedFile().getAbsolutePath();
+            hasSaved = true;
         }
         else{
             stopSavingOrLoading = true;
@@ -806,11 +807,16 @@ public class Main {
      */
     static JMenu createFileMenu(ParentLayer parentLayer, ToolContainer toolContainer, AnimationDataStorage animDataStorage) {
         JMenu fileMenu = new JMenu("File");
+
         JMenuItem newItem = new JMenuItem("New");
-        fileMenu.add(newItem);
         JMenuItem openItem = new JMenuItem("Open");
-        fileMenu.add(openItem);
         JMenuItem saveItem = new JMenuItem("Save");
+        JMenuItem saveAsItem = new JMenuItem("Save As");
+
+        fileMenu.add(newItem);
+        fileMenu.add(openItem);
+        fileMenu.add(saveItem);
+        fileMenu.add(saveAsItem);
 
         openItem.addActionListener(e -> {
             if(!askUser("Warning: if you load, your unsaved progress WILL be lost! Continue?", "LOADING")){
@@ -842,7 +848,14 @@ public class Main {
         saveItem.addActionListener(e -> {
             saveLayers(parentLayer, animDataStorage);
         });
-        fileMenu.add(saveItem);
+
+        saveAsItem.addActionListener(e -> {
+            if(hasSaved){
+                setSaveDirectory();
+            }
+            saveLayers(parentLayer, animDataStorage);
+        });
+
         return fileMenu;
     }
 

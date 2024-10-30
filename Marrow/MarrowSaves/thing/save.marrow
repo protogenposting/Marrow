@@ -1,0 +1,24 @@
+MARROW - Don't change name of this file!
+
+ParentLayer
+
+MaxFrameCount: 120
+FPS: 24
+-Layer 0
+--CHANNEL: 0x
+--CHANNEL: 1y
+--CHANNEL: 2scaleX
+--CHANNEL: 3scaleY
+--CHANNEL: 4rotation
+--CHANNEL: 5shearX
+--CHANNEL: 6shearY
+--CHANNEL: 7opacity
+--⤷ Layer 0
+---CHANNEL: 0x
+---CHANNEL: 1y
+---CHANNEL: 2scaleX
+---CHANNEL: 3scaleY
+---CHANNEL: 4rotation
+---CHANNEL: 5shearX
+---CHANNEL: 6shearY
+---CHANNEL: 7opacity
