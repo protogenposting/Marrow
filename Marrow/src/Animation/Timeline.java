@@ -6,43 +6,40 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.security.Key;
 import java.util.ArrayList;
 
-public class Timeline extends JPanel {
+public class Timeline extends JSplitPane {
 
-    AnimationDataStorage animDataStorage;
-    ParentLayer parentLayer;
-    JButton playButton = new JButton("Play");
-    JButton animModeButton = new JButton("Start Animating");
+    private final AnimationDataStorage animDataStorage;
+    private final ParentLayer parentLayer;
+    private final JButton playButton = new JButton("Play");
+    private final JButton animModeButton = new JButton("Start Animating");
 
-    JSlider frameSlider = setUpSlider();
-    JLabel currentFrameLabel = new JLabel("Current Frame:");
-    JLabel maxFrameCountLabel = new JLabel("Max Frame Count:");
-    JLabel fpsLabel = new JLabel("Frames per Second:");
+    public final JSlider frameSlider = setUpSlider();
+    private final JLabel currentFrameLabel = new JLabel("Current Frame:");
+    private final JLabel maxFrameCountLabel = new JLabel("Max Frame Count:");
+    private final JLabel fpsLabel = new JLabel("Frames per Second:");
 
-    JTextField maxFrameCount = setUpMaxFrameCount(new JTextField("120", 6));
-    JTextField framesPerSecond = setUpFramesPerSecond(new JTextField("24", 4));
-    JTextField currentFrameTextField = setUpCurrentFrame(new JTextField("0", 6));
+    private final JTextField maxFrameCount = setUpMaxFrameCount(new JTextField("120", 6));
+    private final JTextField framesPerSecond = setUpFramesPerSecond(new JTextField("24", 4));
+    public final JTextField currentFrameTextField = setUpCurrentFrame(new JTextField("0", 6));
 
-    JPanel keyFramePanel = new JPanel();
-    JScrollPane channelPanel;
-    JPanel keyframes = new JPanel();
-    JPanel keyframeValuePanel = new JPanel();
+    private final JPanel channelPanel = new JPanel();
+    private JScrollPane channelScrollPanel;
+    private final JPanel keyframePanel = new JPanel();
+    private final JPanel keyframeValuePanel = new JPanel();
 
-    Object[] yesNoOptions = {"Yes", "No"};
+    private final JSplitPane propertiesArea = new JSplitPane();
+
+    private final Object[] yesNoOptions = {"Yes", "No"};
 
     private int currentChannel = 0;
 
     public Timeline(AnimationDataStorage animDataStorage, ParentLayer parentLayer)
     {
-        playButton.addActionListener(e -> playOrPause());
-        animModeButton.addActionListener(e -> animateOnOrOff());
 
-        playButton.setVisible(true);
-        animModeButton.setVisible(true);
+        setSplitPanes();
 
-        this.setLayout(new FlowLayout(FlowLayout.LEFT));
         this.parentLayer = parentLayer;
         this.animDataStorage = animDataStorage;
 
@@ -52,63 +49,88 @@ public class Timeline extends JPanel {
     }
 
     /**
+     * Sets up the split pane values for the GUI.
+     */
+    private void setSplitPanes(){
+        this.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+        this.setDividerLocation(200);
+        this.setLeftComponent(channelScrollPanel);
+        this.setRightComponent(propertiesArea);
+
+        propertiesArea.setOrientation(JSplitPane.VERTICAL_SPLIT);
+        propertiesArea.setDividerLocation(40);
+
+        JLabel info = new JLabel("   Set the current channel!");
+        info.setVisible(true);
+
+        propertiesArea.setBottomComponent(info);
+    }
+
+    /**
      * Adds all the immediately necessary GUIs to the Timeline object.
      * The line a GUI is added determines its position on the timeline.
      */
     private void addComponents(){
-        JPanel timeline = new JPanel();
-        timeline.add(fpsLabel);
-        timeline.add(framesPerSecond);
 
-        timeline.add(maxFrameCountLabel);
-        timeline.add(maxFrameCount);
+        playButton.addActionListener(e -> playOrPause());
+        animModeButton.addActionListener(e -> animateOnOrOff());
 
-        timeline.add(playButton);
-        timeline.add(animModeButton);
+        playButton.setVisible(true);
+        animModeButton.setVisible(true);
 
-        timeline.add(frameSlider);
-        timeline.add(currentFrameLabel);
-        timeline.add(currentFrameTextField);
+        JPanel properties = new JPanel();
+        properties.add(fpsLabel);
+        properties.add(framesPerSecond);
 
-        this.add(timeline);
+        properties.add(maxFrameCountLabel);
+        properties.add(maxFrameCount);
+
+        properties.add(playButton);
+        properties.add(animModeButton);
+
+        properties.add(frameSlider);
+        properties.add(currentFrameLabel);
+        properties.add(currentFrameTextField);
+
+        propertiesArea.setTopComponent(properties);
     }
 
     public void addChannels(){
 
-        if(channelPanel == null){
+        if(channelScrollPanel == null){
             setUpKeyFramePanels();
             return;
         }
-        channelPanel.add(new JButton( String.valueOf( animDataStorage.currentFrame )));
+        channelScrollPanel.add(new JButton( String.valueOf( animDataStorage.currentFrame )));
 
     }
 
     private void setUpKeyFramePanels(){
 
-        channelPanel = new JScrollPane();
-        channelPanel.setPreferredSize(new Dimension(100, 200));
+        channelScrollPanel = new JScrollPane();
+        channelScrollPanel.setPreferredSize(new Dimension(100, 200));
 
-        channelPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        keyFramePanel.setLayout(new BoxLayout(keyFramePanel, BoxLayout.Y_AXIS));
+        channelScrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        channelPanel.setLayout(new BoxLayout(channelPanel, BoxLayout.Y_AXIS));
 
         //region add channel buttons
         //replace channelID with TransformChannels enum values
-        keyFramePanel.add(createChannelButton("X", 0));
-        keyFramePanel.add(createChannelButton("Y", 1));
-        keyFramePanel.add(createChannelButton("Scale X", 2));
-        keyFramePanel.add(createChannelButton("Scale Y", 3));
-        keyFramePanel.add(createChannelButton("Rotation", 4));
-        keyFramePanel.add(createChannelButton("Shear", 5));
-        keyFramePanel.add(createChannelButton("Opacity", 6));
+        channelPanel.add(createChannelButton("X", 0));
+        channelPanel.add(createChannelButton("Y", 1));
+        channelPanel.add(createChannelButton("Scale X", 2));
+        channelPanel.add(createChannelButton("Scale Y", 3));
+        channelPanel.add(createChannelButton("Rotation", 4));
+        channelPanel.add(createChannelButton("Shear", 5));
+        channelPanel.add(createChannelButton("Opacity", 6));
         //endregion
 
-        keyFramePanel.setVisible(true);
-
-        channelPanel.add(keyFramePanel);
         channelPanel.setVisible(true);
-        channelPanel.setViewportView(keyFramePanel);
 
-        this.add(channelPanel, 0);
+        channelScrollPanel.add(channelPanel);
+        channelScrollPanel.setVisible(true);
+        channelScrollPanel.setViewportView(channelPanel);
+
+        this.setLeftComponent(channelScrollPanel);
     }
 
     /**
@@ -130,18 +152,18 @@ public class Timeline extends JPanel {
 
     private void keyframeSelection(ArrayList<Keyframe> keyframe, int channelID){
 
-        if(keyframes.isVisible()){
-            keyframes.removeAll();
-            keyframes.setVisible(false);
+        if(keyframePanel.isVisible()){
+            keyframePanel.removeAll();
+            keyframePanel.setVisible(false);
         }
 
-        keyframes.setLayout(new BoxLayout(keyframes, BoxLayout.X_AXIS));
+        keyframePanel.setLayout(new BoxLayout(keyframePanel, BoxLayout.X_AXIS));
 
         TransformChannels[] channels = TransformChannels.values();
         TransformChannels channel = channels[channelID];
 
 
-        keyframes.add(new JLabel("Channel: " + channel.name() + ", Keyframes: "));
+        keyframePanel.add(new JLabel("   Channel: " + channel.name() + ", Keyframes: "));
 
         for (int i = 0; i < keyframe.size(); i++) {
             if(!keyframe.get(i).isActive){
@@ -152,7 +174,7 @@ public class Timeline extends JPanel {
             int finalI = i;
             keyframeButton.addActionListener(e -> editKeyframeValue(channelID, finalI, String.valueOf(finalI)));
 
-            keyframes.add(keyframeButton);
+            keyframePanel.add(keyframeButton);
         }
 
         JButton addKeyFrameButton = new JButton("Add Keyframe");
@@ -161,12 +183,12 @@ public class Timeline extends JPanel {
         addKeyFrameButton.addActionListener(e -> addSpecificKeyFrame(keyframe, channelID));
         removeKeyFrameButton.addActionListener(e -> removeSpecificKeyframe(keyframe, channelID, animDataStorage.currentFrame));
 
-        keyframes.add(addKeyFrameButton);
-        keyframes.add(removeKeyFrameButton);
+        keyframePanel.add(addKeyFrameButton);
+        keyframePanel.add(removeKeyFrameButton);
 
-        keyframes.setVisible(true);
+        keyframePanel.setVisible(true);
 
-        this.add(keyframes);
+        propertiesArea.setBottomComponent(keyframePanel);
         revalidate();
         repaint();
     }
@@ -215,11 +237,12 @@ public class Timeline extends JPanel {
 
         double currentValue = parentLayer.currentLayer.keyframes.get(channelID).get(keyframeID).value;
 
-        JLabel keyframeValue = new JLabel("Keyframe " + name + " Value: ");
-        JTextField keyframeValueTextbox = new JTextField(String.valueOf(currentValue), 4);
+        JLabel keyframeValue = new JLabel("   Keyframe " + name + " Value: ");
+        JTextField keyframeValueTextField = new JTextField(String.valueOf(currentValue), 4);
+        keyframeValueTextField.setMaximumSize(new Dimension(150, 20));
 
-        keyframeValueTextbox.addActionListener(e -> {
-            String userInput = keyframeValueTextbox.getText();
+        keyframeValueTextField.addActionListener(e -> {
+            String userInput = keyframeValueTextField.getText();
 
             parentLayer.currentLayer.keyframes.get(channelID).get(keyframeID).value = Double.parseDouble(userInput);
 
@@ -229,26 +252,25 @@ public class Timeline extends JPanel {
         keyframeValuePanel.setLayout(new BoxLayout(keyframeValuePanel, BoxLayout.X_AXIS));
 
         keyframeValuePanel.add(keyframeValue);
-        keyframeValuePanel.add(keyframeValueTextbox);
+        keyframeValuePanel.add(keyframeValueTextField);
         keyframeValuePanel.setVisible(true);
 
         EaseType[] choices = EaseType.values();
 
         JComboBox<EaseType> dropdown = new JComboBox<>(choices);
 
-        dropdown.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                parentLayer.currentLayer.keyframes.get(channelID).get(keyframeID).easing = (EaseType) dropdown.getSelectedItem();
-                parentLayer.repaint();
-            }
+        dropdown.addActionListener(e -> {
+            parentLayer.currentLayer.keyframes.get(channelID).get(keyframeID).easing = (EaseType) dropdown.getSelectedItem();
+            parentLayer.repaint();
         });
 
+        dropdown.setMaximumSize(new Dimension(100, 20));
         dropdown.setSelectedItem(parentLayer.currentLayer.keyframes.get(channelID).get(keyframeID).easing);
 
+        keyframeValuePanel.add(new JLabel(" Easing: "));
         keyframeValuePanel.add(dropdown);
+        keyframePanel.add(keyframeValuePanel);
 
-        this.add(keyframeValuePanel);
         revalidate();
         repaint();
     }
