@@ -126,25 +126,25 @@ public class ParentLayer extends Layer {
 
                         switch (channel) {
                             case TransformChannels.x:
-                                currentTransform.setToTranslation(value, currentTransform.getTranslateY());
+                                currentTransform.translate(value, 0);
                                 break;
                             case TransformChannels.y:
-                                currentTransform.setToTranslation(currentTransform.getTranslateX(), value);
+                                currentTransform.translate(0, value);
                                 break;
                             case TransformChannels.scaleX:
-                                currentTransform.setToScale(value,currentTransform.getScaleY());
+                                currentTransform.scale(value,0);
                                 break;
                             case TransformChannels.scaleY:
-                                currentTransform.setToScale(currentTransform.getScaleX(),value);
+                                currentTransform.scale(0,value);
                                 break;
                             case TransformChannels.rotation:
-                                currentTransform.setToRotation(currentTransform.Ro + Math.toRadians(value));
+                                currentTransform.rotate(Math.toRadians(value));
                                 break;
                             case TransformChannels.shearX:
-                                currentTransform.setToShear(value,currentTransform.getShearY());
+                                currentTransform.shear(value,0);
                                 break;
                             case TransformChannels.shearY:
-                                currentTransform.setToShear(currentTransform.getShearX(),value);
+                                currentTransform.shear(0,value);
                                 break;
                             case TransformChannels.opacity:
                                 //OH GOD IT ISN'T IN THE AFFINE TRANSFORM HELP-
