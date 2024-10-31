@@ -49,7 +49,7 @@ public class Main {
     public static Object[] yesNoOptions = {"Yes", "No"};
 
     /**
-     * All main does is call frame setup
+     * All main does is call frame setup lol
      * @param args
      */
     public static void main(String[] args) {
@@ -562,26 +562,29 @@ public class Main {
      * Sets up the main frame that the user draws on
      */
     static void frameSetup(){
-        
+        //add the main split pane.
         frame.getContentPane().add(mainSplitPane);
 
+        //important components
         ToolContainer toolContainer = new ToolContainer();
-        AnimationDataStorage animDataStorage = new AnimationDataStorage();
-        ParentLayer parentLayer = new ParentLayer(toolContainer, animDataStorage);
+        AnimationDataStorage animationDataStorage = new AnimationDataStorage();
+        ParentLayer parentLayer = new ParentLayer(toolContainer, animationDataStorage);
 
-        animDataStorage.parentLayer = parentLayer;
+        //add the parentlayer to animation data
+        animationDataStorage.parentLayer = parentLayer;
 
+        //set the parent layer's size
         parentLayer.setSize(800,400);
         parentLayer.setVisible(true);
 
-        System.out.println(toolContainer.currentTool.toString());
-
         Toolbox tools = new Toolbox(toolContainer);
 
-        animDataStorage.setSize(240);
+        //set the default size of the timeline
+        animationDataStorage.setSize(240);
 
-        Timeline timeline = new Timeline(animDataStorage, parentLayer);
+        Timeline timeline = new Timeline(animationDataStorage, parentLayer);
 
+        //these need to be called for functions related to keys.
         frame.setFocusable(true);
         frame.requestFocusInWindow();
 
@@ -593,6 +596,7 @@ public class Main {
 
             @Override
             public void keyPressed(KeyEvent e) {
+                //toggle playing with P
                 if(e.getKeyCode() == KeyEvent.VK_P) {
                     timeline.playOrPause();
                 }
@@ -604,13 +608,15 @@ public class Main {
             }
         });
 
-        animDataStorage.timeline = timeline;
+        //give the timeline to animation data
+        animationDataStorage.timeline = timeline;
 
         LayerWindow layerOrganization = new LayerWindow(parentLayer,toolContainer, timeline);
 
-        //region color chooser gui used for determining the color of the drawTool || lineTool || paintBucket
+        //region color chooser gui used for determining the color of a tool
         JColorChooser colorChooser = new JColorChooser();
 
+        //update color when color is clicked
         colorChooser.getSelectionModel().addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -638,12 +644,13 @@ public class Main {
         frame.setLocationRelativeTo(null); //places window at the center of the screen
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
+        //do this when frame is closed
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
 
                 if(askUser("Would you like to save before you exit?", "SAVE OPTION")){
-                    saveLayers(parentLayer, animDataStorage);
+                    saveLayers(parentLayer, animationDataStorage);
                 }
 
                 frame.dispose();
@@ -686,63 +693,7 @@ public class Main {
 
         //endregion
 
-
-        // region useless code??
-        /*
-        frame.addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent componentEvent) {
-                int frameWidth = frame.getWidth();
-                int frameHeight = frame.getHeight();
-                // note: don't use getX and getY. those return the origin (as in, the center position of the frame
-                // that barely changes whenever you resize it). these two methods are much better suited
-
-                int childLayerWidth = 260;
-                int frameDefaultHeight = 768;
-                int drawScreenDefaultHeight = 450;
-
-                // added these variables since the equivalent of these were being assigned everywhere
-                int newWidth = frameWidth - childLayerWidth;
-                int newHeight = frameHeight - frameDefaultHeight + drawScreenDefaultHeight;
-
-                parentLayer.setSize(newWidth, newHeight);
-
-                ArrayList<ChildLayer> childrenArray = parentLayer.getChildren();
-
-
-                    for(child; child<array; child++){
-
-                    layer = (Bitmap) array.getChild
-
-                    newSize = (Dimension) (frameHeight - (toolBox.getY + timeline.getY)),
-                                            (frameWidth- childLayer.getX)
-                    
-
-                    layer.setSize(newSize)
-                    layer.Bitmap.setSize(newSize)
-
-                    }
-
-
-                for (ChildLayer childLayer : childrenArray) {
-
-                    System.out.println("setting size");
-                    BitmapLayer layer = (BitmapLayer) childLayer;
-
-                    layer.setSize(newWidth, newHeight);
-
-                    layer.bitmap.setSize(newWidth, newHeight);
-                }
-
-                parentLayer.revalidate();
-                parentLayer.repaint();
-
-                System.out.println((newHeight) + " Height by " + (newWidth) + " Width");
-            }
-        });
-        */
-        //endregion
-
-        //region Split Pane Settup
+        //region Split Pane Set up
         mainSplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
         mainSplitPane.setDividerLocation(75);
         mainSplitPane.setTopComponent(tools); //TOOL BAR HERE
@@ -760,9 +711,7 @@ public class Main {
 
         //endregion
 
-        frame.setJMenuBar(createMenuBar(parentLayer, toolContainer, animDataStorage));
-        //frame.setLocationByPlatform(true);
-        System.out.println(parentLayer.getChildren().size());
+        frame.setJMenuBar(createMenuBar(parentLayer, toolContainer, animationDataStorage));
     }
 
     /**
@@ -826,6 +775,7 @@ public class Main {
         fileMenu.add(saveItem);
         fileMenu.add(saveAsItem);
 
+        //load function
         openItem.addActionListener(e -> {
             if(!askUser("Warning: if you load, your unsaved progress WILL be lost! Continue?", "LOADING")){
                 return;
