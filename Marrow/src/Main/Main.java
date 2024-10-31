@@ -20,6 +20,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import java.io.*;
@@ -750,6 +752,7 @@ public class Main {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createFileMenu(parentLayer, toolContainer, animDataStorage));
         menuBar.add(createEditMenu());
+        menuBar.add(createHelpMenu());
         return menuBar;
     }
 
@@ -830,6 +833,26 @@ public class Main {
         editMenu.add(copyItem);
         JMenuItem pasteItem = new JMenuItem("Paste");
         editMenu.add(pasteItem);
+        return editMenu;
+    }
+    static JMenu createHelpMenu() {
+        JMenu editMenu = new JMenu("Help");
+
+        JMenuItem cutItem = new JMenuItem("Open Manual");
+
+        cutItem.addActionListener(e -> {
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                try {
+                    Desktop.getDesktop().browse(new URI("http://protogenposting.github.io/Marrow/user_manual.html"));
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (URISyntaxException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+
+        editMenu.add(cutItem);
         return editMenu;
     }
     //endregion
