@@ -843,7 +843,7 @@ public class Main {
         cutItem.addActionListener(e -> {
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                 try {
-                    Desktop.getDesktop().browse(new URI("http://protogenposting.github.io/Marrow/user_manual.html"));
+                    Desktop.getDesktop().browse(new URI("http://protogenposting.github.io/Marrow/manual/user_manual.html"));
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 } catch (URISyntaxException ex) {
