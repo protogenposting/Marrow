@@ -1,9 +1,9 @@
 package Main;
 
+//region imports
 import Animation.*;
 import Bitmaps.Bitmap;
 import Animation.Timeline;
-import Bitmaps.Pixel;
 import Bitmaps.RGBColor;
 import Layers.*;
 import Layers.LayerWindow.LayerWindow;
@@ -25,20 +25,26 @@ import java.util.ArrayList;
 import java.io.*;
 import java.util.LinkedList;
 import java.util.Scanner;
+//endregion
 
 public class Main {
-    //region the main frame we will be drawing on
+
+    //region the main frame everything will be put on
+
     public static JFrame frame = new JFrame("Marrow");
 
+    //these are all split panes, which can be resized
     static JSplitPane mainSP = new JSplitPane();
     static JSplitPane topScreenSP = new JSplitPane();
     static JSplitPane bottomScreenSPVert = new JSplitPane();
     static JSplitPane bottomScreenSPHor = new JSplitPane();
 
-    public static String currentSaveDirectory = "MarrowSaves"; // change later on to be able to find the directory user saved it at
-    public static String currentLoadDirectory = "MarrowSaves";
-    public static boolean hasSaved = false;
-    public static boolean stopSavingOrLoading = false;
+    public static String currentSaveDirectory;
+    public static String currentLoadDirectory;
+    public static boolean hasSavedOrLoaded = false;
+    public static boolean stopSavingOrLoading = false; // stops the saving or loading if user changes their mind when choosing files
+
+    public static Object[] yesNoOptions = {"Yes", "No"};
 
     public static void main(String[] args) {
         frameSetup();
@@ -51,8 +57,8 @@ public class Main {
      */
     public static void saveLayers(ParentLayer parentLayer, AnimationDataStorage animDataStorage){
         try {
-            if(!hasSaved) {
-                getSaveDirectory();
+            if(!hasSavedOrLoaded) {
+                setSaveDirectory();
             }
 
             if(stopSavingOrLoading){
@@ -216,9 +222,18 @@ public class Main {
     //endregion
 
     //region LOAD FUNCTIONS
-    public static ArrayList<BitmapLayer> loadLayers(ToolContainer toolContainer, AnimationDataStorage animDataStorage)throws IOException{
 
-        getLoadDirectory();
+    /**
+     * Loads all the layers and their corresponding keyframes in a user-chosen save folder.
+     * @param toolContainer For BitmapLayer constructor.
+     * @param animDataStorage Loads previous animation data into this object.
+     * @return An ArrayList of loaded {@link BitmapLayer}s.
+     * @throws IOException In the event a file can't be read.
+     */
+    public static ArrayList<BitmapLayer> loadLayers(ToolContainer toolContainer,
+                                                    AnimationDataStorage animDataStorage)throws IOException{
+
+        setLoadDirectory();
 
         if(stopSavingOrLoading){
             stopSavingOrLoading = false;
@@ -231,6 +246,7 @@ public class Main {
         LinkedList<String> layerNames = new LinkedList<>();
         ArrayList<BitmapLayer> bitmapLayers = new ArrayList<>();
 
+        //contain everything in the save file into a list of strings
         while(fileReader.hasNextLine()){
             String layerName = fileReader.nextLine();
 
@@ -284,6 +300,11 @@ public class Main {
         return bitmapLayers;
     }
 
+    /**
+     * Gets a number from a string if possible.
+     * @param stringWithNumber The string the number is from.
+     * @return The number from the string. If the number doesn't exist, it returns -1.
+     */
     private static int getNumberFromString(String stringWithNumber){
 
         for (int i = 0; i < stringWithNumber.length(); i++) {
@@ -293,19 +314,23 @@ public class Main {
             try {
                 return Integer.parseInt(stringWithNumber.substring(i + 1));
             } catch (NumberFormatException e) {
-                return 1;
+                return -1;
             }
         }
-        return 1;
+        return -1;
     }
 
-    private static int saveKeyframesToBitmap(BitmapLayer bitmapLayers, LinkedList<String> layerNames, int layerNameIndex){
+    /**
+     * Loads a set of keyframes from a save file into a {@link BitmapLayer}.
+     * @param bitmapLayer the layer having its keyframes set
+     * @param layerNames the save file being loaded
+     * @param layerNameIndex the scanner's position in the save file
+     * @return the current position of the scanner in the save file
+     */
+    private static int saveKeyframesToBitmap(BitmapLayer bitmapLayer, LinkedList<String> layerNames, int layerNameIndex){
 
-        ArrayList<ArrayList<Keyframe>> channels = bitmapLayers.keyframes;
+        ArrayList<ArrayList<Keyframe>> channels = bitmapLayer.keyframes;
 
-        //loop through all the layer names at i's position
-        //get keyframeID and insert the corresponding value to the channel
-        //return i once finished
         int channelID = -1;
 
         int keyframeID;
@@ -313,8 +338,11 @@ public class Main {
         String layerName;
         EaseType easing;
 
+        //load all the keyframes in a channel, then move to another channel
+        //repeat until no more channels need to be set or an error occurs
         while(channelID < channels.size()) {
 
+            //for if the scanner has reached the end of the file
             if(layerNames.size() <= layerNameIndex){
                 return layerNameIndex - 1;
             }
@@ -345,6 +373,7 @@ public class Main {
 
             keyframe.isActive = true;
             keyframe.value = keyframeValue;
+            keyframe.easing = easing;
 
             layerNameIndex++;
         }
@@ -353,14 +382,20 @@ public class Main {
     }
 
     //region find keyframe values
-    private static EaseType findKeyframeEasing(String layerName){
+
+    /**
+     * Finds the easing type of the keyframe
+     * @param keyframeName the keyframe being loaded
+     * @return the keyframe's easing type
+     */
+    private static EaseType findKeyframeEasing(String keyframeName){
 
         boolean ignoreLoop = true;
         StringBuilder value = new StringBuilder();
 
-        for (int i = 0; i < layerName.length(); i++) {
+        for (int i = 0; i < keyframeName.length(); i++) {
 
-            if(layerName.charAt(i) == '$'){
+            if(keyframeName.charAt(i) == '$'){
                 ignoreLoop = false;
                 continue;
             }
@@ -368,24 +403,37 @@ public class Main {
                 continue;
             }
 
-            value.append(layerName.charAt(i));
+            value.append(keyframeName.charAt(i));
         }
 
-        return EaseType.valueOf(String.valueOf(value));
+        try {
+            return EaseType.valueOf(String.valueOf(value));
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Keyframe's ease type could not be found!");
+        }
     }
 
-    private static int findKeyframeID(String layerName){
+    /**
+     * Finds the frame the keyframe was made in
+     * @param keyframeName the keyframe being loaded
+     * @return the frame the keyframe was on
+     */
+    private static int findKeyframeID(String keyframeName){
 
-        for (int i = 0; i < layerName.length(); i++) {
+        for (int i = 0; i < keyframeName.length(); i++) {
 
-            if(!(layerName.charAt(i) == ':')){
+            //keyframe's ID is the first thing in keyframeName
+            //the colon is the end of the ID
+            if(!(keyframeName.charAt(i) == ':')){
                 continue;
             }
 
+            //return
             try{
-                return Integer.parseInt(layerName.substring(0, i));
-            } catch (NumberFormatException e) {
-                return -2;
+                return Integer.parseInt(keyframeName.substring(0, i));
+            }
+            catch (NumberFormatException e) {
+                return -1;
             }
 
         }
@@ -393,14 +441,20 @@ public class Main {
         return -1;
     }
 
-    private static double findKeyframeValue(String keyframeValue){
+    /**
+     * Finds the value of the keyframe being loaded
+     * @param keyframeName the keyframe being loaded
+     * @return the keyframe's value
+     */
+    private static double findKeyframeValue(String keyframeName){
 
         boolean ignoreLoop = true;
         StringBuilder value = new StringBuilder();
 
-        for (int i = 0; i < keyframeValue.length(); i++) {
+        for (int i = 0; i < keyframeName.length(); i++) {
 
-            if(keyframeValue.charAt(i) == ' '){
+            //skip until after the first space
+            if(keyframeName.charAt(i) == ' '){
                 ignoreLoop = false;
                 continue;
             }
@@ -408,22 +462,28 @@ public class Main {
                 continue;
             }
 
-            if(keyframeValue.charAt(i) == '$'){
+            //the $ sign is when it starts loading the ease type instead, so stop looping here
+            if(keyframeName.charAt(i) == '$'){
                 break;
             }
 
-            value.append(keyframeValue.charAt(i));
+            value.append(keyframeName.charAt(i));
         }
 
         try{
             return Double.parseDouble(String.valueOf(value));
         }
         catch (NumberFormatException ex){
-            return 0.0;
+            throw new RuntimeException("Keyframe value could not be found!");
         }
     }
     //endregion
 
+    /**
+     * Checks if a string is a saved channel
+     * @param layerName the string being checked
+     * @return true if it is a saved channel, false if it isn't
+     */
     private static boolean isSavedChannel(String layerName){
         try{
             String getChannel = layerName.substring(0, 8);
@@ -436,9 +496,9 @@ public class Main {
     }
 
     /**
-     * removes the dashes at the back of a layer name
-     * @param layerName the name having its dashes removed
-     * @return the layer name with the removed dashes
+     * Removes the dashes at the back of a layer name.
+     * @param layerName The name having its dashes removed.
+     * @return The layer name with the removed dashes.
      */
     private static String removeDashes(String layerName){
         StringBuilder returningName = new StringBuilder();
@@ -460,19 +520,23 @@ public class Main {
     /**
      * Sets the current save directory to where the user wants it to be.
      */
-    private static void getSaveDirectory(){
+    private static void setSaveDirectory(){
         JFileChooser chooseFile = new JFileChooser(currentSaveDirectory);
         int fileChosen = chooseFile.showSaveDialog(null);
 
         if(fileChosen == JFileChooser.APPROVE_OPTION){
             currentSaveDirectory = chooseFile.getSelectedFile().getAbsolutePath();
+            hasSavedOrLoaded = true;
         }
         else{
             stopSavingOrLoading = true;
         }
     }
 
-    private static void getLoadDirectory(){
+    /**
+     * Sets the current load directory to where the user wants it to be.
+     */
+    private static void setLoadDirectory(){
         JFileChooser chooseFile = new JFileChooser(currentLoadDirectory);
         chooseFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
@@ -480,6 +544,7 @@ public class Main {
 
         if(fileChosen == JFileChooser.APPROVE_OPTION){
             currentLoadDirectory = chooseFile.getSelectedFile().getAbsolutePath();
+            hasSavedOrLoaded = true;
         }
         else{
             stopSavingOrLoading = true;
@@ -490,7 +555,6 @@ public class Main {
      * Sets up the main frame that the user draws on
      */
     static void frameSetup(){
-
         frame.getContentPane().add(mainSP);
 
         ToolContainer toolContainer = new ToolContainer();
@@ -509,6 +573,28 @@ public class Main {
         animDataStorage.setSize(240);
 
         Timeline timeline = new Timeline(animDataStorage, parentLayer);
+
+        frame.setFocusable(true);
+        frame.requestFocusInWindow();
+
+        frame.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_P) {
+                    timeline.playOrPause();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
 
         animDataStorage.timeline = timeline;
 
@@ -542,14 +628,17 @@ public class Main {
         frame.setResizable(true);
         frame.setVisible(true);
         frame.setLocationRelativeTo(null); //places window at the center of the screen
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // this allows it to save the stuff when user exits
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
 
+                if(askUser("Would you like to save before you exit?", "SAVE OPTION")){
+                    saveLayers(parentLayer, animDataStorage);
+                }
+
                 frame.dispose();
-                //askToSave();
                 System.exit(0);
             }
         });
@@ -588,30 +677,6 @@ public class Main {
         });
 
         //endregion
-
-        frame.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {}
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode()==KeyEvent.VK_S){
-                    saveLayers(parentLayer, animDataStorage);
-                    BitmapLayer layer = (BitmapLayer) parentLayer.getChildren().get(1);
-                    ArrayList<ArrayList<Pixel>> bitmap = layer.bitmap.bitmap;
-                    for (ArrayList<Pixel> x : bitmap) {
-
-                        for (Pixel y : x) {
-                            if (y.alpha != 0) {
-                                System.out.println(y.alpha);
-                            }
-                        }
-                    }
-                }
-            }
-            @Override
-            public void keyReleased(KeyEvent e) {}
-        });
 
 
         // region useless code??
@@ -687,14 +752,31 @@ public class Main {
 
         //endregion
 
-
-
-
         frame.setJMenuBar(createMenuBar(parentLayer, toolContainer, animDataStorage));
         //frame.setLocationByPlatform(true);
-
+        System.out.println(parentLayer.getChildren().size());
     }
 
+    /**
+     * Asks the user to answer a yes or no question.
+     * @param prompt The question.
+     * @param windowName The name of the window the question is in.
+     * @return True if user answers yes, false if answered no.
+     */
+    private static boolean askUser(String prompt, String windowName){
+        int choice = JOptionPane.showOptionDialog(
+                null, // center of screen
+                prompt,
+                windowName,
+                JOptionPane.YES_NO_OPTION, // Option type (Yes, No, Cancel)
+                JOptionPane.QUESTION_MESSAGE, // Message type (question icon)
+                null, // Custom icon (null means no custom icon)
+                yesNoOptions, // Custom options array
+                yesNoOptions[1] // Initial selection (default is "Cancel")
+        );
+
+        return choice == JOptionPane.YES_OPTION;
+    }
 
     //region create menu methods
 
@@ -725,13 +807,24 @@ public class Main {
      */
     static JMenu createFileMenu(ParentLayer parentLayer, ToolContainer toolContainer, AnimationDataStorage animDataStorage) {
         JMenu fileMenu = new JMenu("File");
+
         JMenuItem newItem = new JMenuItem("New");
-        fileMenu.add(newItem);
         JMenuItem openItem = new JMenuItem("Open");
-        fileMenu.add(openItem);
         JMenuItem saveItem = new JMenuItem("Save");
+        JMenuItem saveAsItem = new JMenuItem("Save As");
+
+        fileMenu.add(newItem);
+        fileMenu.add(openItem);
+        fileMenu.add(saveItem);
+        fileMenu.add(saveAsItem);
 
         openItem.addActionListener(e -> {
+            if(!askUser("Warning: if you load, your unsaved progress WILL be lost! Continue?", "LOADING")){
+                return;
+            }
+            if(!parentLayer.getChildren().isEmpty()){
+                parentLayer.getChildren().clear();
+            }
             try {
                 ArrayList<BitmapLayer> bitmapLayers = loadLayers(toolContainer, animDataStorage);
 
@@ -755,7 +848,14 @@ public class Main {
         saveItem.addActionListener(e -> {
             saveLayers(parentLayer, animDataStorage);
         });
-        fileMenu.add(saveItem);
+
+        saveAsItem.addActionListener(e -> {
+            if(hasSavedOrLoaded){
+                setSaveDirectory();
+            }
+            saveLayers(parentLayer, animDataStorage);
+        });
+
         return fileMenu;
     }
 

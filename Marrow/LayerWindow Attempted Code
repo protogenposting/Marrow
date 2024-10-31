@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 public class LayerWindow extends JPanel {
     Layer parentLayer;
     Timeline timeline;
-    
+
     static JPanel innerPanel = new JPanel();
     static ArrayList <LayerButton> buttonLinkedList = new ArrayList<>();
 
@@ -69,9 +69,9 @@ public class LayerWindow extends JPanel {
 
             timeline.addChannels();
 
-            addChildrenToChildren(newChild, parentLayer, innerPanel, timeline);
+            addChildrenToChildren(newChild, parentLayer, innerPanel, timeline, false);
 
-            addToListAndResort(innerPanel, layerButton, parentLayer.currentLayer);
+            addToListAndResort(innerPanel, layerButton, parentLayer.currentLayer, false);
         };
 
 
@@ -163,8 +163,8 @@ public class LayerWindow extends JPanel {
      * @param timeline the timeline that holds the keyFrames for the new layer
      */
     private void addChildrenToChildren(ChildLayer newChild, ParentLayer parentLayer, JPanel innerPanel,
-                                     Timeline timeline){
-        
+                                     Timeline timeline, boolean isLoading){
+
        newChild.onAddChild = (newerChild) -> {
            LayerButton layerButton = new LayerButton(newerChild.name);
 
@@ -176,9 +176,9 @@ public class LayerWindow extends JPanel {
 
            timeline.addChannels();
 
-           addChildrenToChildren(newerChild, parentLayer, innerPanel, timeline);
+           addChildrenToChildren(newerChild, parentLayer, innerPanel, timeline, isLoading);
 
-           addToListAndResort(innerPanel, layerButton, parentLayer.currentLayer);
+           addToListAndResort(innerPanel, layerButton, parentLayer.currentLayer, isLoading);
        };
    }
 
@@ -193,7 +193,7 @@ public class LayerWindow extends JPanel {
      * @param newButton the newly created button
      * @param currentLayer the layer that is the parent of the newly created button's layer
      */
-    public static void addToListAndResort(JPanel innerPanel, LayerButton newButton, ChildLayer currentLayer){
+    public static void addToListAndResort(JPanel innerPanel, LayerButton newButton, ChildLayer currentLayer, boolean isLoading){
 
         boolean buttonAdded = false;
 
@@ -202,9 +202,20 @@ public class LayerWindow extends JPanel {
             buttonAdded = true;
         }
 
+        if(buttonLinkedList.getFirst().parentLayer.getChildren().size() <= 1){
+
+            buttonLinkedList.clear();
+
+            removeLayerButtons(innerPanel);
+
+            buttonLinkedList.add(newButton);
+            buttonAdded = true;
+        }
+
         for (int listIndex = 0; listIndex < buttonLinkedList.size(); listIndex++) {
             if(buttonLinkedList.get(listIndex).layer==currentLayer){
                 buttonLinkedList.add(countChildren(currentLayer.getChildren(), listIndex),newButton);
+                System.out.println("adding new button");
             } else if (currentLayer == null && !buttonAdded) {
                 buttonLinkedList.add(newButton);
                 buttonAdded = true;
@@ -241,5 +252,13 @@ public class LayerWindow extends JPanel {
         return numberOfChildren;
     }
 
+    private static void removeLayerButtons(JPanel innerPanel){
+        Component parentLayerButton = innerPanel.getComponent(0);
+        innerPanel.removeAll();
+        innerPanel.add(parentLayerButton);
+
+        innerPanel.repaint();
+        innerPanel.revalidate();
+    }
 
 }
