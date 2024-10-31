@@ -54,7 +54,14 @@ public class ParentLayer extends Layer {
             if (child.getClass().equals(BitmapLayer.class)) {
                 //draw the bitmap layer's image :3
                 BitmapLayer bitmapChild = (BitmapLayer) child;
-                AffineTransform currentTransform = new AffineTransform();
+                AffineTransform currentTransform;
+                if(child.parent!=null)
+                {
+                    currentTransform = (AffineTransform) child.parent.currentAnimatedTransform.clone();
+                }
+                else {
+                    currentTransform = new AffineTransform();
+                }
 
                 // this section deals with actually animating!
 
@@ -131,7 +138,7 @@ public class ParentLayer extends Layer {
                                 currentTransform.setToScale(currentTransform.getScaleX(),value);
                                 break;
                             case TransformChannels.rotation:
-                                currentTransform.setToRotation(Math.toRadians(value));
+                                currentTransform.setToRotation(currentTransform.Ro + Math.toRadians(value));
                                 break;
                             case TransformChannels.shearX:
                                 currentTransform.setToShear(value,currentTransform.getShearY());

@@ -718,7 +718,7 @@ public class Main {
      * Asks the user to answer a yes or no question.
      * @param prompt The question.
      * @param windowName The name of the window the question is in.
-     * @return True if user answers yes, false if answered no.
+     * @return {@code true} if user answers yes, false if answered no.
      */
     private static boolean askUser(String prompt, String windowName){
         int choice = JOptionPane.showOptionDialog(
@@ -740,7 +740,7 @@ public class Main {
     /**
      * the dropdown menu that is used to hold the file dropdown menu and edit dropdown menu
      *
-     * @param parentLayer the layer that holds all layers that the user draws on
+     * @param parentLayer the {@link Layer} that holds all layers that the user draws on
      * @param toolContainer the tool container that declares which tools are being used
      * @param animDataStorage the data storage for the animation
      * @return menuBar
