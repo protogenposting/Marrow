@@ -34,25 +34,32 @@ public class Main {
     public static JFrame frame = new JFrame("Marrow");
 
     //these are all split panes, which can be resized
-    static JSplitPane mainSP = new JSplitPane();
-    static JSplitPane topScreenSP = new JSplitPane();
-    static JSplitPane bottomScreenSPVert = new JSplitPane();
-    static JSplitPane bottomScreenSPHor = new JSplitPane();
+    static JSplitPane mainSplitPane = new JSplitPane();
+    static JSplitPane topScreenSplitPane = new JSplitPane();
+    static JSplitPane bottomScreenSplitPaneVertical = new JSplitPane();
+    static JSplitPane bottomScreenSplitPaneHorizontal = new JSplitPane();
 
+    //saving variables, no idea if they're used currently :/
     public static String currentSaveDirectory;
     public static String currentLoadDirectory;
     public static boolean hasSavedOrLoaded = false;
     public static boolean stopSavingOrLoading = false; // stops the saving or loading if user changes their mind when choosing files
 
+    //What is this :skull:
     public static Object[] yesNoOptions = {"Yes", "No"};
 
+    /**
+     * All main does is call frame setup
+     * @param args
+     */
     public static void main(String[] args) {
         frameSetup();
     }
 
     //region SAVE FUNCTIONS
     /**
-     * saves the parentLayer and its children into a custom text file named "save.marrow"
+     * Saves the parentLayer and its children into a custom text file named "save.marrow"
+     * Tiger can you come and document this please-
      * @param parentLayer the layer and its children being saved
      */
     public static void saveLayers(ParentLayer parentLayer, AnimationDataStorage animDataStorage){
@@ -555,7 +562,8 @@ public class Main {
      * Sets up the main frame that the user draws on
      */
     static void frameSetup(){
-        frame.getContentPane().add(mainSP);
+        
+        frame.getContentPane().add(mainSplitPane);
 
         ToolContainer toolContainer = new ToolContainer();
         AnimationDataStorage animDataStorage = new AnimationDataStorage();
@@ -735,20 +743,20 @@ public class Main {
         //endregion
 
         //region Split Pane Settup
-        mainSP.setOrientation(JSplitPane.VERTICAL_SPLIT);
-        mainSP.setDividerLocation(75);
-        mainSP.setTopComponent(tools); //TOOL BAR HERE
-        mainSP.setBottomComponent(bottomScreenSPVert);
+        mainSplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+        mainSplitPane.setDividerLocation(75);
+        mainSplitPane.setTopComponent(tools); //TOOL BAR HERE
+        mainSplitPane.setBottomComponent(bottomScreenSplitPaneVertical);
 
-        bottomScreenSPVert.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-        bottomScreenSPVert.setDividerLocation(260);
-        bottomScreenSPVert.setLeftComponent(layerOrganization); //CHILD LAYER HERE
-        bottomScreenSPVert.setRightComponent(bottomScreenSPHor);
+        bottomScreenSplitPaneVertical.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+        bottomScreenSplitPaneVertical.setDividerLocation(260);
+        bottomScreenSplitPaneVertical.setLeftComponent(layerOrganization); //CHILD LAYER HERE
+        bottomScreenSplitPaneVertical.setRightComponent(bottomScreenSplitPaneHorizontal);
 
-        bottomScreenSPHor.setOrientation(JSplitPane.VERTICAL_SPLIT);
-        bottomScreenSPHor.setDividerLocation(450);
-        bottomScreenSPHor.setTopComponent(parentLayer); // DRAW SCREEN HERE
-        bottomScreenSPHor.setBottomComponent(timeline); // TIMELINE HERE
+        bottomScreenSplitPaneHorizontal.setOrientation(JSplitPane.VERTICAL_SPLIT);
+        bottomScreenSplitPaneHorizontal.setDividerLocation(450);
+        bottomScreenSplitPaneHorizontal.setTopComponent(parentLayer); // DRAW SCREEN HERE
+        bottomScreenSplitPaneHorizontal.setBottomComponent(timeline); // TIMELINE HERE
 
         //endregion
 
