@@ -4,8 +4,6 @@ import Layers.ParentLayer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class Timeline extends JSplitPane {
@@ -26,6 +24,8 @@ public class Timeline extends JSplitPane {
 
     private final JPanel channelPanel = new JPanel();
     private JScrollPane channelScrollPanel;
+    private JScrollPane keyframeScrollPanel = new JScrollPane();
+    private final JPanel totalKeyframePanel = new JPanel();
     private final JPanel keyframePanel = new JPanel();
     private final JPanel keyframeValuePanel = new JPanel();
 
@@ -98,14 +98,14 @@ public class Timeline extends JSplitPane {
     public void addChannels(){
 
         if(channelScrollPanel == null){
-            setUpKeyFramePanels();
+            setUpChannelPanel();
             return;
         }
         channelScrollPanel.add(new JButton( String.valueOf( animDataStorage.currentFrame )));
 
     }
 
-    private void setUpKeyFramePanels(){
+    private void setUpChannelPanel(){
 
         channelScrollPanel = new JScrollPane();
         channelScrollPanel.setPreferredSize(new Dimension(100, 200));
@@ -152,18 +152,33 @@ public class Timeline extends JSplitPane {
 
     private void keyframeSelection(ArrayList<Keyframe> keyframe, int channelID){
 
-        if(keyframePanel.isVisible()){
+        if(totalKeyframePanel.isVisible()){
+            totalKeyframePanel.removeAll();
+            keyframeScrollPanel.removeAll();
             keyframePanel.removeAll();
-            keyframePanel.setVisible(false);
+            totalKeyframePanel.setVisible(false);
         }
 
-        keyframePanel.setLayout(new BoxLayout(keyframePanel, BoxLayout.X_AXIS));
+        totalKeyframePanel.setLayout(new FlowLayout());
+
+        keyframeScrollPanel = new JScrollPane();
+        keyframeScrollPanel.setPreferredSize(new Dimension(530, 48));
+        keyframeScrollPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        JButton addKeyFrameButton = new JButton("Add Keyframe");
+        JButton removeKeyFrameButton = new JButton("Remove Keyframe");
+
+        addKeyFrameButton.addActionListener(e -> addSpecificKeyFrame(keyframe, channelID));
+        removeKeyFrameButton.addActionListener(e -> removeSpecificKeyframe(keyframe, channelID, animDataStorage.currentFrame));
+
+        totalKeyframePanel.add(addKeyFrameButton);
+        totalKeyframePanel.add(removeKeyFrameButton);
 
         TransformChannels[] channels = TransformChannels.values();
         TransformChannels channel = channels[channelID];
 
 
-        keyframePanel.add(new JLabel("   Channel: " + channel.name() + ", Keyframes: "));
+        totalKeyframePanel.add(new JLabel("   Channel: " + channel.name() + ", Keyframes: "));
 
         for (int i = 0; i < keyframe.size(); i++) {
             if(!keyframe.get(i).isActive){
@@ -177,18 +192,12 @@ public class Timeline extends JSplitPane {
             keyframePanel.add(keyframeButton);
         }
 
-        JButton addKeyFrameButton = new JButton("Add Keyframe");
-        JButton removeKeyFrameButton = new JButton("Remove Keyframe");
+        totalKeyframePanel.setVisible(true);
+        keyframeScrollPanel.setVisible(true);
+        keyframeScrollPanel.setViewportView(keyframePanel);
+        totalKeyframePanel.add(keyframeScrollPanel);
 
-        addKeyFrameButton.addActionListener(e -> addSpecificKeyFrame(keyframe, channelID));
-        removeKeyFrameButton.addActionListener(e -> removeSpecificKeyframe(keyframe, channelID, animDataStorage.currentFrame));
-
-        keyframePanel.add(addKeyFrameButton);
-        keyframePanel.add(removeKeyFrameButton);
-
-        keyframePanel.setVisible(true);
-
-        propertiesArea.setBottomComponent(keyframePanel);
+        propertiesArea.setBottomComponent(totalKeyframePanel);
         revalidate();
         repaint();
     }
@@ -269,7 +278,7 @@ public class Timeline extends JSplitPane {
 
         keyframeValuePanel.add(new JLabel(" Easing: "));
         keyframeValuePanel.add(dropdown);
-        keyframePanel.add(keyframeValuePanel);
+        totalKeyframePanel.add(keyframeValuePanel);
 
         revalidate();
         repaint();
