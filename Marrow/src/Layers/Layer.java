@@ -48,6 +48,10 @@ public class Layer extends JPanel {
 
         int defaultHeight = 400;
 
+        layer.transform.centerX = 200;
+
+        layer.transform.centerY = 200;
+
         layer.setSize(defaultWidth,defaultHeight);
 
         layer.width = defaultWidth;

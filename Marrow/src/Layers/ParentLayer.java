@@ -65,6 +65,8 @@ public class ParentLayer extends Layer {
 
                 // this section deals with actually animating!
 
+                currentTransform.translate(child.transform.centerX,child.transform.centerY);
+
                 if(animDataStorage.isInAnimateMode) {
                     int channelID = 0;
                     for (TransformChannels channel : TransformChannels.values()) {
@@ -153,6 +155,8 @@ public class ParentLayer extends Layer {
                         channelID++;
                     }
                 }
+
+                currentTransform.translate(-child.transform.centerX,-child.transform.centerY);
 
                 if (child == currentLayer) {
                     //selection rectangle
