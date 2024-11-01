@@ -8,7 +8,7 @@ public class Toolbox extends JPanel {
     ToolContainer toolContainer;
 
     JLabel promptCloser = new JLabel("Set brush size(Pixels)");
-    JTextField setBrushSize = new JTextField("0", 5);
+    JTextField setBrushSize = new JTextField("5", 5);
 
     final int drawSizeCap = 1000;
 
