@@ -37,18 +37,14 @@ public class Main {
 
     //these are all split panes, which can be resized
     static JSplitPane mainSplitPane = new JSplitPane();
-    static JSplitPane topScreenSplitPane = new JSplitPane();
     static JSplitPane bottomScreenSplitPaneVertical = new JSplitPane();
     static JSplitPane bottomScreenSplitPaneHorizontal = new JSplitPane();
 
-    //saving variables, no idea if they're used currently :/
+    //saving variables (they are, in fact, being used)
     public static String currentSaveDirectory;
     public static String currentLoadDirectory;
     public static boolean hasSavedOrLoaded = false;
     public static boolean stopSavingOrLoading = false; // stops the saving or loading if user changes their mind when choosing files
-
-    //What is this :skull:
-    public static Object[] yesNoOptions = {"Yes", "No"};
 
     /**
      * All main does is call frame setup lol
@@ -77,22 +73,9 @@ public class Main {
 
             FileWriter writer = getSaveFileWriter();
 
-            /*
-            example of what it should look like
-            parentLayer
-            -childLayer1
-            --childLayer1~1  the reason it ends with ~1 is so computer doesn't get confused reading the same names
-            --childLayer1~2
-            --childLayer1~3
-            ---childLayer1~3~1
-            -childLayer2
-            --childLayer2~1
-             */
-
             ArrayList<ChildLayer> childLayers = parentLayer.getChildren();
 
             writer.write("MARROW - Don't change name of this file!\n\nParentLayer");
-            System.out.print("\nMARROW\n\nParentLayer");
 
             writer.write("\n\nMaxFrameCount: ");
             writer.write(String.valueOf(animDataStorage.maxFrameCount));
@@ -130,8 +113,6 @@ public class Main {
         File saveFile = new File(currentSaveDirectory + "/save.marrow");
         boolean saveExists = saveFile.createNewFile();
 
-        // Currently, this will simply overwrite the current save file. Find way to resolve issue, maybe?
-
         return new FileWriter(currentSaveDirectory + "/save.marrow");
     }
 
@@ -165,7 +146,6 @@ public class Main {
                 ChildLayer child = childLayers.get(i);
                 childLayerName = child.name;
                 writer.write("\n" + dashCount + childLayerName);
-                System.out.print("\n" + dashCount + childLayerName);
 
                 saveKeyFrames(child, writer, dashCount);
 
@@ -178,8 +158,6 @@ public class Main {
                 }
             }
             catch (IOException ignore) {}
-
-
 
             if(thereIsChild){
                 ArrayList<ChildLayer> secondChildLayers = childLayers.get(i).getChildren(); //get the children of the child in childLayers
@@ -572,7 +550,7 @@ public class Main {
         AnimationDataStorage animationDataStorage = new AnimationDataStorage();
         ParentLayer parentLayer = new ParentLayer(toolContainer, animationDataStorage);
 
-        //add the parentlayer to animation data
+        //add the parent layer to animation data
         animationDataStorage.parentLayer = parentLayer;
 
         //set the parent layer's size
@@ -592,9 +570,7 @@ public class Main {
 
         frame.addKeyListener(new KeyListener() {
             @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
+            public void keyTyped(KeyEvent e) {}
 
             @Override
             public void keyPressed(KeyEvent e) {
@@ -605,9 +581,7 @@ public class Main {
             }
 
             @Override
-            public void keyReleased(KeyEvent e) {
-
-            }
+            public void keyReleased(KeyEvent e) {}
         });
 
         //give the timeline to animation data
@@ -619,17 +593,14 @@ public class Main {
         JColorChooser colorChooser = new JColorChooser();
 
         //update color when color is clicked
-        colorChooser.getSelectionModel().addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                Color currentColor = colorChooser.getColor();
-                toolContainer.currentColor = new RGBColor(
-                        currentColor.getRed(),
-                        currentColor.getGreen(),
-                        currentColor.getBlue(),
-                        255);
-                toolContainer.currentTool.currentColor = toolContainer.currentColor;
-            }
+        colorChooser.getSelectionModel().addChangeListener(e -> {
+            Color currentColor = colorChooser.getColor();
+            toolContainer.currentColor = new RGBColor(
+                    currentColor.getRed(),
+                    currentColor.getGreen(),
+                    currentColor.getBlue(),
+                    255);
+            toolContainer.currentTool.currentColor = toolContainer.currentColor;
         });
 
         JFrame colorFrame = new JFrame();
@@ -723,6 +694,8 @@ public class Main {
      * @return {@code true} if user answers yes, {@code false} if answered no.
      */
     private static boolean askUser(String prompt, String windowName){
+        Object[] yesNoOptions = {"Yes", "No"};
+
         int choice = JOptionPane.showOptionDialog(
                 null, // center of screen
                 prompt,
@@ -798,8 +771,6 @@ public class Main {
                 }
                 parentLayer.revalidate();
                 parentLayer.repaint();
-
-                //System.out.println("load successful");
             }
             catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -844,9 +815,7 @@ public class Main {
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                 try {
                     Desktop.getDesktop().browse(new URI("http://protogenposting.github.io/Marrow/manual/user_manual.html"));
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                } catch (URISyntaxException ex) {
+                } catch (IOException | URISyntaxException ex) {
                     throw new RuntimeException(ex);
                 }
             }
