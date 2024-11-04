@@ -133,14 +133,11 @@ public class ParentLayer extends Layer {
                             case TransformChannels.y:
                                 currentTransform.translate(0, value);
                                 break;
-                            case TransformChannels.rotation:
-                                currentTransform.rotate(Math.toRadians(value));
-                                break;
                             case TransformChannels.scaleX:
-                                currentTransform.scale(value,0);
+                                currentTransform.scale(value,currentTransform.getScaleY());
                                 break;
                             case TransformChannels.scaleY:
-                                currentTransform.scale(0,value);
+                                currentTransform.scale(currentTransform.getScaleX(),value);
                                 break;
                             case TransformChannels.shearX:
                                 currentTransform.shear(value,0);
@@ -151,12 +148,13 @@ public class ParentLayer extends Layer {
                             case TransformChannels.opacity:
                                 //OH GOD IT ISN'T IN THE AFFINE TRANSFORM HELP-
                                 break;
+                            case TransformChannels.rotation:
+                                currentTransform.rotate(Math.toRadians(value));
+                                break;
                         }
                         channelID++;
                     }
                 }
-
-                currentTransform.translate(-child.transform.centerX,-child.transform.centerY);
 
                 if (child == currentLayer) {
                     //selection rectangle
@@ -170,12 +168,14 @@ public class ParentLayer extends Layer {
                     //ALSO CENTER IT
 
                     graphics.drawOval(
-                            (int) (child.transform.centerX + currentTransform.getTranslateX()) - 15,
-                            (int) (child.transform.centerY + currentTransform.getTranslateY()) - 15,
+                            (int) (currentTransform.getTranslateX()) - 15,
+                            (int) (currentTransform.getTranslateY()) - 15,
                             30,
                             30
                     );
                 }
+
+                currentTransform.translate(-child.transform.centerX,-child.transform.centerY);
 
                 bitmapChild.currentAnimatedTransform = currentTransform;
 

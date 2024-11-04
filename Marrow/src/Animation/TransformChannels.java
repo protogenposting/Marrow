@@ -3,12 +3,12 @@ package Animation;
 public enum TransformChannels{
     x(0),
     y(1),
-    rotation(2),
+    opacity(7),
     scaleX(3),
     scaleY(4),
     shearX(5),
     shearY(6),
-    opacity(7);
+    rotation(2);
     private final int value;
     private TransformChannels(int value) {
         this.value = value;
