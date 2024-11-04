@@ -31,8 +31,6 @@ public class Timeline extends JSplitPane {
 
     private final JSplitPane propertiesArea = new JSplitPane();
 
-    private final Object[] yesNoOptions = {"Yes", "No"};
-
     private int currentChannel = 0;
 
     public Timeline(AnimationDataStorage animDataStorage, ParentLayer parentLayer)
@@ -115,6 +113,23 @@ public class Timeline extends JSplitPane {
 
         //region add channel buttons
         //replace channelID with TransformChannels enum values
+
+        /*
+
+        while this is more efficient, the names don't look as good
+        we should change it to this sooner or later so whenever we add a channel it'll automatically
+        add it for us
+
+        TransformChannels channelName;
+
+        for(int channel = 0; channel < TransformChannels.values().length; channel++){
+
+            channelName = TransformChannels.values()[channel];
+            channelPanel.add(createChannelButton(channelName.name(), 0));
+        }
+
+        */
+
         channelPanel.add(createChannelButton("X", 0));
         channelPanel.add(createChannelButton("Y", 1));
         channelPanel.add(createChannelButton("Rotation", 7));
@@ -153,6 +168,7 @@ public class Timeline extends JSplitPane {
 
     private void keyframeSelection(ArrayList<Keyframe> keyframe, int channelID){
 
+        // "repaints" all the keyframe stuff if this function has been called more than once
         if(totalKeyframePanel.isVisible()){
             totalKeyframePanel.removeAll();
             keyframeScrollPanel.removeAll();
@@ -166,6 +182,7 @@ public class Timeline extends JSplitPane {
         keyframeScrollPanel.setPreferredSize(new Dimension(530, 48));
         keyframeScrollPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
+        //region add and remove keyframe buttons
         JButton addKeyFrameButton = new JButton("Add Keyframe");
         JButton removeKeyFrameButton = new JButton("Remove Keyframe");
 
@@ -174,13 +191,14 @@ public class Timeline extends JSplitPane {
 
         totalKeyframePanel.add(addKeyFrameButton);
         totalKeyframePanel.add(removeKeyFrameButton);
+        //endregion
 
         TransformChannels[] channels = TransformChannels.values();
         TransformChannels channel = channels[channelID];
 
-
         totalKeyframePanel.add(new JLabel("   Channel: " + channel.name() + ", Keyframes: "));
 
+        //adds a button for every active keyframe to the scroll panel
         for (int i = 0; i < keyframe.size(); i++) {
             if(!keyframe.get(i).isActive){
                 continue;
@@ -192,6 +210,8 @@ public class Timeline extends JSplitPane {
 
             keyframePanel.add(keyframeButton);
         }
+
+        keyframePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         totalKeyframePanel.setVisible(true);
         keyframeScrollPanel.setVisible(true);
@@ -416,6 +436,8 @@ public class Timeline extends JSplitPane {
 
     private boolean warnUser(String prompt, String windowName){
 
+        Object[] yesNoOptions = {"Yes", "No"};
+
         int choice = JOptionPane.showOptionDialog(
                 null, // Parent component (null means center on screen)
                 prompt, // Message to display
@@ -428,27 +450,12 @@ public class Timeline extends JSplitPane {
         );
 
         return choice == JOptionPane.YES_OPTION;
-
     }
 
     private JSlider setUpSlider(){
         JSlider slider = new JSlider(0, 120, 0);
 
         slider.setVisible(true);
-
-        /*
-        until we figure out why the tick spacing never wants to change for some reason,
-        keep this code commented (or just delete it eventually)
-        slider.setPaintTrack(true);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-         */
-
-        int majorTickSpacing = setTickSpacing(slider.getMaximum(), 5);
-        int minorTickSpacing = setTickSpacing(slider.getMaximum(), 20);
-
-        slider.setMajorTickSpacing( majorTickSpacing );
-        slider.setMinorTickSpacing( minorTickSpacing );
 
         slider.addChangeListener(e -> {
 
@@ -461,29 +468,6 @@ public class Timeline extends JSplitPane {
         });
 
         return slider;
-    }
-
-    private void setTickSpacingFromTextField(JSlider slider){
-        int majorTickSpacing = setTickSpacing(slider.getMaximum(), 5);
-        int minorTickSpacing = setTickSpacing(slider.getMaximum(), 20);
-
-        slider.setMajorTickSpacing( majorTickSpacing );
-        slider.setMinorTickSpacing( minorTickSpacing );
-    }
-
-    private int setTickSpacing(int maxSlideValue, int divider){
-        if (maxSlideValue > 200){
-            return maxSlideValue / (divider * 2);
-        }
-        else if (maxSlideValue > 20) {
-            return maxSlideValue / divider;
-        }
-        else if(maxSlideValue > 10){
-            return 2;
-        }
-        else {
-            return 1;
-        }
     }
 
     public void playOrPause(){
@@ -507,6 +491,4 @@ public class Timeline extends JSplitPane {
             animModeButton.setText("Start Animating");
         }
     }
-
-
 }
