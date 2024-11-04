@@ -159,10 +159,10 @@ public class ParentLayer extends Layer {
                 if (child == currentLayer) {
                     //selection rectangle
                     graphics.drawRect(
-                            (int) (currentTransform.getTranslateX() + child.transform.centerX - child.width),
-                            (int) (currentTransform.getTranslateY() + child.transform.centerY - child.height),
-                            (int) (currentTransform.getTranslateX() + child.transform.centerX + child.width),
-                            (int) (currentTransform.getTranslateY() + child.transform.centerY + child.height)
+                            (int) (currentTransform.getTranslateX() - child.width * currentTransform.getScaleX()),
+                            (int) (currentTransform.getTranslateY() - child.height * currentTransform.getScaleY()),
+                            (int) (currentTransform.getTranslateX() + child.width * currentTransform.getScaleX()),
+                            (int) (currentTransform.getTranslateY() + child.height * currentTransform.getScaleY())
                     );
                     //the centerpoint, make this a jsomething later!
                     //ALSO CENTER IT
