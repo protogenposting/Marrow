@@ -167,6 +167,8 @@ public class ParentLayer extends Layer {
                             (int) (currentTransform.getTranslateY() + child.transform.centerY + child.height)
                     );
                     //the centerpoint, make this a jsomething later!
+                    //ALSO CENTER IT
+
                     graphics.drawOval(
                             (int) (child.transform.centerX + currentTransform.getTranslateX()) - 15,
                             (int) (child.transform.centerY + currentTransform.getTranslateY()) - 15,
