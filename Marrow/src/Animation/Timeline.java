@@ -117,11 +117,12 @@ public class Timeline extends JSplitPane {
         //replace channelID with TransformChannels enum values
         channelPanel.add(createChannelButton("X", 0));
         channelPanel.add(createChannelButton("Y", 1));
-        channelPanel.add(createChannelButton("Scale X", 2));
-        channelPanel.add(createChannelButton("Scale Y", 3));
-        channelPanel.add(createChannelButton("Rotation", 4));
-        channelPanel.add(createChannelButton("Shear", 5));
-        channelPanel.add(createChannelButton("Opacity", 6));
+        channelPanel.add(createChannelButton("Rotation", 2));
+        channelPanel.add(createChannelButton("Scale X", 3));
+        channelPanel.add(createChannelButton("Scale Y", 4));
+        channelPanel.add(createChannelButton("Shear X", 5));
+        channelPanel.add(createChannelButton("Shear Y", 6));
+        channelPanel.add(createChannelButton("Opacity", 7));
         //endregion
 
         channelPanel.setVisible(true);

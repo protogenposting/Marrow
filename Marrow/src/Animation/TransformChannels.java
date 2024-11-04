@@ -3,9 +3,9 @@ package Animation;
 public enum TransformChannels{
     x(0),
     y(1),
-    scaleX(2),
-    scaleY(3),
-    rotation(4),
+    rotation(2),
+    scaleX(3),
+    scaleY(4),
     shearX(5),
     shearY(6),
     opacity(7);

@@ -133,14 +133,14 @@ public class ParentLayer extends Layer {
                             case TransformChannels.y:
                                 currentTransform.translate(0, value);
                                 break;
+                            case TransformChannels.rotation:
+                                currentTransform.rotate(Math.toRadians(value));
+                                break;
                             case TransformChannels.scaleX:
                                 currentTransform.scale(value,0);
                                 break;
                             case TransformChannels.scaleY:
                                 currentTransform.scale(0,value);
-                                break;
-                            case TransformChannels.rotation:
-                                currentTransform.rotate(Math.toRadians(value));
                                 break;
                             case TransformChannels.shearX:
                                 currentTransform.shear(value,0);
