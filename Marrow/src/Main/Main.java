@@ -40,6 +40,8 @@ public class Main {
     static JSplitPane bottomScreenSplitPaneVertical = new JSplitPane();
     static JSplitPane bottomScreenSplitPaneHorizontal = new JSplitPane();
 
+    static LayerWindow layerWindow;
+
     //saving variables (they are, in fact, being used)
     public static String currentSaveDirectory;
     public static String currentLoadDirectory;
@@ -587,7 +589,7 @@ public class Main {
         //give the timeline to animation data
         animationDataStorage.timeline = timeline;
 
-        LayerWindow layerOrganization = new LayerWindow(parentLayer,toolContainer, timeline);
+        layerWindow = new LayerWindow(parentLayer,toolContainer, timeline);
 
         //region color chooser gui used for determining the color of a tool
         JColorChooser colorChooser = new JColorChooser();
@@ -674,7 +676,7 @@ public class Main {
 
         bottomScreenSplitPaneVertical.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
         bottomScreenSplitPaneVertical.setDividerLocation(260);
-        bottomScreenSplitPaneVertical.setLeftComponent(layerOrganization); //CHILD LAYER HERE
+        bottomScreenSplitPaneVertical.setLeftComponent(layerWindow); //CHILD LAYER HERE
         bottomScreenSplitPaneVertical.setRightComponent(bottomScreenSplitPaneHorizontal);
 
         bottomScreenSplitPaneHorizontal.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -750,6 +752,19 @@ public class Main {
         fileMenu.add(openItem);
         fileMenu.add(saveItem);
         fileMenu.add(saveAsItem);
+
+        //very wip
+        newItem.addActionListener(e -> {
+            if(!askUser("Create new?", "NEW")){
+                return;
+            }
+            mainSplitPane.removeAll();
+            bottomScreenSplitPaneVertical.removeAll();
+            bottomScreenSplitPaneHorizontal.removeAll();
+            frame.removeAll();
+            frameSetup();
+            //frame.repaint();
+        });
 
         //load function
         openItem.addActionListener(e -> {
