@@ -3,6 +3,7 @@ package Layers;
 import Animation.AnimationDataStorage;
 import Animation.Keyframe;
 import Animation.TransformChannels;
+import Encoding.AnimatedGifEncoder;
 import Main.Main;
 import Tools.ToolContainer;
 
@@ -40,7 +41,8 @@ public class ParentLayer extends Layer {
         if(image==null)
         {
             //we create an image here
-            image = createImage(getSize().width,getSize().height);
+            //MAKE THIS RESIZABLE
+            image = createImage(800,400);
             graphics = (Graphics2D) image.getGraphics();
             //enable antialiasing
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -204,19 +206,29 @@ public class ParentLayer extends Layer {
 
             if(animDataStorage.currentFrame >= animDataStorage.maxFrameCount)
             {
+                String path = "MarrowTest/render/";
+
                 Main.rendering = false;
+
+                AnimatedGifEncoder encoder = new AnimatedGifEncoder();
+
+                File file = new File(path+"anim.gif");
+
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                encoder.start(path+"anim.gif");
+                encoder.setDelay(1000/animDataStorage.framesPerSecond);   // 1 frame per sec
+                encoder.setRepeat(9999999);
                 for (int i = 0; i < Main.images.size(); i++)
                 {
-                    try {
-                        File file = new File("MarrowTest/render/image"+i+".png");
-
-                        file.mkdirs();
-
-                        ImageIO.write(Main.images.get(i),"png",file);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    encoder.addFrame(Main.images.get(i));
                 }
+
+                encoder.finish();
             }
         }
 
