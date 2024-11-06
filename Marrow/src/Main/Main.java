@@ -37,11 +37,12 @@ public class Main {
 
     //these are all split panes, which can be resized
     static JSplitPane mainSplitPane = new JSplitPane();
-    static JSplitPane topScreenSplitPane = new JSplitPane();
     static JSplitPane bottomScreenSplitPaneVertical = new JSplitPane();
     static JSplitPane bottomScreenSplitPaneHorizontal = new JSplitPane();
 
-    //saving variables, no idea if they're used currently :/
+    static LayerWindow layerWindow;
+
+    //saving variables (they are, in fact, being used)
     public static String currentSaveDirectory;
     public static String currentLoadDirectory;
     public static boolean hasSavedOrLoaded = false;
@@ -53,7 +54,6 @@ public class Main {
     public static ArrayList<BufferedImage> images = new ArrayList<>();
 
     public static boolean rendering = false;
-
     /**
      * All main does is call frame setup lol
      * @param args
@@ -81,22 +81,9 @@ public class Main {
 
             FileWriter writer = getSaveFileWriter();
 
-            /*
-            example of what it should look like
-            parentLayer
-            -childLayer1
-            --childLayer1~1  the reason it ends with ~1 is so computer doesn't get confused reading the same names
-            --childLayer1~2
-            --childLayer1~3
-            ---childLayer1~3~1
-            -childLayer2
-            --childLayer2~1
-             */
-
             ArrayList<ChildLayer> childLayers = parentLayer.getChildren();
 
             writer.write("MARROW - Don't change name of this file!\n\nParentLayer");
-            System.out.print("\nMARROW\n\nParentLayer");
 
             writer.write("\n\nMaxFrameCount: ");
             writer.write(String.valueOf(animDataStorage.maxFrameCount));
@@ -129,12 +116,15 @@ public class Main {
         //NOTE: IF IT DOESN'T WORK OR IS UNABLE TO FIND A FILE, CHECK FOR TYPOS
 
         File path = new File(currentSaveDirectory);
-        boolean pathExists = path.mkdirs();
+        boolean pathDoesNotExist = path.mkdirs();
 
         File saveFile = new File(currentSaveDirectory + "/save.marrow");
-        boolean saveExists = saveFile.createNewFile();
+        boolean saveDoesNotExist = saveFile.createNewFile();
 
-        // Currently, this will simply overwrite the current save file. Find way to resolve issue, maybe?
+        // If it already exists, overwrite the file.
+        if(!saveDoesNotExist){
+            return new FileWriter(currentSaveDirectory + "/save.marrow", false);
+        }
 
         return new FileWriter(currentSaveDirectory + "/save.marrow");
     }
@@ -169,7 +159,6 @@ public class Main {
                 ChildLayer child = childLayers.get(i);
                 childLayerName = child.name;
                 writer.write("\n" + dashCount + childLayerName);
-                System.out.print("\n" + dashCount + childLayerName);
 
                 saveKeyFrames(child, writer, dashCount);
 
@@ -182,8 +171,6 @@ public class Main {
                 }
             }
             catch (IOException ignore) {}
-
-
 
             if(thereIsChild){
                 ArrayList<ChildLayer> secondChildLayers = childLayers.get(i).getChildren(); //get the children of the child in childLayers
@@ -240,7 +227,7 @@ public class Main {
      * Loads all the layers and their corresponding keyframes in a user-chosen save folder.
      * @param toolContainer For BitmapLayer constructor.
      * @param animDataStorage Loads previous animation data into this object.
-     * @return An ArrayList of loaded {@link BitmapLayer}s.
+     * @return An {@link ArrayList} of loaded {@link BitmapLayer}s.
      * @throws IOException In the event a file can't be read.
      */
     public static ArrayList<BitmapLayer> loadLayers(ToolContainer toolContainer,
@@ -288,7 +275,6 @@ public class Main {
             String layerName = layerNames.get(i);
 
             if(isSavedChannel(layerName)){
-
                 i = saveKeyframesToBitmap(bitmapLayers.get(currentBitmapIndex), layerNames, i);
                 continue;
             }
@@ -366,6 +352,8 @@ public class Main {
             if(isSavedChannel(layerName)){
                 channelID++;
                 layerNameIndex++;
+                System.out.println(layerNameIndex);
+                System.out.println(layerName);
                 continue;
             }
 
@@ -374,8 +362,9 @@ public class Main {
 
             //if less than 0, no longer looking at keyframes and channels but another bitmapLayer
             if(keyframeID < 0){
-                layerNameIndex++;
-                return layerNameIndex;
+                System.out.println("returning index: " + layerNameIndex);
+                System.out.println(layerName);
+                return layerNameIndex - 1;
             }
 
             //find the value to set
@@ -389,6 +378,8 @@ public class Main {
             keyframe.easing = easing;
 
             layerNameIndex++;
+            System.out.println(layerNameIndex);
+            System.out.println(layerName);
         }
 
         return layerNameIndex;
@@ -535,6 +526,8 @@ public class Main {
      */
     private static void setSaveDirectory(){
         JFileChooser chooseFile = new JFileChooser(currentSaveDirectory);
+        chooseFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
         int fileChosen = chooseFile.showSaveDialog(null);
 
         if(fileChosen == JFileChooser.APPROVE_OPTION){
@@ -576,7 +569,7 @@ public class Main {
         AnimationDataStorage animationDataStorage = new AnimationDataStorage();
         ParentLayer parentLayer = new ParentLayer(toolContainer, animationDataStorage);
 
-        //add the parentlayer to animation data
+        //add the parent layer to animation data
         animationDataStorage.parentLayer = parentLayer;
 
         //set the parent layer's size
@@ -596,9 +589,7 @@ public class Main {
 
         frame.addKeyListener(new KeyListener() {
             @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
+            public void keyTyped(KeyEvent e) {}
 
             @Override
             public void keyPressed(KeyEvent e) {
@@ -609,31 +600,26 @@ public class Main {
             }
 
             @Override
-            public void keyReleased(KeyEvent e) {
-
-            }
+            public void keyReleased(KeyEvent e) {}
         });
 
         //give the timeline to animation data
         animationDataStorage.timeline = timeline;
 
-        LayerWindow layerOrganization = new LayerWindow(parentLayer,toolContainer, timeline);
+        layerWindow = new LayerWindow(parentLayer,toolContainer, timeline);
 
         //region color chooser gui used for determining the color of a tool
         JColorChooser colorChooser = new JColorChooser();
 
         //update color when color is clicked
-        colorChooser.getSelectionModel().addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                Color currentColor = colorChooser.getColor();
-                toolContainer.currentColor = new RGBColor(
-                        currentColor.getRed(),
-                        currentColor.getGreen(),
-                        currentColor.getBlue(),
-                        255);
-                toolContainer.currentTool.currentColor = toolContainer.currentColor;
-            }
+        colorChooser.getSelectionModel().addChangeListener(e -> {
+            Color currentColor = colorChooser.getColor();
+            toolContainer.currentColor = new RGBColor(
+                    currentColor.getRed(),
+                    currentColor.getGreen(),
+                    currentColor.getBlue(),
+                    255);
+            toolContainer.currentTool.currentColor = toolContainer.currentColor;
         });
 
         JFrame colorFrame = new JFrame();
@@ -707,7 +693,7 @@ public class Main {
 
         bottomScreenSplitPaneVertical.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
         bottomScreenSplitPaneVertical.setDividerLocation(260);
-        bottomScreenSplitPaneVertical.setLeftComponent(layerOrganization); //CHILD LAYER HERE
+        bottomScreenSplitPaneVertical.setLeftComponent(layerWindow); //CHILD LAYER HERE
         bottomScreenSplitPaneVertical.setRightComponent(bottomScreenSplitPaneHorizontal);
 
         bottomScreenSplitPaneHorizontal.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -727,6 +713,8 @@ public class Main {
      * @return {@code true} if user answers yes, {@code false} if answered no.
      */
     private static boolean askUser(String prompt, String windowName){
+        Object[] yesNoOptions = {"Yes", "No"};
+
         int choice = JOptionPane.showOptionDialog(
                 null, // center of screen
                 prompt,
@@ -784,6 +772,19 @@ public class Main {
         fileMenu.add(saveAsItem);
         fileMenu.add(renderItem);
 
+        //very wip
+        newItem.addActionListener(e -> {
+            if(!askUser("Create new?", "NEW")){
+                return;
+            }
+            mainSplitPane.removeAll();
+            bottomScreenSplitPaneVertical.removeAll();
+            bottomScreenSplitPaneHorizontal.removeAll();
+            frame.removeAll();
+            frameSetup();
+            //frame.repaint();
+        });
+
         //load function
         openItem.addActionListener(e -> {
             if(!askUser("Warning: if you load, your unsaved progress WILL be lost! Continue?", "LOADING")){
@@ -804,8 +805,6 @@ public class Main {
                 }
                 parentLayer.revalidate();
                 parentLayer.repaint();
-
-                //System.out.println("load successful");
             }
             catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -858,9 +857,7 @@ public class Main {
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                 try {
                     Desktop.getDesktop().browse(new URI("http://protogenposting.github.io/Marrow/manual/user_manual.html"));
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                } catch (URISyntaxException ex) {
+                } catch (IOException | URISyntaxException ex) {
                     throw new RuntimeException(ex);
                 }
             }

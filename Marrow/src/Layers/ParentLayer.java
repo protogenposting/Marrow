@@ -285,6 +285,8 @@ public class ParentLayer extends Layer {
             child.isCurrentLayer = currentLayer == child;
 
             this.remove(child);
+
+
         }
         layer.isCurrentLayer = true;
         this.add(layer);
