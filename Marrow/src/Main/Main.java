@@ -49,6 +49,10 @@ public class Main {
 
     //What is this :skull:
     public static Object[] yesNoOptions = {"Yes", "No"};
+	
+    public static ArrayList<BufferedImage> images = new ArrayList<>();
+
+    public static boolean rendering = false;
 
     /**
      * All main does is call frame setup lol
@@ -772,11 +776,13 @@ public class Main {
         JMenuItem openItem = new JMenuItem("Open");
         JMenuItem saveItem = new JMenuItem("Save");
         JMenuItem saveAsItem = new JMenuItem("Save As");
+        JMenuItem renderItem = new JMenuItem("Render");
 
         fileMenu.add(newItem);
         fileMenu.add(openItem);
         fileMenu.add(saveItem);
         fileMenu.add(saveAsItem);
+        fileMenu.add(renderItem);
 
         //load function
         openItem.addActionListener(e -> {
@@ -815,6 +821,14 @@ public class Main {
                 setSaveDirectory();
             }
             saveLayers(parentLayer, animDataStorage);
+        });
+
+        renderItem.addActionListener(e -> {
+            rendering = true;
+            images = new ArrayList<>();
+            animDataStorage.currentFrame = 0;
+            animDataStorage.isPlaying = false;
+            parentLayer.repaint();
         });
 
         return fileMenu;

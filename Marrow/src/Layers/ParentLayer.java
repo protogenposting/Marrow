@@ -3,10 +3,15 @@ package Layers;
 import Animation.AnimationDataStorage;
 import Animation.Keyframe;
 import Animation.TransformChannels;
+import Main.Main;
 import Tools.ToolContainer;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Consumer;
@@ -18,7 +23,7 @@ import java.util.function.Consumer;
 public class ParentLayer extends Layer {
 
     Graphics2D graphics;
-    Image image;
+    public Image image;
     ToolContainer toolContainer;
     AnimationDataStorage animDataStorage = new AnimationDataStorage();
     public ChildLayer currentLayer;
@@ -156,7 +161,7 @@ public class ParentLayer extends Layer {
                     }
                 }
 
-                if (child == currentLayer) {
+                if (child == currentLayer && !Main.rendering) {
                     //selection rectangle
                     graphics.drawRect(
                             (int) (currentTransform.getTranslateX() - child.width * currentTransform.getScaleX()),
@@ -183,7 +188,38 @@ public class ParentLayer extends Layer {
                 graphics.drawImage(bitmapChild.drawnImage, currentTransform, this);
             }
         });
-        
+
+        if(Main.rendering) {
+            BufferedImage renderedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+            Graphics2D renderedImageGraphics = renderedImage.createGraphics();
+
+            renderedImageGraphics.drawImage(image, 0, 0, null);
+
+            renderedImageGraphics.dispose();
+
+            Main.images.add(renderedImage);
+
+            animDataStorage.currentFrame++;
+
+            if(animDataStorage.currentFrame >= animDataStorage.maxFrameCount)
+            {
+                Main.rendering = false;
+                for (int i = 0; i < Main.images.size(); i++)
+                {
+                    try {
+                        File file = new File("MarrowTest/render/image"+i+".png");
+
+                        file.mkdirs();
+
+                        ImageIO.write(Main.images.get(i),"png",file);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
+
         g.drawImage(image,0,0,null);
     }
 
