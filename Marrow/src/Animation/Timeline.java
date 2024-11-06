@@ -112,33 +112,14 @@ public class Timeline extends JSplitPane {
         channelPanel.setLayout(new BoxLayout(channelPanel, BoxLayout.Y_AXIS));
 
         //region add channel buttons
-        //replace channelID with TransformChannels enum values
-
-        /*
-
-        while this is more efficient, the names don't look as good
-        we should change it to this sooner or later so whenever we add a channel it'll automatically
-        add it for us
 
         TransformChannels channelName;
 
         for(int channel = 0; channel < TransformChannels.values().length; channel++){
 
             channelName = TransformChannels.values()[channel];
-            channelPanel.add(createChannelButton(channelName.name(), 0));
+            channelPanel.add(createChannelButton(channelName.name(), channel));
         }
-
-        */
-
-        channelPanel.add(createChannelButton("X", 0));
-        channelPanel.add(createChannelButton("Y", 1));
-        channelPanel.add(createChannelButton("Rotation", 7));
-        channelPanel.add(createChannelButton("Scale X", 3));
-        channelPanel.add(createChannelButton("Scale Y", 4));
-        channelPanel.add(createChannelButton("Shear X", 5));
-        channelPanel.add(createChannelButton("Shear Y", 6));
-        channelPanel.add(createChannelButton("Opacity", 2));
-        //endregion
 
         channelPanel.setVisible(true);
 

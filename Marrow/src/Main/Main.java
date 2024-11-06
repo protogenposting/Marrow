@@ -110,10 +110,15 @@ public class Main {
         //NOTE: IF IT DOESN'T WORK OR IS UNABLE TO FIND A FILE, CHECK FOR TYPOS
 
         File path = new File(currentSaveDirectory);
-        boolean pathExists = path.mkdirs();
+        boolean pathDoesNotExist = path.mkdirs();
 
         File saveFile = new File(currentSaveDirectory + "/save.marrow");
-        boolean saveExists = saveFile.createNewFile();
+        boolean saveDoesNotExist = saveFile.createNewFile();
+
+        // If it already exists, overwrite the file.
+        if(!saveDoesNotExist){
+            return new FileWriter(currentSaveDirectory + "/save.marrow", false);
+        }
 
         return new FileWriter(currentSaveDirectory + "/save.marrow");
     }
@@ -216,7 +221,7 @@ public class Main {
      * Loads all the layers and their corresponding keyframes in a user-chosen save folder.
      * @param toolContainer For BitmapLayer constructor.
      * @param animDataStorage Loads previous animation data into this object.
-     * @return An ArrayList of loaded {@link BitmapLayer}s.
+     * @return An {@link ArrayList} of loaded {@link BitmapLayer}s.
      * @throws IOException In the event a file can't be read.
      */
     public static ArrayList<BitmapLayer> loadLayers(ToolContainer toolContainer,
@@ -264,7 +269,6 @@ public class Main {
             String layerName = layerNames.get(i);
 
             if(isSavedChannel(layerName)){
-
                 i = saveKeyframesToBitmap(bitmapLayers.get(currentBitmapIndex), layerNames, i);
                 continue;
             }
@@ -342,6 +346,8 @@ public class Main {
             if(isSavedChannel(layerName)){
                 channelID++;
                 layerNameIndex++;
+                System.out.println(layerNameIndex);
+                System.out.println(layerName);
                 continue;
             }
 
@@ -350,8 +356,9 @@ public class Main {
 
             //if less than 0, no longer looking at keyframes and channels but another bitmapLayer
             if(keyframeID < 0){
-                layerNameIndex++;
-                return layerNameIndex;
+                System.out.println("returning index: " + layerNameIndex);
+                System.out.println(layerName);
+                return layerNameIndex - 1;
             }
 
             //find the value to set
@@ -365,6 +372,8 @@ public class Main {
             keyframe.easing = easing;
 
             layerNameIndex++;
+            System.out.println(layerNameIndex);
+            System.out.println(layerName);
         }
 
         return layerNameIndex;
@@ -511,6 +520,8 @@ public class Main {
      */
     private static void setSaveDirectory(){
         JFileChooser chooseFile = new JFileChooser(currentSaveDirectory);
+        chooseFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
         int fileChosen = chooseFile.showSaveDialog(null);
 
         if(fileChosen == JFileChooser.APPROVE_OPTION){
