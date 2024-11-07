@@ -52,7 +52,7 @@ public class Eraser extends Tool{
     }
 
     /**
-     * draws / sets an unfilled circle at the mouse cursor
+     * removes a circle at the mouse cursor
      * @param xCenter the x-position of the center of the unfilled circle
      * @param yCenter the y-position of the center of the unfilled circle
      * @param bitmap where the unfilled circle is being drawn / set to
@@ -102,7 +102,7 @@ public class Eraser extends Tool{
     }
 
     /**
-     * draws a horizontal line between two points
+     * removes a horizontal line between two points
      * @param x1 x position of first point
      * @param x2 x position of second point
      * @param y y position of both points

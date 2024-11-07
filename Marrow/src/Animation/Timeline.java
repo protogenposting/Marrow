@@ -38,6 +38,8 @@ public class Timeline extends JSplitPane {
 
         setSplitPanes();
 
+        this.setPreferredSize(new Dimension(800, 300));
+
         this.parentLayer = parentLayer;
         this.animDataStorage = animDataStorage;
 

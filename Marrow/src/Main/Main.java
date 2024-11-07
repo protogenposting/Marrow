@@ -565,6 +565,7 @@ public class Main {
 
         //set the parent layer's size
         parentLayer.setSize(800,400);
+        parentLayer.setPreferredSize(new Dimension(800, 400));
         parentLayer.setVisible(true);
 
         Toolbox tools = new Toolbox(toolContainer);
@@ -691,7 +692,6 @@ public class Main {
         bottomScreenSplitPaneHorizontal.setDividerLocation(450);
         bottomScreenSplitPaneHorizontal.setTopComponent(parentLayer); // DRAW SCREEN HERE
         bottomScreenSplitPaneHorizontal.setBottomComponent(timeline); // TIMELINE HERE
-
         //endregion
 
         frame.setJMenuBar(createMenuBar(parentLayer, toolContainer, animationDataStorage));
@@ -794,8 +794,8 @@ public class Main {
                 for (BitmapLayer bitmapLayer : bitmapLayers) {
                     parentLayer.addChild(bitmapLayer);
                 }
-                parentLayer.revalidate();
                 parentLayer.repaint();
+                parentLayer.revalidate();
             }
             catch (IOException ex) {
                 throw new RuntimeException(ex);

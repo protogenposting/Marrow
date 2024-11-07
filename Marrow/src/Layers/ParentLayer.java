@@ -26,7 +26,7 @@ public class ParentLayer extends Layer {
     Graphics2D graphics;
     public Image image;
     ToolContainer toolContainer;
-    AnimationDataStorage animDataStorage = new AnimationDataStorage();
+    AnimationDataStorage animDataStorage;
     public ChildLayer currentLayer;
 
 
