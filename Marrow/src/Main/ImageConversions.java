@@ -43,6 +43,7 @@ public class ImageConversions {
             ImageIO.write(newImage,"png",outputfile);
         } catch (IOException | IllegalArgumentException t) {
             writeTransparentImage(outputfile);
+            System.out.println("image was null");
         }
 
         System.out.println("saved image");
@@ -53,8 +54,8 @@ public class ImageConversions {
             Files.copy(new File("IconImages/Empty/TransparentBG.png").toPath(), outputfile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             //ImageIO.write(image, "png", outputfile);
         }
-        catch (IOException ignore){
-            ignore.printStackTrace();
+        catch (IOException e){
+            System.out.println("couldn't write transparent png");
         }
     }
 }
