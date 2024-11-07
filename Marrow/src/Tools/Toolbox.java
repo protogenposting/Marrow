@@ -33,11 +33,11 @@ public class Toolbox extends JPanel {
         ToolButton shape = new ToolButton("/IconImages/Tools/shapeTool.png", new ShapeTool());
         ToolButton eraser = new ToolButton("/IconImages/Tools/eraserTool.png", new Eraser());
 
-        paintBrush.toolButton.addActionListener(e -> {setTool(paintBrush);});
-        bucket.toolButton.addActionListener(e -> {setTool(bucket);});
-        line.toolButton.addActionListener(e -> {setTool(line);});
-        eraser.toolButton.addActionListener(e -> {setTool(eraser);});
-        shape.toolButton.addActionListener(e -> {setTool(shape);});
+        paintBrush.toolButton.addActionListener(e -> setTool(paintBrush));
+        bucket.toolButton.addActionListener(e -> setTool(bucket));
+        line.toolButton.addActionListener(e -> setTool(line));
+        eraser.toolButton.addActionListener(e -> setTool(eraser));
+        shape.toolButton.addActionListener(e -> setTool(shape));
 
         this.add(paintBrush.toolButton);
         this.add(bucket.toolButton);

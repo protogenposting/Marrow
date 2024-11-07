@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class ImageConversions {
     /**
@@ -39,10 +41,20 @@ public class ImageConversions {
 
         try {
             ImageIO.write(newImage,"png",outputfile);
-        } catch (IOException t) {
-            throw new RuntimeException(t);
+        } catch (IOException | IllegalArgumentException t) {
+            writeTransparentImage(outputfile);
         }
 
         System.out.println("saved image");
+    }
+
+    private static void writeTransparentImage(File outputfile){
+        try {
+            Files.copy(new File("IconImages/Empty/TransparentBG.png").toPath(), outputfile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            //ImageIO.write(image, "png", outputfile);
+        }
+        catch (IOException ignore){
+            ignore.printStackTrace();
+        }
     }
 }

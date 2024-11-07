@@ -47,9 +47,6 @@ public class Main {
     public static String currentLoadDirectory;
     public static boolean hasSavedOrLoaded = false;
     public static boolean stopSavingOrLoading = false; // stops the saving or loading if user changes their mind when choosing files
-
-    //What is this :skull:
-    public static Object[] yesNoOptions = {"Yes", "No"};
 	
     public static ArrayList<BufferedImage> images = new ArrayList<>();
 
@@ -95,7 +92,7 @@ public class Main {
                     "-",
                     writer,
                     false,
-                    "ChildLayer"
+                    0
             );
 
             writer.close();
@@ -145,48 +142,42 @@ public class Main {
      * @param dashCount the "hierarchy" of the childLayer
      * @param writer the file writer that saves the childLayers into the save file
      * @param hasRepeated checks for if it has repeated at least once
-     * @param childLayerName the name being saved to the file for each childLayer that exists
      */
     public static void saveChildrenInChildLayer(ArrayList<ChildLayer> childLayers, String dashCount,
-                                                FileWriter writer, boolean hasRepeated,
-                                                String childLayerName){
+                                                FileWriter writer, boolean hasRepeated, int childIndex){
         boolean thereIsChild;
+        String childLayerName;
 
-        for (int i = 0; i < childLayers.size(); i++) {
-            thereIsChild = isThereChildrenInChildLayer(childLayers.get(i));
+        for (ChildLayer layer : childLayers) {
+
+            if(hasRepeated){
+                layer = childLayers.get(childIndex);
+            }
+
+            thereIsChild = isThereChildrenInChildLayer(layer);
 
             try {
-                ChildLayer child = childLayers.get(i);
-                childLayerName = child.name;
+                childLayerName = layer.name;
                 writer.write("\n" + dashCount + childLayerName);
-
-                saveKeyFrames(child, writer, dashCount);
+                saveKeyFrames(layer, writer, dashCount);
 
                 //SAVE THE IMAGE!!!
-                if(child.getClass().equals(BitmapLayer.class))
-                {
-                    BitmapLayer bitmapLayer = (BitmapLayer) child;
+                if (layer.getClass().equals(BitmapLayer.class)) {
+                    BitmapLayer bitmapLayer = (BitmapLayer) layer;
 
-                    ImageConversions.SaveImage(bitmapLayer.drawnImage,currentSaveDirectory+"/"+childLayerName+".png");
+                    ImageConversions.SaveImage(bitmapLayer.drawnImage, currentSaveDirectory + "/" + childLayerName + ".png");
                 }
             }
             catch (IOException ignore) {}
 
-            if(thereIsChild){
-                ArrayList<ChildLayer> secondChildLayers = childLayers.get(i).getChildren(); //get the children of the child in childLayers
+            if (thereIsChild) {
+                ArrayList<ChildLayer> secondChildLayers = layer.getChildren(); //get the children of the child in childLayers
 
                 for (int j = 0; j < secondChildLayers.size(); j++) {
-                    if(!hasRepeated) { //needed so childLayerName prints "ChildLayer1~1" instead of "ChildLayer~1", for example
-                        saveChildrenInChildLayer(secondChildLayers, dashCount + "-", writer,
-                                true, childLayerName + (i + 1) + "~" + (j + 1));
-                    }
-                    else{
-                        saveChildrenInChildLayer(secondChildLayers, dashCount + "-", writer,
-                                true, childLayerName + "~" + (j + 1));
-                    }
+                    saveChildrenInChildLayer(secondChildLayers, dashCount + "-", writer, true, j);
                 }
             } // if this is not here, it will print duplicate layers
-            if(hasRepeated){
+            if (hasRepeated) {
                 break;
             }
         }

@@ -118,6 +118,11 @@ public class Bitmap {
     }
 
     public BufferedImage toImage(){
+
+        if(bitmap.isEmpty()){
+            System.out.println("image is empty");
+        }
+
         BufferedImage image = new BufferedImage(
                 bitmap.size(),
                 bitmap.getFirst().size(),

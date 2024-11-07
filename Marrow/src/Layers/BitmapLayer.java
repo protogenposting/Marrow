@@ -34,20 +34,6 @@ public class BitmapLayer extends ChildLayer {
     public BitmapLayer(ToolContainer toolContainer, String name) {
         this(toolContainer, name, new Bitmap());
 
-        //TEST CODE FOR KEYFRAMES
-
-        Keyframe frame1 = new Keyframe(true);
-
-        frame1.value = 0;
-
-        Keyframe frame2 = new Keyframe(true);
-
-        frame2.value = 100;
-
-        Keyframe frame3 = new Keyframe(true);
-
-        frame3.value = 0;
-
         setSize(120);
 
         // note: index out of bounds occurs because "keyframes" has 128 keyframes, and each keyframe has 7 channels
