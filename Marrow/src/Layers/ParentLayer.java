@@ -293,8 +293,8 @@ public class ParentLayer extends Layer {
     }
 
     @Override
-    public void addChild(ChildLayer layer) {
-        super.addChild(layer);
+    public void addChild(ChildLayer layer, boolean preloaded) {
+        super.addChild(layer,preloaded);
 
         if(children.isEmpty()) {
             setChildTo(layer);

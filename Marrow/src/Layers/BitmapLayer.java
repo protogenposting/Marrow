@@ -111,4 +111,20 @@ public class BitmapLayer extends ChildLayer {
             }
         }
     }
+
+    public ArrayList<Integer> getUsedPixels()
+    {
+        ArrayList<Integer> xValues = new ArrayList<>();
+        ArrayList<Integer> yValues = new ArrayList<>();
+        for (int x = 0; x < bitmap.bitmap.size(); x++) {
+            for (int y = 0; y < bitmap.bitmap.getFirst().size(); y++) {
+                if(bitmap.getPixelAt(x,y).alpha > 0) {
+
+                    xValues.add(x);
+                    yValues.add(y);
+                }
+            }
+        }
+        return xValues;
+    }
 }

@@ -221,7 +221,7 @@ public class Main {
      * @return An {@link ArrayList} of loaded {@link BitmapLayer}s.
      * @throws IOException In the event a file can't be read.
      */
-    public static ArrayList<BitmapLayer> loadLayers(ToolContainer toolContainer,
+    public static ArrayList<ChildLayer> loadLayers(ToolContainer toolContainer,
                                                     AnimationDataStorage animDataStorage)throws IOException{
 
         setLoadDirectory();
@@ -235,7 +235,7 @@ public class Main {
         Scanner fileReader = new Scanner(saveFile);
 
         LinkedList<String> layerNames = new LinkedList<>();
-        ArrayList<BitmapLayer> bitmapLayers = new ArrayList<>();
+        ArrayList<ChildLayer> bitmapLayers = new ArrayList<>();
 
         //contain everything in the save file into a list of strings
         while(fileReader.hasNextLine()){
@@ -317,7 +317,7 @@ public class Main {
      * @param layerNameIndex the scanner's position in the save file
      * @return the current position of the scanner in the save file
      */
-    private static int saveKeyframesToBitmap(BitmapLayer bitmapLayer, LinkedList<String> layerNames, int layerNameIndex){
+    private static int saveKeyframesToBitmap(ChildLayer bitmapLayer, LinkedList<String> layerNames, int layerNameIndex){
 
         ArrayList<ArrayList<Keyframe>> channels = bitmapLayer.keyframes;
 
@@ -785,14 +785,14 @@ public class Main {
                 parentLayer.getChildren().clear();
             }
             try {
-                ArrayList<BitmapLayer> bitmapLayers = loadLayers(toolContainer, animDataStorage);
+                ArrayList<ChildLayer> bitmapLayers = loadLayers(toolContainer, animDataStorage);
 
                 if(bitmapLayers == null){
                     return;
                 }
 
-                for (BitmapLayer bitmapLayer : bitmapLayers) {
-                    parentLayer.addChild(bitmapLayer);
+                for (ChildLayer bitmapLayer : bitmapLayers) {
+                    parentLayer.addChild(bitmapLayer,true);
                 }
                 parentLayer.repaint();
                 parentLayer.revalidate();

@@ -95,7 +95,7 @@ public class LayerWindow extends JPanel {
             public void actionPerformed(ActionEvent e) {
 
                 if (parentLayer.currentLayer == null) {
-                    parentLayer.addChild(new BitmapLayer(toolContainer, "Layer " + parentLayer.getChildren().size()));
+                    parentLayer.addChild(new BitmapLayer(toolContainer, "Layer " + parentLayer.getChildren().size()),false);
                 }else {
 
                     StringBuilder indentCount = new StringBuilder();
@@ -107,7 +107,7 @@ public class LayerWindow extends JPanel {
                     }
 
                     parentLayer.currentLayer.addChild(new BitmapLayer(toolContainer, indentCount + "Layer "
-                            + parentLayer.currentLayer.getChildren().size()));
+                            + parentLayer.currentLayer.getChildren().size()),false);
                 }
 
 

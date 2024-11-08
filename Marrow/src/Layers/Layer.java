@@ -32,7 +32,7 @@ public class Layer extends JPanel {
      * this function adds a child
      * @param layer the layer to add as a child
      */
-    public void addChild(ChildLayer layer)
+    public void addChild(ChildLayer layer, boolean preloaded)
     {
         //if we have no child then the current layer is the one we just added
         children.add(layer);
@@ -60,8 +60,10 @@ public class Layer extends JPanel {
 
         if(layer instanceof BitmapLayer)
         {
-            BitmapLayer currentLayer = (BitmapLayer) layer;
-            currentLayer.bitmap.setSize(defaultWidth,defaultHeight);
+            if(!preloaded) {
+                BitmapLayer currentLayer = (BitmapLayer) layer;
+                currentLayer.bitmap.setSize(defaultWidth, defaultHeight);
+            }
         }
 
 

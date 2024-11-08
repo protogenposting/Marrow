@@ -123,14 +123,20 @@ public class Bitmap {
             System.out.println("image is empty");
         }
 
+
         BufferedImage image = new BufferedImage(
                 bitmap.size(),
                 bitmap.getFirst().size(),
                 BufferedImage.TYPE_INT_ARGB);
 
+        ArrayList<Integer> xValues = new ArrayList<>();
+        ArrayList<Integer> yValues = new ArrayList<>();
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
                 if(getPixelAt(x,y).alpha > 0) {
+
+                    xValues.add(x);
+                    yValues.add(y);
                     image.setRGB(x, y, getPixelAt(x, y).toColor().getRGB());
                 }
             }
