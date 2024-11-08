@@ -235,7 +235,7 @@ public class Main {
         Scanner fileReader = new Scanner(saveFile);
 
         LinkedList<String> layerNames = new LinkedList<>();
-        ArrayList<ChildLayer> bitmapLayers = new ArrayList<>();
+        ArrayList<ChildLayer> childLayers = new ArrayList<>();
 
         //contain everything in the save file into a list of strings
         while(fileReader.hasNextLine()){
@@ -257,6 +257,7 @@ public class Main {
         animDataStorage.framesPerSecond = framesPerSecond;
 
         int currentBitmapIndex = -1;
+        ChildLayer currentParent = new ChildLayer();
 
         for (int i = 0; i < layerNames.size(); i++) {
             if(i < 4){
@@ -266,7 +267,7 @@ public class Main {
             String layerName = layerNames.get(i);
 
             if(isSavedChannel(layerName)){
-                i = saveKeyframesToBitmap(bitmapLayers.get(currentBitmapIndex), layerNames, i);
+                i = saveKeyframesToBitmap(childLayers.get(currentBitmapIndex), layerNames, i);
                 continue;
             }
 
@@ -278,16 +279,56 @@ public class Main {
                 continue; //if the layer doesn't exist, can't load it
             }
 
+
             BufferedImage image = ImageIO.read(layer);
             Bitmap imageToBitmap = new Bitmap(image);
 
             BitmapLayer bitmapLayer = new BitmapLayer(toolContainer, layerName, imageToBitmap);
             bitmapLayer.setSize(maxFrameCount);
-            bitmapLayers.add(bitmapLayer);
+
+            //first layer is the parent layer in case it has children
+            if(i == 5){
+                currentParent = bitmapLayer;
+            }
+            else if(areBothChildren(currentParent.name, layerName)){
+                currentParent = bitmapLayer;
+            }
+
+            if(getIndentCount(currentParent.name) == 0){
+                childLayers.add(bitmapLayer);
+            }
+            else{
+                currentParent.addChild(bitmapLayer, true);
+            }
+            childLayers.add(bitmapLayer);
             currentBitmapIndex += 1;
         }
 
-        return bitmapLayers;
+        return childLayers;
+    }
+
+    private static boolean areBothChildren(String currentParent, String layerName){
+        int currentParentIndents = getIndentCount(currentParent);
+        int layerNameIndents = getIndentCount(layerName);
+        return currentParentIndents <= layerNameIndents;
+    }
+
+    private static int getIndentCount(String name){
+        int indentCount = 0;
+
+        for (int i = 0; i < name.length(); i += 2) {
+
+            try {
+                if (name.charAt(i) == '⤷' && name.charAt(i + 1) == ' ') {
+                    indentCount += 1;
+                }
+            }
+            catch(ArrayIndexOutOfBoundsException e){
+                return indentCount;
+            }
+        }
+
+        return indentCount;
     }
 
     /**
@@ -785,13 +826,13 @@ public class Main {
                 parentLayer.getChildren().clear();
             }
             try {
-                ArrayList<ChildLayer> bitmapLayers = loadLayers(toolContainer, animDataStorage);
+                ArrayList<ChildLayer> childLayers = loadLayers(toolContainer, animDataStorage);
 
-                if(bitmapLayers == null){
+                if(childLayers == null){
                     return;
                 }
 
-                for (ChildLayer bitmapLayer : bitmapLayers) {
+                for (ChildLayer bitmapLayer : childLayers) {
                     parentLayer.addChild(bitmapLayer,true);
                 }
                 parentLayer.repaint();
