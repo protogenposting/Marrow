@@ -72,6 +72,11 @@ public class LayerWindow extends JPanel {
             addChildrenToChildren(newChild, parentLayer, innerPanel, timeline);
 
             addToListAndResort(innerPanel, layerButton, parentLayer.currentLayer);
+
+            for(ChildLayer child : newChild.children)
+            {
+                parentLayer.onAddChild.accept(child);
+            }
         };
 
 

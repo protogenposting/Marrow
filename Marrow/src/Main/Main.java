@@ -257,7 +257,6 @@ public class Main {
         animDataStorage.framesPerSecond = framesPerSecond;
 
         int currentBitmapIndex = -1;
-        ChildLayer currentParent = new ChildLayer();
 
         for (int i = 0; i < layerNames.size(); i++) {
             if(i < 4){
@@ -285,21 +284,6 @@ public class Main {
 
             BitmapLayer bitmapLayer = new BitmapLayer(toolContainer, layerName, imageToBitmap);
             bitmapLayer.setSize(maxFrameCount);
-
-            //first layer is the parent layer in case it has children
-            if(i == 5){
-                currentParent = bitmapLayer;
-            }
-            else if(areBothChildren(currentParent.name, layerName)){
-                currentParent = bitmapLayer;
-            }
-
-            if(getIndentCount(currentParent.name) == 0){
-                childLayers.add(bitmapLayer);
-            }
-            else{
-                currentParent.addChild(bitmapLayer, true);
-            }
             childLayers.add(bitmapLayer);
             currentBitmapIndex += 1;
         }
@@ -310,7 +294,7 @@ public class Main {
     private static boolean areBothChildren(String currentParent, String layerName){
         int currentParentIndents = getIndentCount(currentParent);
         int layerNameIndents = getIndentCount(layerName);
-        return currentParentIndents <= layerNameIndents;
+        return currentParentIndents == layerNameIndents;
     }
 
     private static int getIndentCount(String name){
@@ -761,6 +745,28 @@ public class Main {
         return choice == JOptionPane.YES_OPTION;
     }
 
+    private static ArrayList<ChildLayer> rearrangeChildLayers(ArrayList<ChildLayer> childLayers){
+        ChildLayer currentParent = childLayers.getFirst();
+        ArrayList<ChildLayer> newChildLayers = new ArrayList<>();
+
+        //if childLayer has the same indent count OR less, it is now the current parent
+
+        for(ChildLayer childLayer : childLayers){
+
+            if(getIndentCount(childLayer.name) <= getIndentCount(currentParent.name)){
+                currentParent = childLayer;
+            }
+
+            if(currentParent != childLayer){
+                currentParent.addChild(childLayer, true);
+            }
+
+            newChildLayers.add(childLayer);
+        }
+
+        return newChildLayers;
+    }
+
     //region create menu methods
 
     /**
@@ -827,13 +833,16 @@ public class Main {
             }
             try {
                 ArrayList<ChildLayer> childLayers = loadLayers(toolContainer, animDataStorage);
+                childLayers = rearrangeChildLayers(childLayers);
 
                 if(childLayers == null){
                     return;
                 }
 
-                for (ChildLayer bitmapLayer : childLayers) {
-                    parentLayer.addChild(bitmapLayer,true);
+                for (ChildLayer childLayer : childLayers) {
+                    if(getIndentCount(childLayer.name) == 0) {
+                        parentLayer.addChild(childLayer, true);
+                    }
                 }
                 parentLayer.repaint();
                 parentLayer.revalidate();
