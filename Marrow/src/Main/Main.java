@@ -560,12 +560,15 @@ public class Main {
      */
     private static void setLoadDirectory(){
         JFileChooser chooseFile = new JFileChooser(currentLoadDirectory);
-        chooseFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooseFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
         int fileChosen = chooseFile.showOpenDialog(null);
 
         if(fileChosen == JFileChooser.APPROVE_OPTION){
             currentLoadDirectory = chooseFile.getSelectedFile().getAbsolutePath();
+
+            currentLoadDirectory = currentLoadDirectory.split("/save.marrow")[0];
+
             hasSavedOrLoaded = true;
         }
         else{
