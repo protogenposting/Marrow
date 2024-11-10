@@ -567,7 +567,15 @@ public class Main {
         if(fileChosen == JFileChooser.APPROVE_OPTION){
             currentLoadDirectory = chooseFile.getSelectedFile().getAbsolutePath();
 
-            currentLoadDirectory = currentLoadDirectory.split("/save.marrow")[0];
+            String[] splitDirectory = currentLoadDirectory.split("/save.marrow");
+
+            if(splitDirectory.length != 1)
+            {
+                stopSavingOrLoading = true;
+                return;
+            }
+
+            currentLoadDirectory = splitDirectory[0];
 
             hasSavedOrLoaded = true;
         }
