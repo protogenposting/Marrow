@@ -740,7 +740,7 @@ public class Main {
      * @param windowName The name of the window the question is in.
      * @return {@code true} if user answers yes, {@code false} if answered no.
      */
-    private static boolean askUser(String prompt, String windowName){
+    public static boolean askUser(String prompt, String windowName){
         Object[] yesNoOptions = {"Yes", "No"};
 
         int choice = JOptionPane.showOptionDialog(

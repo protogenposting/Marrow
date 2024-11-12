@@ -8,6 +8,7 @@ import Main.Main;
 import Tools.ToolContainer;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -192,6 +193,13 @@ public class ParentLayer extends Layer {
         });
 
         if(Main.rendering) {
+            if(Main.currentSaveDirectory == null)
+            {
+                Main.rendering = false;
+                JOptionPane.showConfirmDialog(null,"Sorry, you must save before rendering!");
+                return;
+            }
+
             BufferedImage renderedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 
             Graphics2D renderedImageGraphics = renderedImage.createGraphics();
@@ -220,8 +228,10 @@ public class ParentLayer extends Layer {
                     throw new RuntimeException(e);
                 }
 
+                path = Main.currentSaveDirectory;
+
                 encoder.start(path+"anim.gif");
-                encoder.setDelay(1000/animDataStorage.framesPerSecond);   // 1 frame per sec
+                encoder.setDelay(1000/animDataStorage.framesPerSecond); //sets teh fps
                 encoder.setRepeat(9999999);
                 for (int i = 0; i < Main.images.size(); i++)
                 {
