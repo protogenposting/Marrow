@@ -2,6 +2,7 @@ package Tools;
 
 import Bitmaps.Bitmap;
 import Bitmaps.Pixel;
+import Tools.Brushes.Brush;
 
 public class Paintbrush extends DragTool{
 
@@ -14,7 +15,7 @@ public class Paintbrush extends DragTool{
      * @param bitmap the bitmap to add to
      */
 
-    public Bitmap brushMap = null;
+    public Brush brush;
 
     public void onDrag(int x1, int y1, int x2, int y2, Bitmap bitmap)
     {
@@ -37,11 +38,11 @@ public class Paintbrush extends DragTool{
                 double tan = (Math.tan(theta) * xProgress);
                 int yResult = (int)Math.round(tan);
 
-                if(brushMap == null) {
+                if(brush == null) {
                     drawCircle(xProgress + x1, yResult + y1, bitmap, drawSize);
                 }
                 else {
-                    drawBitmap(xProgress + x1, yResult + y1, brushMap, bitmap);
+                    drawBitmap(xProgress + x1, yResult + y1, brush.brushMap, bitmap);
                 }
 
                 xProgress += signX;
@@ -53,11 +54,11 @@ public class Paintbrush extends DragTool{
             for(int j = 0; j < height; j++) {
                 int xResult = (int)Math.round(yProgress/Math.tan(theta));
 
-                if(brushMap == null) {
+                if(brush == null) {
                     drawCircle(xResult + x1, yProgress + y1, bitmap, drawSize);
                 }
                 else {
-                    drawBitmap(xResult + x1, yProgress + y1, brushMap, bitmap);
+                    drawBitmap(xResult + x1, yProgress + y1, brush.brushMap, bitmap);
                 }
 
                 yProgress += signY;
