@@ -41,7 +41,7 @@ public class Paintbrush extends DragTool{
                     drawCircle(xProgress + x1, yResult + y1, bitmap, drawSize);
                 }
                 else {
-                    //this is when you draw using an image brush
+                    drawBitmap(xProgress + x1, yResult + y1, brushMap, bitmap);
                 }
 
                 xProgress += signX;
@@ -57,7 +57,7 @@ public class Paintbrush extends DragTool{
                     drawCircle(xResult + x1, yProgress + y1, bitmap, drawSize);
                 }
                 else {
-                    //freaky :3
+                    drawBitmap(xResult + x1, yProgress + y1, brushMap, bitmap);
                 }
 
                 yProgress += signY;

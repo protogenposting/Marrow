@@ -18,6 +18,12 @@ public class Pixel {
         this.blue = blue;
         this.alpha = alpha;
     }
+
+    public Pixel copy()
+    {
+        return new Pixel(red,green,blue,alpha);
+    }
+
     public RGBColor toRGBColor()
     {
         return new RGBColor(red,green,blue,alpha);

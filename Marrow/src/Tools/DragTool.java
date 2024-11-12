@@ -60,6 +60,28 @@ public class DragTool extends Tool {
 
     }
 
+    protected void drawBitmap(int x, int y, Bitmap bitmapToDraw, Bitmap bitmap)
+    {
+        int width = bitmapToDraw.bitmap.size();
+        int height = bitmapToDraw.bitmap.getFirst().size();
+        int xOffset = -width/2;
+        int yOffset = -height/2;
+        for(int xPointer = 0; xPointer < width; xPointer++)
+        {
+            for(int yPointer = 0; yPointer < height; yPointer++)
+            {
+                Pixel pixel = bitmapToDraw.getPixelAt(xPointer,yPointer).copy();
+
+                if(pixel.alpha == 0)
+                {
+                    continue;
+                }
+
+                bitmap.addPixel(xPointer + x + xOffset, yPointer + y + yOffset, pixel);
+            }
+        }
+    }
+
     /**
      * draws a horizontal line between two points
      * @param x1 x position of first point

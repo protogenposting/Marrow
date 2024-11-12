@@ -41,6 +41,7 @@ public class Main {
     static JSplitPane bottomScreenSplitPaneHorizontal = new JSplitPane();
 
     static LayerWindow layerWindow;
+    static Timeline timeline;
 
     //saving variables (they are, in fact, being used)
     public static String currentSaveDirectory;
@@ -609,7 +610,7 @@ public class Main {
         //set the default size of the timeline
         animationDataStorage.setSize(240);
 
-        Timeline timeline = new Timeline(animationDataStorage, parentLayer);
+        timeline = new Timeline(animationDataStorage, parentLayer);
 
         //these need to be called for functions related to keys.
         frame.setFocusable(true);
@@ -843,6 +844,8 @@ public class Main {
                 parentLayer.getChildren().clear();
             }
             try {
+                layerWindow = new LayerWindow(parentLayer,toolContainer,timeline);
+
                 ArrayList<ChildLayer> childLayers = loadLayers(toolContainer, animDataStorage);
                 childLayers = rearrangeChildLayers(childLayers);
 

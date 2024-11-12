@@ -1,7 +1,13 @@
 package Tools;
 
+import Bitmaps.Bitmap;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class Toolbox extends JPanel {
 
@@ -9,6 +15,7 @@ public class Toolbox extends JPanel {
 
     JLabel promptCloser = new JLabel("Set brush size(Pixels)");
     JTextField setBrushSize = new JTextField("5", 5);
+    JButton brushButton = new JButton("Change Brush");
 
     final int drawSizeCap = 1000;
 
@@ -61,18 +68,42 @@ public class Toolbox extends JPanel {
         setBrushSize.setSize(200,120);
         setBrushSize.setVisible(true);
 
-        setBrushSize.addActionListener(e -> {resetBrushSizeText(eraser);});
+        setBrushSize.addActionListener(e -> resetBrushSizeText(eraser));
+
+        this.add(brushButton);
+        brushButton.setVisible(true);
+
+        brushButton.addActionListener(e -> {
+            JFileChooser chooser = new JFileChooser();
+            int fileChosen = chooser.showOpenDialog(null);
+
+            if(fileChosen == JFileChooser.APPROVE_OPTION)
+            {
+                Paintbrush tool = (Paintbrush) paintBrush.tool;
+                try {
+                    tool.brushMap = new Bitmap(ImageIO.read(chooser.getSelectedFile()));
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
 
     /**
      * sets the toolButton's tool to a specific brush or tool
      * @param toolButton the toolButton being set
      */
-    private void setTool(ToolButton toolButton){
+    private void setTool(ToolButton toolButton) {
         toolContainer.currentTool = toolButton.tool;
         toolContainer.currentTool.currentColor = toolContainer.currentColor;
 
         setBrushSize.setText(String.valueOf(toolButton.tool.drawSize));
+
+        if (toolButton.tool instanceof Paintbrush) {
+            brushButton.setVisible(true);
+        } else {
+            brushButton.setVisible(false);
+        }
     }
 
     private void resetBrushSizeText(ToolButton eraser){
