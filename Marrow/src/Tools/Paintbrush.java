@@ -13,6 +13,9 @@ public class Paintbrush extends DragTool{
      * @param y2 y position from current frame
      * @param bitmap the bitmap to add to
      */
+
+    public Bitmap brushMap = null;
+
     public void onDrag(int x1, int y1, int x2, int y2, Bitmap bitmap)
     {
         bitmap.addPixel(x1,y1,new Pixel(currentColor));
@@ -34,7 +37,12 @@ public class Paintbrush extends DragTool{
                 double tan = (Math.tan(theta) * xProgress);
                 int yResult = (int)Math.round(tan);
 
-                drawCircle(xProgress + x1, yResult + y1, bitmap, drawSize);
+                if(brushMap == null) {
+                    drawCircle(xProgress + x1, yResult + y1, bitmap, drawSize);
+                }
+                else {
+                    //this is when you draw using an image brush
+                }
 
                 xProgress += signX;
             }
@@ -45,7 +53,12 @@ public class Paintbrush extends DragTool{
             for(int j = 0; j < height; j++) {
                 int xResult = (int)Math.round(yProgress/Math.tan(theta));
 
-                drawCircle(xResult + x1, yProgress + y1, bitmap, drawSize);
+                if(brushMap == null) {
+                    drawCircle(xResult + x1, yProgress + y1, bitmap, drawSize);
+                }
+                else {
+                    //freaky :3
+                }
 
                 yProgress += signY;
             }
