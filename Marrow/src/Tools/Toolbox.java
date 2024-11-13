@@ -1,12 +1,14 @@
 package Tools;
 
 import Bitmaps.Bitmap;
+import Tools.Brushes.Brush;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 
 public class Toolbox extends JPanel {
@@ -75,13 +77,26 @@ public class Toolbox extends JPanel {
 
         brushButton.addActionListener(e -> {
             JFileChooser chooser = new JFileChooser();
+            chooser.setMultiSelectionEnabled(true);
             int fileChosen = chooser.showOpenDialog(null);
 
             if(fileChosen == JFileChooser.APPROVE_OPTION)
             {
                 Paintbrush tool = (Paintbrush) paintBrush.tool;
                 try {
-                    tool.brushMap = new Bitmap(ImageIO.read(chooser.getSelectedFile()));
+                    File[] files = chooser.getSelectedFiles();
+
+                    int increment = 0;
+
+                    tool.brush = new Brush();
+
+                    tool.brush.brushMap = new Bitmap[files.length];
+
+                    for(File file : files) {
+                        tool.brush.brushMap[increment] = new Bitmap(ImageIO.read(file));
+                        tool.brush.distance = Math.max(tool.brush.distance,tool.brush.brushMap[increment].bitmap.size());
+                        increment++;
+                    }
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -115,12 +130,8 @@ public class Toolbox extends JPanel {
             }
 
             //here so eraser draw size is separate from everything else
-            if (toolContainer.currentTool == eraser.tool) {
-                eraser.tool.drawSize = newDrawSize;
-            }
-            else{
-                toolContainer.currentTool.drawSize = newDrawSize;
-            }
+            //removed that if else thingy, idk why it was there
+            toolContainer.currentTool.drawSize = newDrawSize;
         } catch (NumberFormatException Ex){
             setBrushSize.setText(String.valueOf(toolContainer.currentTool.drawSize));
         }

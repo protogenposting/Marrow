@@ -33,7 +33,9 @@ public class LayerWindow extends JPanel {
         this.parentLayer = parentLayer;
         this.setLayout(new FlowLayout());
 
+        innerPanel = new JPanel();
 
+        buttonLinkedList = new ArrayList<>();
 
         JButton layerAdding = getjButton(parentLayer, toolContainer);
         add(layerAdding);

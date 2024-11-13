@@ -566,17 +566,7 @@ public class Main {
         int fileChosen = chooseFile.showOpenDialog(null);
 
         if(fileChosen == JFileChooser.APPROVE_OPTION){
-            currentLoadDirectory = chooseFile.getSelectedFile().getAbsolutePath();
-
-            String[] splitDirectory = currentLoadDirectory.split("/save.marrow");
-
-            if(splitDirectory.length != 1)
-            {
-                stopSavingOrLoading = true;
-                return;
-            }
-
-            currentLoadDirectory = splitDirectory[0];
+            currentLoadDirectory = chooseFile.getSelectedFile().getParentFile().getAbsolutePath();
 
             hasSavedOrLoaded = true;
         }
@@ -845,6 +835,8 @@ public class Main {
             }
             try {
                 layerWindow = new LayerWindow(parentLayer,toolContainer,timeline);
+
+                bottomScreenSplitPaneVertical.setLeftComponent(layerWindow);
 
                 ArrayList<ChildLayer> childLayers = loadLayers(toolContainer, animDataStorage);
                 childLayers = rearrangeChildLayers(childLayers);
